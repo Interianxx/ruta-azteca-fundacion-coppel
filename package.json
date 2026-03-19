@@ -2,25 +2,39 @@
   "name": "ruta-azteca",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "yarn@4.9.1",
   "scripts": {
-    "dev": "next dev",
+    "dev":   "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint":  "eslint src --ext .ts,.tsx"
   },
   "dependencies": {
-    "next": "16.1.7",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "next":                                  "16.1.7",
+    "react":                                 "19.2.3",
+    "react-dom":                             "19.2.3",
+
+    "next-auth":                             "^4.24.11",
+
+    "@aws-sdk/client-dynamodb":              "^3.0.0",
+    "@aws-sdk/lib-dynamodb":                 "^3.0.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.0.0",
+    "@aws-sdk/client-lambda":                "^3.0.0",
+    "@aws-sdk/client-s3":                    "^3.0.0",
+    "@aws-sdk/s3-request-presigner":         "^3.0.0",
+
+    "mapbox-gl":                             "^3.0.0",
+    "jose":                                  "^5.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.7",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@tailwindcss/postcss":   "^4",
+    "@types/node":            "^20",
+    "@types/react":           "^19",
+    "@types/react-dom":       "^19",
+    "@types/mapbox-gl":       "^3.0.0",
+    "eslint":                 "^9",
+    "eslint-config-next":     "16.1.7",
+    "tailwindcss":            "^4",
+    "typescript":             "^5"
   }
 }
