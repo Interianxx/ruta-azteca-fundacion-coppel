@@ -7,9 +7,7 @@ Plataforma PWA que conecta a turistas del Mundial FIFA 2026 con micro y pequeño
 
 ---
 
-## Estado actual — Infraestructura inicial
-
-> Este commit representa la **infraestructura base** del proyecto: toda la nube AWS aprovisionada con Terraform y el scaffolding del monorepo. El producto (UI, flujos, experiencia) se construye durante el hackathon presencial (7-9 de abril).
+# Estado actual — Infraestructura inicial
 
 ### Infraestructura desplegada en AWS
 
@@ -112,54 +110,6 @@ yarn install
 
 ```bash
 yarn dev
-```
-
----
-
-## Infraestructura — Terraform
-
-### Requisitos previos
-
-Crear el bucket de estado remoto (una sola vez):
-
-```bash
-aws s3api create-bucket --bucket ruta-azteca-tfstate --region us-east-1
-aws s3api put-bucket-versioning \
-  --bucket ruta-azteca-tfstate \
-  --versioning-configuration Status=Enabled
-```
-
-Crear `infra/terraform.tfvars` (no se commitea):
-
-```hcl
-google_client_id     = "..."
-google_client_secret = "..."
-```
-
-### Desplegar
-
-```bash
-cd infra
-terraform init
-terraform plan  -var-file="environments/dev.tfvars"
-terraform apply -var-file="environments/dev.tfvars"
-```
-
-### Ver outputs (credenciales para .env.local)
-
-```bash
-terraform output
-terraform output nextjs_bff_access_key_id
-terraform output nextjs_bff_secret_access_key
-```
-
-### Seed data
-
-```bash
-cd seed
-pip install boto3
-python seed.py --dry-run   # vista previa
-python seed.py             # escribe a DynamoDB
 ```
 
 ---
