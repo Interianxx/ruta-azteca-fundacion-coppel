@@ -160,13 +160,20 @@ resource "aws_cognito_user_pool_client" "nextjs" {
   name         = "${local.prefix}-nextjs"
   user_pool_id = aws_cognito_user_pool.main.id
 
-  # Sin secret en cliente web (PKCE)
-  generate_secret = false
+  # Secret requerido por NextAuth para el intercambio de tokens server-side
+  generate_secret = true
 
   # Flujos permitidos
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["email", "openid", "profile"]
+
+  # USER_PASSWORD_AUTH requerido para el flujo de email + contraseña (CredentialsProvider)
+  explicit_auth_flows = [
+    "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+  ]
 
   supported_identity_providers = [
     "COGNITO",

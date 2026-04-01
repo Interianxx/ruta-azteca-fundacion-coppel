@@ -1,50 +1,68 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { QueryCommand, PutCommand, DeleteCommand } from '@aws-sdk/lib-dynamodb'
+import { getServerSession } from 'next-auth'
+import { PutCommand, DeleteCommand, QueryCommand } from '@aws-sdk/lib-dynamodb'
 import { dynamo, TABLE_NAME } from '@/lib/dynamo'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
-// GET /api/favoritos?turistaId=xxx
-export async function GET(req: NextRequest) {
-  const turistaId = req.nextUrl.searchParams.get('turistaId')
-  if (!turistaId) return NextResponse.json({ error: 'turistaId requerido' }, { status: 400 })
+function getUid(session: Awaited<ReturnType<typeof getServerSession>>): string | null {
+  if (!session?.user) return null
+  return (session.user as { sub?: string }).sub ?? session.user.email ?? null
+}
+
+// GET /api/favoritos — list negocioIds favorited by current user
+export async function GET() {
+  const session = await getServerSession(authOptions)
+  const uid = getUid(session)
+  if (!uid) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
 
   const result = await dynamo.send(new QueryCommand({
     TableName:              TABLE_NAME,
     KeyConditionExpression: 'PK = :pk AND begins_with(SK, :prefix)',
     ExpressionAttributeValues: {
-      ':pk':     `USER#${turistaId}`,
+      ':pk':     `USER#${uid}`,
       ':prefix': 'FAV#',
     },
   }))
 
-  return NextResponse.json({ data: { items: result.Items ?? [], count: result.Count ?? 0 } })
+  const ids = (result.Items ?? []).map(item => (item.SK as string).replace('FAV#', ''))
+  return NextResponse.json({ data: ids })
 }
 
-// POST /api/favoritos — agregar favorito
+// POST /api/favoritos — { negocioId }
 export async function POST(req: NextRequest) {
-  const { turistaId, negocioId } = await req.json()
+  const session = await getServerSession(authOptions)
+  const uid = getUid(session)
+  if (!uid) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+
+  const { negocioId } = await req.json()
+  if (!negocioId) return NextResponse.json({ error: 'negocioId requerido' }, { status: 400 })
 
   await dynamo.send(new PutCommand({
     TableName: TABLE_NAME,
     Item: {
-      PK:        `USER#${turistaId}`,
-      SK:        `FAV#${negocioId}`,
+      PK:      `USER#${uid}`,
+      SK:      `FAV#${negocioId}`,
       negocioId,
-      createdAt: new Date().toISOString(),
+      addedAt: new Date().toISOString(),
     },
   }))
 
-  return NextResponse.json({ message: 'Favorito agregado' }, { status: 201 })
+  return NextResponse.json({ ok: true })
 }
 
-// DELETE /api/favoritos?turistaId=xxx&negocioId=yyy
+// DELETE /api/favoritos — { negocioId }
 export async function DELETE(req: NextRequest) {
-  const turistaId = req.nextUrl.searchParams.get('turistaId')
-  const negocioId = req.nextUrl.searchParams.get('negocioId')
+  const session = await getServerSession(authOptions)
+  const uid = getUid(session)
+  if (!uid) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+
+  const { negocioId } = await req.json()
+  if (!negocioId) return NextResponse.json({ error: 'negocioId requerido' }, { status: 400 })
 
   await dynamo.send(new DeleteCommand({
     TableName: TABLE_NAME,
-    Key: { PK: `USER#${turistaId}`, SK: `FAV#${negocioId}` },
+    Key: { PK: `USER#${uid}`, SK: `FAV#${negocioId}` },
   }))
 
-  return NextResponse.json({ message: 'Favorito eliminado' })
+  return NextResponse.json({ ok: true })
 }

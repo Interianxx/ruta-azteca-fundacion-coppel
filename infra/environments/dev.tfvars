@@ -23,4 +23,5 @@ callback_urls = [
 
 logout_urls = [
   "http://localhost:3000",
+  "http://localhost:3000/login",
 ]

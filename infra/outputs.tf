@@ -15,6 +15,12 @@ output "cognito_client_id" {
   value       = module.cognito.client_id
 }
 
+output "cognito_client_secret" {
+  description = "Client Secret para NextAuth server-side (COGNITO_CLIENT_SECRET)"
+  value       = module.cognito.client_secret
+  sensitive   = true
+}
+
 output "cognito_domain" {
   description = "Dominio del hosted UI de Cognito (NEXT_PUBLIC_COGNITO_DOMAIN)"
   value       = module.cognito.domain

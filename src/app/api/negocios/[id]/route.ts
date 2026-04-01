@@ -3,10 +3,12 @@ import { GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { dynamo, TABLE_NAME } from '@/lib/dynamo'
 
 // GET /api/negocios/:id
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+
   const result = await dynamo.send(new GetCommand({
     TableName: TABLE_NAME,
-    Key: { PK: `NEGOCIO#${params.id}`, SK: 'METADATA' },
+    Key: { PK: `NEGOCIO#${id}`, SK: 'METADATA' },
   }))
 
   if (!result.Item) {
@@ -17,7 +19,8 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
 }
 
 // PUT /api/negocios/:id
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const body = await req.json()
   const updatedAt = new Date().toISOString()
 
@@ -29,7 +32,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   await dynamo.send(new UpdateCommand({
     TableName:                 TABLE_NAME,
-    Key:                       { PK: `NEGOCIO#${params.id}`, SK: 'METADATA' },
+    Key:                       { PK: `NEGOCIO#${id}`, SK: 'METADATA' },
     UpdateExpression:          updateExpr,
     ExpressionAttributeNames:  names,
     ExpressionAttributeValues: values,

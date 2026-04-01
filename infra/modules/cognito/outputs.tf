@@ -13,6 +13,12 @@ output "client_id" {
   value       = aws_cognito_user_pool_client.nextjs.id
 }
 
+output "client_secret" {
+  description = "App Client Secret — COGNITO_CLIENT_SECRET (nunca exponer al browser)"
+  value       = aws_cognito_user_pool_client.nextjs.client_secret
+  sensitive   = true
+}
+
 output "domain" {
   description = "Dominio del hosted UI (sin https://) — NEXT_PUBLIC_COGNITO_DOMAIN"
   value       = "${aws_cognito_user_pool_domain.main.domain}.auth.${data.aws_region.current.name}.amazoncognito.com"
