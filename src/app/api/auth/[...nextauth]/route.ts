@@ -25,7 +25,9 @@ function secretHash(username: string) {
   return createHmac('sha256', SECRET).update(username + CLIENT_ID).digest('base64')
 }
 
-const ROLES_PROPIOS = ['turista', 'negocio_pendiente', 'negocio_activo', 'admin']
+// Orden de mayor a menor privilegio — se usa para elegir el rol dominante
+// cuando un usuario pertenece a varios grupos (ej: admin + turista).
+const ROLES_PROPIOS = ['admin', 'negocio_activo', 'negocio_pendiente', 'turista']
 
 const COGNITO_ERRORS: Record<string, string> = {
   NotAuthorizedException:          'Correo o contraseña incorrectos.',
@@ -135,8 +137,7 @@ export const authOptions: NextAuthOptions = {
 
         const payload = decodeJwtPayload(res.AuthenticationResult.AccessToken)
         const groups  = (payload['cognito:groups'] as string[] | undefined) ?? []
-        const rol     = groups.find(g => ROLES_PROPIOS.includes(g)) ?? 'turista'
-
+        const rol     = ROLES_PROPIOS.find(r => groups.includes(r)) ?? 'turista'
         return {
           id:    payload.sub as string,
           email,
@@ -179,12 +180,12 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, account, user }) {
-      if (account) {
+      if (account?.type === 'oauth') {
         // OAuth flow (Google via Cognito Hosted UI)
         // cognito:groups está en el access_token — decodificamos sin verificar.
         const payload   = account.access_token ? decodeJwtPayload(account.access_token) : {}
         const allGroups = (payload['cognito:groups'] as string[] | undefined) ?? []
-        token.rol = allGroups.find(g => ROLES_PROPIOS.includes(g)) ?? 'turista'
+        token.rol = ROLES_PROPIOS.find(r => allGroups.includes(r)) ?? 'turista'
       } else if (user && (user as { rol?: string }).rol) {
         // Credentials flow — rol fue asignado en authorize()
         token.rol = (user as { rol?: string }).rol

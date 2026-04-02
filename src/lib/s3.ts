@@ -3,6 +3,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION ?? 'us-east-1',
+  // Disable automatic checksum — presigned PUT URLs are used by the browser
+  // which cannot calculate SDK-generated checksums (CRC32, SHA256, etc.)
+  requestChecksumCalculation: 'when_required',
+  responseChecksumValidation: 'when_required',
 })
 
 const BUCKET = process.env.S3_BUCKET_NAME ?? 'ruta-azteca-images'

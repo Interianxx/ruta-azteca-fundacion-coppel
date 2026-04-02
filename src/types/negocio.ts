@@ -38,4 +38,5 @@ export interface NegocioInput {
   lat: number
   lng: number
   tags?: string[]
+  imagenUrl?: string
 }

@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 import { QueryCommand, PutCommand } from '@aws-sdk/lib-dynamodb'
+import { CognitoIdentityProviderClient, AdminAddUserToGroupCommand } from '@aws-sdk/client-cognito-identity-provider'
 import { dynamo, TABLE_NAME, GSI_STATUS, GSI_CATEGORIA } from '@/lib/dynamo'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import type { NegocioInput } from '@/types/negocio'
 import { randomUUID } from 'crypto'
+
+const cognito = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION ?? 'us-east-1' })
+const USER_POOL_ID = process.env.COGNITO_USER_POOL_ID!
 
 // GET /api/negocios?categoria=comida&lastKey=...
 export async function GET(req: NextRequest) {
@@ -14,7 +20,6 @@ export async function GET(req: NextRequest) {
     let result
 
     if (categoria) {
-      // Filtrar por categoría (GSI2)
       result = await dynamo.send(new QueryCommand({
         TableName:              TABLE_NAME,
         IndexName:              GSI_CATEGORIA,
@@ -24,7 +29,6 @@ export async function GET(req: NextRequest) {
         ExclusiveStartKey: lastKey ? JSON.parse(lastKey) : undefined,
       }))
     } else {
-      // Listar todos los activos (GSI1)
       result = await dynamo.send(new QueryCommand({
         TableName:              TABLE_NAME,
         IndexName:              GSI_STATUS,
@@ -42,13 +46,20 @@ export async function GET(req: NextRequest) {
         count:   result.Count ?? 0,
       },
     })
-  } catch (e) {
+  } catch {
     return NextResponse.json({ error: 'Error al obtener negocios' }, { status: 500 })
   }
 }
 
-// POST /api/negocios — crear negocio (requiere auth)
+// POST /api/negocios — registrar negocio (requiere auth)
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if (!session?.user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+
+  const uid   = (session.user as { sub?: string }).sub ?? session.user.email ?? null
+  const email = session.user.email
+  if (!uid) return NextResponse.json({ error: 'No se pudo identificar al usuario' }, { status: 400 })
+
   const body: NegocioInput = await req.json()
   const id        = randomUUID()
   const createdAt = new Date().toISOString()
@@ -61,13 +72,25 @@ export async function POST(req: NextRequest) {
     GSI2PK:   `CAT#${body.categoria}`,
     GSI2SK:   `NEGOCIO#${id}`,
     id,
-    estado:    'PENDING',
+    estado:        'PENDING',
+    propietarioId: uid,
+    propietarioEmail: email,
     createdAt,
-    updatedAt: createdAt,
+    updatedAt:     createdAt,
     ...body,
   }
 
+  // 1. Guardar en DynamoDB
   await dynamo.send(new PutCommand({ TableName: TABLE_NAME, Item: item }))
+
+  // 2. Meter al usuario en el grupo negocio_pendiente de Cognito
+  if (email) {
+    await cognito.send(new AdminAddUserToGroupCommand({
+      UserPoolId: USER_POOL_ID,
+      Username:   email,
+      GroupName:  'negocio_pendiente',
+    })).catch(() => {}) // No bloquear si falla (ej. ya está en el grupo)
+  }
 
   return NextResponse.json({ data: item }, { status: 201 })
 }

@@ -5,9 +5,10 @@ import { moverAGrupo } from '@/lib/cognito'
 
 // PUT /api/admin/aprobar — aprueba o rechaza un negocio
 export async function PUT(req: NextRequest) {
-  const { negocioId, propietarioId, accion }: {
+  const { negocioId, propietarioId, propietarioEmail, accion }: {
     negocioId: string
     propietarioId: string
+    propietarioEmail?: string
     accion: 'aprobar' | 'rechazar'
   } = await req.json()
 
@@ -27,9 +28,9 @@ export async function PUT(req: NextRequest) {
     },
   }))
 
-  // 2. Mover usuario en Cognito
+  // 2. Mover usuario en Cognito (usar email como username; fallback al sub)
   if (accion === 'aprobar') {
-    await moverAGrupo(propietarioId, 'negocio_pendiente', 'negocio_activo')
+    await moverAGrupo(propietarioEmail ?? propietarioId, 'negocio_pendiente', 'negocio_activo')
   }
 
   return NextResponse.json({ message: `Negocio ${accion === 'aprobar' ? 'aprobado' : 'rechazado'}` })
