@@ -61,7 +61,7 @@ resource "aws_s3_bucket_cors_configuration" "images" {
 }
 
 # ---------------------------------------------------------------------------
-# CloudFront Origin Access Control (OAC) — reemplaza el OAI obsoleto
+# CloudFront Origin Access Control (OAC) 
 # ---------------------------------------------------------------------------
 
 resource "aws_cloudfront_origin_access_control" "main" {
@@ -144,6 +144,10 @@ data "aws_iam_policy_document" "cloudfront_oac" {
     }
   }
 }
+
+# ---------------------------------------------------------------------------
+# Asociar la política al bucket S3
+# ---------------------------------------------------------------------------
 
 resource "aws_s3_bucket_policy" "images" {
   bucket = aws_s3_bucket.images.id

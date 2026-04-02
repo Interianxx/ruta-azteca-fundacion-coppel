@@ -63,7 +63,7 @@ module "s3_cdn" {
   source = "./modules/s3-cdn"
 
   environment     = var.environment
-  allowed_origins = var.callback_urls 
+  allowed_origins = var.cors_origins
 }
 
 module "ai_services" {

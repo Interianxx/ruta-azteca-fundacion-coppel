@@ -77,3 +77,9 @@ variable "logout_urls" {
   type        = list(string)
   default     = ["http://localhost:3000"]
 }
+
+variable "cors_origins" {
+  description = "Orígenes permitidos en CORS del bucket S3 (solo protocol://host:port, sin paths)"
+  type        = list(string)
+  default     = ["http://localhost:3000"]
+}
