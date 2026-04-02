@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
+
 // Dynamic metadata for each negocio
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const negocio = await getNegocio(params.id)
+  const negocio = await getNegocio((await params).id)
   if (!negocio) {
     return {
       title: 'Negocio no encontrado | Ruta Azteca',
@@ -10,15 +11,16 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     }
   }
   return {
-    title: `Ruta Azteca${" - " + negocio.nombre}`,
+    title: `Ruta Azteca - ${negocio.nombre}`,
     description: negocio.descripcion,
     openGraph: {
-      title: `Ruta Azteca${" - " + negocio.nombre}`,
+      title: `Ruta Azteca - ${negocio.nombre}`,
       description: negocio.descripcion,
       images: negocio.imagenUrl ? [negocio.imagenUrl] : undefined,
     }
   }
 }
+
 import Link from 'next/link'
 import type { Negocio } from '@/types/negocio'
 
