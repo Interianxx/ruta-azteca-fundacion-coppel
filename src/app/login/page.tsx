@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, useSession, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 // ─── SVG Assets ───────────────────────────────────────────────────────────────
@@ -84,17 +84,18 @@ const MailIcon = () => (
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type View = 'select' | 'tourist' | 't-login' | 't-signup' | 't-verify' | 't-forgot' | 't-reset' | 'business'
+type View = 'select' | 'tourist' | 't-login' | 't-signup' | 't-verify' | 't-forgot' | 't-reset' | 'business' | 'b-signup' | 'b-verify' | 'b-forgot' | 'b-reset'
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function LoginPage() {
-  const router  = useRouter()
+  const router = useRouter()
   const { data: session } = useSession()
 
   const [view,        setView]        = useState<View>('select')
   const [viewKey,     setViewKey]     = useState(0)
   const dirRef                        = useRef<'fwd' | 'back'>('fwd')
+  const redirected                    = useRef(false)
 
   const [email,       setEmail]       = useState('')
   const [password,    setPassword]    = useState('')
@@ -109,7 +110,13 @@ export default function LoginPage() {
   const [isMobile,    setIsMobile]    = useState(false)
 
   useEffect(() => {
-    if (session) router.replace('/turista/mapa')
+    if (!session || redirected.current) return
+    redirected.current = true
+    const rol = (session as any)?.rol ?? 'turista'
+    if (rol === 'admin')                  router.replace('/admin/dashboard')
+    else if (rol === 'negocio_activo')    router.replace('/negocio/perfil')
+    else if (rol === 'negocio_pendiente') router.replace('/negocio/registro')
+    else                                  router.replace('/turista/mapa')
   }, [session, router])
 
   useEffect(() => {
@@ -138,12 +145,67 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
+    const isBusiness = view === 'business'
+    redirected.current = true
     const res = await signIn('credentials', { redirect: false, email, password })
     setLoading(false)
     if (res?.error) {
+      redirected.current = false
       setError('Correo o contraseña incorrectos. Si acabas de registrarte, verifica tu correo primero.')
     } else {
-      router.replace(view === 'business' ? '/negocio/perfil' : '/turista/mapa')
+      const session = await getSession()
+      const rol = (session as any)?.rol ?? 'turista'
+      if (rol === 'admin')                  router.replace('/admin/dashboard')
+      else if (rol === 'negocio_activo')    router.replace('/negocio/perfil')
+      else if (rol === 'negocio_pendiente') router.replace('/negocio/registro')
+      else                                  router.replace('/turista/mapa')
+    }
+  }
+
+  const handleBusinessSignup = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res  = await fetch('/api/auth/email-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name, role: 'negocio' }),
+      })
+      const data = await res.json()
+      if (data.error) { setError(data.error); setLoading(false); return }
+      nav('b-verify', 'fwd')
+    } catch {
+      setError('Error de red. Intenta de nuevo.')
+    }
+    setLoading(false)
+  }
+
+  const handleBusinessVerify = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const res  = await fetch('/api/auth/email-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code, role: 'negocio' }),
+      })
+      const data = await res.json()
+      if (data.error) { setError(data.error); setLoading(false); return }
+      redirected.current = true
+      const login = await signIn('credentials', { redirect: false, email, password })
+      if (login?.error) {
+        redirected.current = false
+        setSuccess('¡Cuenta verificada! Ya puedes iniciar sesión.')
+        nav('business', 'fwd')
+      } else {
+        router.replace('/negocio/registro')
+      }
+    } catch {
+      redirected.current = false
+      setError('Error de red. Intenta de nuevo.')
+      setLoading(false)
     }
   }
 
@@ -262,7 +324,11 @@ export default function LoginPage() {
     't-verify': 'Verifica tu correo',
     't-forgot': 'Recuperar contraseña',
     't-reset':  'Nueva contraseña',
-    business:  'Acceso negocio / admin',
+    business:  'Negocio / Admin',
+    'b-signup': 'Crear cuenta negocio',
+    'b-verify': 'Verifica tu correo',
+    'b-forgot': 'Recuperar contraseña',
+    'b-reset':  'Nueva contraseña',
   }
 
   const SUBTITLES: Record<View, string> = {
@@ -273,7 +339,11 @@ export default function LoginPage() {
     't-verify': `Enviamos un código a ${email || 'tu correo'}`,
     't-forgot': 'Te enviaremos un código de recuperación',
     't-reset':  `Revisa ${email || 'tu correo'} y escribe el código`,
-    business:  'Inicia sesión para gestionar tu negocio o panel',
+    business:  'Accede para gestionar tu negocio o panel',
+    'b-signup': 'Registra tu negocio en Ruta Azteca',
+    'b-verify': `Enviamos un código a ${email || 'tu correo'}`,
+    'b-forgot': 'Te enviaremos un código de recuperación',
+    'b-reset':  `Revisa ${email || 'tu correo'} y escribe el código`,
   }
 
   const animName = viewKey > 0
@@ -542,23 +612,6 @@ export default function LoginPage() {
                   </div>
                 </button>
 
-                <button onClick={() => nav('business', 'fwd')} style={{
-                  display: 'flex', alignItems: 'center', gap: 12,
-                  width: '100%', padding: '16px 20px',
-                  background: dark ? 'rgba(26,158,120,0.06)' : '#fff',
-                  border: dark ? '1px solid rgba(26,158,120,0.15)' : '1px solid #e0ddd5',
-                  borderRadius: 14, cursor: 'pointer', textAlign: 'left',
-                }}>
-                  <span style={{ width: 40, height: 40, borderRadius: 10, background: dark ? 'rgba(26,158,120,0.1)' : '#e8f5f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={dark ? '#1A9E78' : '#0D7C66'} strokeWidth="2">
-                      <path d="M12 20V10M6 20V4M18 20v-6"/>
-                    </svg>
-                  </span>
-                  <div>
-                    <div style={{ color: dark ? '#E1F5EE' : '#1A2E26', fontWeight: 600, fontSize: 15 }}>Administrador</div>
-                    <div style={{ color: dark ? '#7FBFA8' : '#8a9690', fontSize: 12 }}>Panel Ola México</div>
-                  </div>
-                </button>
               </div>
             )}
 
@@ -749,19 +802,14 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* ── business ─────────────────────────────────────────────────── */}
+            {/* ── business: login ───────────────────────────────────────── */}
             {view === 'business' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <button onClick={handleGoogle} disabled={loading} style={{ ...outlineBtn, opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
-                  <GoogleIcon /> {loading ? 'Redirigiendo...' : 'Continuar con Google'}
-                </button>
-
-                {dividerTextStyle('o con correo')}
-
+                {successBox}
                 <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <input
-                    type="email" placeholder="correo@ejemplo.com" value={email}
-                    onChange={e => setEmail(e.target.value)} required style={inp}
+                    type="email" placeholder="correo@negocio.com" value={email}
+                    onChange={e => setEmail(e.target.value)} required autoFocus style={inp}
                   />
                   <div style={{ position: 'relative' }}>
                     <input
@@ -773,12 +821,140 @@ export default function LoginPage() {
                       {showPass ? 'Ocultar' : 'Ver'}
                     </button>
                   </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <button type="button" onClick={() => nav('b-forgot', 'fwd')} style={linkBtnStyle}>
+                      ¿Olvidaste tu contraseña?
+                    </button>
+                  </div>
                   {errorBox}
                   <button type="submit" disabled={loading} style={primaryBtn}>
                     {loading ? 'Ingresando...' : 'Iniciar sesión'}
                   </button>
                 </form>
+                <div style={{ textAlign: 'center' }}>
+                  <span style={{ fontSize: 13, color: dark ? '#7FBFA8' : '#8a9690' }}>¿No tienes cuenta? </span>
+                  <button onClick={() => nav('b-signup', 'fwd')} style={linkBtnStyle}>Regístrate</button>
+                </div>
                 <button onClick={() => nav('select', 'back')} style={backBtnStyle}>← Volver</button>
+              </div>
+            )}
+
+            {/* ── b-signup ──────────────────────────────────────────────── */}
+            {view === 'b-signup' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <form onSubmit={handleBusinessSignup} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <input
+                    type="email" placeholder="correo@negocio.com" value={email}
+                    onChange={e => setEmail(e.target.value)} required style={inp}
+                  />
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type={showPass ? 'text' : 'password'} placeholder="Contraseña (mín. 8 caracteres)" value={password}
+                      onChange={e => setPassword(e.target.value)} required
+                      style={{ ...inp, paddingRight: 56 }}
+                    />
+                    <button type="button" onClick={() => setShowPass(!showPass)} style={eyeBtn}>
+                      {showPass ? 'Ocultar' : 'Ver'}
+                    </button>
+                  </div>
+                  {errorBox}
+                  <button type="submit" disabled={loading} style={primaryBtn}>
+                    {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+                  </button>
+                </form>
+                <div style={{ textAlign: 'center' }}>
+                  <span style={{ fontSize: 13, color: dark ? '#7FBFA8' : '#8a9690' }}>¿Ya tienes cuenta? </span>
+                  <button onClick={() => nav('business', 'back')} style={linkBtnStyle}>Iniciar sesión</button>
+                </div>
+                <button onClick={() => nav('business', 'back')} style={backBtnStyle}>← Volver</button>
+              </div>
+            )}
+
+            {/* ── b-verify ──────────────────────────────────────────────── */}
+            {view === 'b-verify' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px',
+                  background: dark ? 'rgba(26,158,120,0.08)' : '#f0faf6',
+                  border: `1px solid ${dark ? 'rgba(26,158,120,0.2)' : '#c8e8da'}`,
+                  borderRadius: 10,
+                }}>
+                  <MailIcon />
+                  <span style={{ fontSize: 13, color: dark ? '#4ABFA0' : '#0D7C66', fontWeight: 500 }}>{email}</span>
+                </div>
+                <form onSubmit={handleBusinessVerify} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <input
+                    type="text" placeholder="000000" value={code} inputMode="numeric"
+                    onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required maxLength={6} autoFocus
+                    style={{ ...inp, textAlign: 'center', fontSize: 26, letterSpacing: '0.35em', fontWeight: 700 }}
+                  />
+                  {errorBox}
+                  {successBox}
+                  <button type="submit" disabled={loading || code.length < 6} style={{
+                    ...primaryBtn,
+                    opacity: (loading || code.length < 6) ? 0.6 : 1,
+                    cursor: (loading || code.length < 6) ? 'not-allowed' : 'pointer',
+                  }}>
+                    {loading ? 'Verificando...' : 'Verificar cuenta'}
+                  </button>
+                </form>
+                <div style={{ textAlign: 'center' }}>
+                  <button onClick={handleResend} disabled={loading} style={{ ...linkBtnStyle, opacity: loading ? 0.6 : 1 }}>
+                    ¿No recibiste el código? Reenviar
+                  </button>
+                </div>
+                <button onClick={() => nav('b-signup', 'back')} style={backBtnStyle}>← Volver</button>
+              </div>
+            )}
+
+            {/* ── b-forgot ──────────────────────────────────────────────── */}
+            {view === 'b-forgot' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <form onSubmit={handleForgot} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <input
+                    type="email" placeholder="correo@negocio.com" value={email}
+                    onChange={e => setEmail(e.target.value)} required autoFocus style={inp}
+                  />
+                  {errorBox}
+                  <button type="submit" disabled={loading} style={primaryBtn}>
+                    {loading ? 'Enviando...' : 'Enviar código de recuperación'}
+                  </button>
+                </form>
+                <button onClick={() => nav('business', 'back')} style={backBtnStyle}>← Volver</button>
+              </div>
+            )}
+
+            {/* ── b-reset ───────────────────────────────────────────────── */}
+            {view === 'b-reset' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <form onSubmit={handleReset} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <input
+                    type="text" placeholder="000000" value={code} inputMode="numeric"
+                    onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required maxLength={6} autoFocus
+                    style={{ ...inp, textAlign: 'center', fontSize: 26, letterSpacing: '0.35em', fontWeight: 700 }}
+                  />
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type={showNewPass ? 'text' : 'password'} placeholder="Nueva contraseña" value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)} required
+                      style={{ ...inp, paddingRight: 56 }}
+                    />
+                    <button type="button" onClick={() => setShowNewPass(!showNewPass)} style={eyeBtn}>
+                      {showNewPass ? 'Ocultar' : 'Ver'}
+                    </button>
+                  </div>
+                  {errorBox}
+                  <button type="submit" disabled={loading || code.length < 6} style={{
+                    ...primaryBtn,
+                    opacity: (loading || code.length < 6) ? 0.6 : 1,
+                    cursor: (loading || code.length < 6) ? 'not-allowed' : 'pointer',
+                  }}>
+                    {loading ? 'Actualizando...' : 'Cambiar contraseña'}
+                  </button>
+                </form>
+                <button onClick={() => nav('b-forgot', 'back')} style={backBtnStyle}>← Volver</button>
               </div>
             )}
           </div>

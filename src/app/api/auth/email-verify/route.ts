@@ -25,7 +25,7 @@ const MSG: Record<string, string> = {
 }
 
 export async function POST(req: NextRequest) {
-  const { email, code, resend } = await req.json()
+  const { email, code, resend, role } = await req.json()
 
   if (resend) {
     try {
@@ -47,9 +47,11 @@ export async function POST(req: NextRequest) {
       Username:         email,
       ConfirmationCode: code,
     }))
-    await agregarAGrupo(email, 'turista')
+    const group = role === 'negocio' ? 'negocio_pendiente' : 'turista'
+    await agregarAGrupo(email, group)
     return NextResponse.json({ ok: true })
   } catch (e: any) {
+    console.error('[verify] ERROR:', e.name, e.message)
     return NextResponse.json({ error: MSG[e.name] ?? e.message ?? 'Error al verificar el código.' }, { status: 400 })
   }
 }

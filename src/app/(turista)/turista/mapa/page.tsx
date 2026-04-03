@@ -81,14 +81,15 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
   const CatIcon = CATEGORIA_LUCIDE[negocio.categoria] ?? Store
   const cat     = CATS.find(c => c.slug === negocio.categoria)
 
-  const [isFav,       setIsFav]       = useState(false)
-  const [favLoading,  setFavLoading]  = useState(false)
-  const [resenas,     setResenas]     = useState<Resena[]>([])
-  const [showForm,    setShowForm]    = useState(false)
-  const [stars,       setStars]       = useState(0)
-  const [comentario,  setComentario]  = useState('')
-  const [submitting,  setSubmitting]  = useState(false)
-  const [submitMsg,   setSubmitMsg]   = useState('')
+  const [isFav,        setIsFav]       = useState(false)
+  const [favLoading,   setFavLoading]  = useState(false)
+  const [resenas,      setResenas]     = useState<Resena[]>([])
+  const [showForm,     setShowForm]    = useState(false)
+  const [stars,        setStars]       = useState(0)
+  const [comentario,   setComentario]  = useState('')
+  const [submitting,   setSubmitting]  = useState(false)
+  const [submitMsg,    setSubmitMsg]   = useState('')
+  const [lightboxOpen, setLightboxOpen] = useState(false)
 
   // Fetch favorites status + reviews on mount
   useEffect(() => {
@@ -191,17 +192,61 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
         </button>
       </div>
 
+      {/* Lightbox overlay */}
+      {lightboxOpen && negocio.imagenUrl && (
+        <div
+          onClick={() => setLightboxOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0,0,0,.88)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          <button
+            onClick={() => setLightboxOpen(false)}
+            style={{
+              position: 'absolute', top: 16, right: 16,
+              background: 'rgba(255,255,255,.15)', border: 'none', borderRadius: '50%',
+              width: 40, height: 40, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <img
+            src={negocio.imagenUrl}
+            alt={negocio.nombre}
+            onClick={e => e.stopPropagation()}
+            style={{
+              maxWidth: '92vw', maxHeight: '80vh',
+              borderRadius: 16, objectFit: 'contain',
+              boxShadow: '0 8px 40px rgba(0,0,0,.6)',
+            }}
+          />
+        </div>
+      )}
+
       {/* Hero */}
       <div style={{
         width: '100%', height: 150, borderRadius: 14,
         background: `linear-gradient(135deg, ${color}20, ${color}40)`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: 14, position: 'relative',
-      }}>
+        cursor: negocio.imagenUrl ? 'zoom-in' : 'default',
+      }} onClick={() => negocio.imagenUrl && setLightboxOpen(true)}>
         {negocio.imagenUrl
           ? <img src={negocio.imagenUrl} alt={negocio.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 14 }} />
           : <CatIcon size={52} color={color} />
         }
+        {negocio.imagenUrl && (
+          <div style={{
+            position: 'absolute', bottom: 8, right: 8,
+            background: 'rgba(0,0,0,.45)', borderRadius: 8, padding: '4px 6px',
+            display: 'flex', alignItems: 'center',
+          }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </div>
+        )}
         {avgCal && (
           <div style={{
             position: 'absolute', top: 10, right: 10,
@@ -655,6 +700,11 @@ export default function MapaPage() {
 
   return (
     <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui,-apple-system,sans-serif', display: 'flex' }}>
+      <style>{`
+        .img-thumb { overflow: hidden; }
+        .img-thumb img { transition: transform .35s ease; }
+        .img-thumb:hover img { transform: scale(1.18); }
+      `}</style>
 
       {/* ── Desktop left panel ── */}
       {isDesktop && (
@@ -744,7 +794,7 @@ export default function MapaPage() {
               return (
                 <button key={n.id} onClick={() => handleSelect(n)}
                   style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', background: isSelected ? '#f0fdf8' : '#fff', borderRadius: 12, border: isSelected ? '1.5px solid #0D7C66' : '1px solid #f0efeb', cursor: 'pointer', textAlign: 'left', transition: 'all .15s', boxShadow: isSelected ? '0 2px 8px rgba(13,124,102,.15)' : '0 1px 3px rgba(0,0,0,.05)' }}>
-                  <div style={{ width: 46, height: 46, borderRadius: 10, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div className="img-thumb" style={{ width: 46, height: 46, borderRadius: 10, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {n.imagenUrl
                       ? <img src={n.imagenUrl} alt={n.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
                       : <CatIcon size={20} color={color} />
@@ -987,7 +1037,7 @@ export default function MapaPage() {
                       cursor: 'pointer', textAlign: 'left',
                       boxShadow: '0 1px 4px rgba(0,0,0,.06)', flexShrink: 0,
                     }}>
-                    <div style={{ width: 48, height: 48, borderRadius: 12, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="img-thumb" style={{ width: 48, height: 48, borderRadius: 12, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {n.imagenUrl
                         ? <img src={n.imagenUrl} alt={n.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12 }} />
                         : <CatIcon size={22} color={color} />
@@ -1083,7 +1133,7 @@ export default function MapaPage() {
                       boxShadow: '0 1px 4px rgba(0,0,0,.07)',
                     }}
                   >
-                    <div style={{
+                    <div className="img-thumb" style={{
                       width: 48, height: 48, borderRadius: 12, flexShrink: 0,
                       background: `${color}18`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
