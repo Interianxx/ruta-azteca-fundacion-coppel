@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { MapView, CATEGORIA_COLOR, CATEGORIA_LUCIDE } from '@/components/Map/MapView'
 import type { Negocio, CategoriaSlug } from '@/types/negocio'
-import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User } from 'lucide-react'
+import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User, Globe, Bot } from 'lucide-react'
+import { useTranslation } from '@/hooks/useTranslation'
 
 // ─── Config ────────────────────────────────────────────────────────────────
 
@@ -17,6 +18,107 @@ const CATS: { slug: CategoriaSlug | ''; label: string; icon: React.ReactNode }[]
   { slug: 'transporte',  label: 'Transporte', icon: <Bus        size={14} /> },
   { slug: 'otro',        label: 'Otro',       icon: <Store      size={14} /> },
 ]
+
+const CAT_LABELS: Record<string, Record<string, string>> = {
+  es: { '': 'Todos',  comida: 'Fondas',       artesanias: 'Artesanos',     hospedaje: 'Hostales', tours: 'Guías',   transporte: 'Transporte', otro: 'Otro'  },
+  en: { '': 'All',    comida: 'Food',         artesanias: 'Crafts',        hospedaje: 'Hostels',  tours: 'Tours',   transporte: 'Transport',  otro: 'Other' },
+  fr: { '': 'Tous',   comida: 'Nourriture',   artesanias: 'Artisanat',     hospedaje: 'Auberges', tours: 'Visites', transporte: 'Transport',  otro: 'Autre' },
+  pt: { '': 'Todos',  comida: 'Comida',       artesanias: 'Artesanato',    hospedaje: 'Hostels',  tours: 'Tours',   transporte: 'Transporte', otro: 'Outro' },
+  de: { '': 'Alle',   comida: 'Essen',        artesanias: 'Kunsthandwerk', hospedaje: 'Hostels',  tours: 'Touren',  transporte: 'Transport',  otro: 'Andere'},
+}
+
+const MAP_UI: Record<string, Record<string, string>> = {
+  es: {
+    search_ph: 'Buscar negocios locales...', loading: 'Cargando…',
+    count_verified: '{n} negocios verificados', more_results: '+{n} resultados más — sigue escribiendo para filtrar',
+    back: 'Volver al mapa', directions: 'Cómo llegar',
+    reviews: 'Reseñas', write_review: '+ Escribir reseña', cancel: 'Cancelar',
+    login_to_review: 'Inicia sesión para reseñar', your_rating: 'Tu calificación',
+    review_ph: 'Cuéntanos tu experiencia...', submitting: 'Enviando…', publish_review: 'Publicar reseña',
+    no_reviews: 'Sin reseñas todavía. ¡Sé el primero!', thanks_review: '¡Gracias por tu reseña!',
+    route_to: 'Ruta a', on_foot: 'A pie', by_car: 'Auto', by_metro: 'Metro',
+    chat_title: 'Asistente Ruta Azteca', chat_greeting: '¡Hola! Soy tu guía de Ruta Azteca. ¿Qué experiencia buscas hoy?',
+    chat_typing: 'Escribiendo…', chat_ph: '¿Qué buscas hoy?',
+    chat_error: 'Lo siento, intenta de nuevo.', chat_conn_error: 'Error de conexión. Intenta de nuevo.',
+    saved: 'Guardados', saved_places: '{n} lugares', no_saved: 'Sin lugares guardados',
+    no_saved_hint: 'Dale ❤️ a un negocio para guardarlo aquí',
+    tourist_fallback: 'Turista', my_saved: 'Mis guardados', sign_out: 'Cerrar sesión',
+    anon_user: 'Explorador anónimo', login_to_personalize: 'Inicia sesión para personalizar tu experiencia',
+    sign_in: 'Iniciar sesión', nav_explore: 'Explorar', nav_favorites: 'Favoritos', nav_routes: 'Rutas',
+  },
+  en: {
+    search_ph: 'Search local businesses...', loading: 'Loading…',
+    count_verified: '{n} verified businesses', more_results: '+{n} more results — keep typing to filter',
+    back: 'Back to map', directions: 'Get directions',
+    reviews: 'Reviews', write_review: '+ Write a review', cancel: 'Cancel',
+    login_to_review: 'Sign in to leave a review', your_rating: 'Your rating',
+    review_ph: 'Tell us about your experience...', submitting: 'Sending…', publish_review: 'Post review',
+    no_reviews: 'No reviews yet. Be the first!', thanks_review: 'Thanks for your review!',
+    route_to: 'Route to', on_foot: 'Walking', by_car: 'Car', by_metro: 'Metro',
+    chat_title: 'Ruta Azteca Assistant', chat_greeting: "Hi! I'm your Ruta Azteca guide. What experience are you looking for today?",
+    chat_typing: 'Typing…', chat_ph: 'What are you looking for?',
+    chat_error: 'Sorry, please try again.', chat_conn_error: 'Connection error. Please try again.',
+    saved: 'Saved', saved_places: '{n} places', no_saved: 'No saved places',
+    no_saved_hint: 'Heart a business to save it here',
+    tourist_fallback: 'Tourist', my_saved: 'My saved', sign_out: 'Sign out',
+    anon_user: 'Anonymous explorer', login_to_personalize: 'Sign in to personalize your experience',
+    sign_in: 'Sign in', nav_explore: 'Explore', nav_favorites: 'Favorites', nav_routes: 'Routes',
+  },
+  fr: {
+    search_ph: 'Rechercher des commerces locaux...', loading: 'Chargement…',
+    count_verified: '{n} commerces vérifiés', more_results: '+{n} résultats — continuez à taper pour filtrer',
+    back: 'Retour à la carte', directions: 'Itinéraire',
+    reviews: 'Avis', write_review: '+ Écrire un avis', cancel: 'Annuler',
+    login_to_review: 'Connectez-vous pour laisser un avis', your_rating: 'Votre note',
+    review_ph: 'Parlez-nous de votre expérience...', submitting: 'Envoi…', publish_review: "Publier l'avis",
+    no_reviews: "Pas encore d'avis. Soyez le premier!", thanks_review: 'Merci pour votre avis!',
+    route_to: 'Itinéraire vers', on_foot: 'À pied', by_car: 'Voiture', by_metro: 'Métro',
+    chat_title: 'Assistant Ruta Azteca', chat_greeting: 'Bonjour! Je suis votre guide Ruta Azteca. Quelle expérience cherchez-vous?',
+    chat_typing: "En train d'écrire…", chat_ph: 'Que cherchez-vous?',
+    chat_error: 'Désolé, veuillez réessayer.', chat_conn_error: 'Erreur de connexion. Veuillez réessayer.',
+    saved: 'Enregistrés', saved_places: '{n} lieux', no_saved: 'Aucun lieu enregistré',
+    no_saved_hint: '❤️ un commerce pour le sauvegarder ici',
+    tourist_fallback: 'Touriste', my_saved: 'Mes enregistrés', sign_out: 'Se déconnecter',
+    anon_user: 'Explorateur anonyme', login_to_personalize: 'Connectez-vous pour personnaliser votre expérience',
+    sign_in: 'Se connecter', nav_explore: 'Explorer', nav_favorites: 'Favoris', nav_routes: 'Itinéraires',
+  },
+  pt: {
+    search_ph: 'Pesquisar negócios locais...', loading: 'Carregando…',
+    count_verified: '{n} negócios verificados', more_results: '+{n} resultados — continue digitando para filtrar',
+    back: 'Voltar ao mapa', directions: 'Como chegar',
+    reviews: 'Avaliações', write_review: '+ Escrever avaliação', cancel: 'Cancelar',
+    login_to_review: 'Entre para deixar uma avaliação', your_rating: 'Sua avaliação',
+    review_ph: 'Conte-nos sobre sua experiência...', submitting: 'Enviando…', publish_review: 'Publicar avaliação',
+    no_reviews: 'Sem avaliações ainda. Seja o primeiro!', thanks_review: 'Obrigado pela sua avaliação!',
+    route_to: 'Rota para', on_foot: 'A pé', by_car: 'Carro', by_metro: 'Metrô',
+    chat_title: 'Assistente Ruta Azteca', chat_greeting: 'Olá! Sou seu guia Ruta Azteca. Que experiência você procura hoje?',
+    chat_typing: 'Digitando…', chat_ph: 'O que você está procurando?',
+    chat_error: 'Desculpe, tente novamente.', chat_conn_error: 'Erro de conexão. Tente novamente.',
+    saved: 'Salvos', saved_places: '{n} lugares', no_saved: 'Nenhum lugar salvo',
+    no_saved_hint: 'Curta ❤️ um negócio para salvá-lo aqui',
+    tourist_fallback: 'Turista', my_saved: 'Meus salvos', sign_out: 'Sair',
+    anon_user: 'Explorador anônimo', login_to_personalize: 'Entre para personalizar sua experiência',
+    sign_in: 'Entrar', nav_explore: 'Explorar', nav_favorites: 'Favoritos', nav_routes: 'Rotas',
+  },
+  de: {
+    search_ph: 'Lokale Unternehmen suchen...', loading: 'Laden…',
+    count_verified: '{n} verifizierte Unternehmen', more_results: '+{n} weitere Ergebnisse — tippen Sie weiter zum Filtern',
+    back: 'Zurück zur Karte', directions: 'Route',
+    reviews: 'Bewertungen', write_review: '+ Bewertung schreiben', cancel: 'Abbrechen',
+    login_to_review: 'Anmelden um zu bewerten', your_rating: 'Ihre Bewertung',
+    review_ph: 'Erzählen Sie uns von Ihrer Erfahrung...', submitting: 'Senden…', publish_review: 'Bewertung veröffentlichen',
+    no_reviews: 'Noch keine Bewertungen. Seien Sie der Erste!', thanks_review: 'Vielen Dank für Ihre Bewertung!',
+    route_to: 'Route nach', on_foot: 'Zu Fuß', by_car: 'Auto', by_metro: 'U-Bahn',
+    chat_title: 'Ruta Azteca Assistent', chat_greeting: 'Hallo! Ich bin Ihr Ruta Azteca Guide. Was suchen Sie heute?',
+    chat_typing: 'Schreiben…', chat_ph: 'Was suchen Sie?',
+    chat_error: 'Entschuldigung, bitte versuchen Sie es erneut.', chat_conn_error: 'Verbindungsfehler. Bitte erneut versuchen.',
+    saved: 'Gespeichert', saved_places: '{n} Orte', no_saved: 'Keine gespeicherten Orte',
+    no_saved_hint: '❤️ Sie ein Unternehmen um es hier zu speichern',
+    tourist_fallback: 'Tourist', my_saved: 'Meine Gespeicherten', sign_out: 'Abmelden',
+    anon_user: 'Anonymer Entdecker', login_to_personalize: 'Anmelden um Ihr Erlebnis zu personalisieren',
+    sign_in: 'Anmelden', nav_explore: 'Erkunden', nav_favorites: 'Favoriten', nav_routes: 'Routen',
+  },
+}
 
 // ─── SVG icons ─────────────────────────────────────────────────────────────
 
@@ -80,6 +182,33 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
   const color   = CATEGORIA_COLOR[negocio.categoria] ?? '#1A9E78'
   const CatIcon = CATEGORIA_LUCIDE[negocio.categoria] ?? Store
   const cat     = CATS.find(c => c.slug === negocio.categoria)
+
+  const { t, idioma } = useTranslation()
+  const ui = MAP_UI[idioma] ?? MAP_UI.en
+  const [descripcionT, setDescripcionT] = useState(negocio.descripcion)
+  const [tagsT,        setTagsT]        = useState(negocio.tags ?? [])
+  const [catLabelT,    setCatLabelT]    = useState(cat?.label ?? negocio.categoria)
+  const [traduciendo,  setTraduciendo]  = useState(false)
+
+  useEffect(() => {
+    setDescripcionT(negocio.descripcion)
+    setTagsT(negocio.tags ?? [])
+    setCatLabelT(cat?.label ?? negocio.categoria)
+  }, [negocio.id])
+
+  useEffect(() => {
+    if (idioma === 'es') return
+    setTraduciendo(true)
+    Promise.all([
+      t(negocio.descripcion),
+      t(cat?.label ?? negocio.categoria),
+      Promise.all((negocio.tags ?? []).map(tag => t(tag))),
+    ]).then(([desc, catL, tags]) => {
+      setDescripcionT(desc as string)
+      setCatLabelT(catL as string)
+      setTagsT(tags as string[])
+    }).finally(() => setTraduciendo(false))
+  }, [idioma, negocio.id])
 
   const [isFav,        setIsFav]       = useState(false)
   const [favLoading,   setFavLoading]  = useState(false)
@@ -146,7 +275,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
         setShowForm(false)
         setStars(0)
         setComentario('')
-        setSubmitMsg('¡Gracias por tu reseña!')
+        setSubmitMsg(ui.thanks_review)
         setTimeout(() => setSubmitMsg(''), 3000)
       }
     } finally {
@@ -177,7 +306,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           background: 'none', border: 'none', cursor: 'pointer',
           color: '#8a9690', fontSize: 13, padding: 0,
         }}>
-          <BackIcon /> Volver al mapa
+          <BackIcon /> {ui.back}
         </button>
         <button onClick={toggleFav} disabled={!session || favLoading} style={{
           width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(26, 46, 38, 0.12)',
@@ -273,19 +402,20 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           padding: '3px 10px', borderRadius: 8,
           background: `rgba(26, 46, 38, 0.1)`, color: color,
           fontSize: 12, fontWeight: 700, textShadow: '0 0 8px rgba(0,0,0,0.4)',
-        }}>{cat?.label ?? negocio.categoria}</span>
+          opacity: traduciendo ? 0.5 : 1, transition: 'opacity .3s',
+        }}>{catLabelT}</span>
         <span style={{ fontSize: 12, color: '#8a9690', display: 'flex', alignItems: 'center', gap: 3 }}>
           <ClockIcon /> {negocio.direccion.split(',')[0]}
         </span>
       </div>
 
-      <p style={{ margin: '0 0 12px', fontSize: 14, color: '#1A2E26', lineHeight: 1.6, opacity: 0.9 }}>
-        {negocio.descripcion}
+      <p style={{ margin: '0 0 12px', fontSize: 14, color: '#1A2E26', lineHeight: 1.6, opacity: traduciendo ? 0.5 : 0.9, transition: 'opacity .3s' }}>
+        {descripcionT}
       </p>
 
-      {negocio.tags?.length > 0 && (
+      {tagsT.length > 0 && (
         <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap' }}>
-          {negocio.tags.map(t => (
+          {tagsT.map(t => (
             <span key={t} style={{
               padding: '4px 12px', borderRadius: 20,
               background: 'rgba(26, 46, 38, 0.08)', color: '#8a9690', border: '1px solid rgba(26, 46, 38, 0.12)', fontSize: 12,
@@ -302,7 +432,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           border: '1px solid #0D7C66', borderRadius: 14, cursor: 'pointer',
           color: '#fff', fontWeight: 600, fontSize: 15,
         }}>
-          <RouteIcon /> Cómo llegar
+          <RouteIcon /> {ui.directions}
         </button>
         <button onClick={onFullPage} style={{
           width: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -317,7 +447,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
       <div style={{ borderTop: '1px solid rgba(26, 46, 38, 0.12)', paddingTop: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <span style={{ fontWeight: 700, fontSize: 15, color: '#1A2E26' }}>
-            Reseñas {resenas.length > 0 && `(${resenas.length})`}
+            {ui.reviews} {resenas.length > 0 && `(${resenas.length})`}
           </span>
           {session
             ? <button onClick={() => setShowForm(f => !f)} style={{
@@ -326,9 +456,9 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
                 border: showForm ? '1px solid rgba(26, 46, 38, 0.15)' : '1px solid #0D7C66', cursor: 'pointer',
                 color: '#1A2E26', fontSize: 13, fontWeight: 600,
               }}>
-                {showForm ? 'Cancelar' : '+ Escribir reseña'}
+                {showForm ? ui.cancel : ui.write_review}
               </button>
-            : <span style={{ fontSize: 12, color: '#8a9690' }}>Inicia sesión para reseñar</span>
+            : <span style={{ fontSize: 12, color: '#8a9690' }}>{ui.login_to_review}</span>
           }
         </div>
 
@@ -338,12 +468,12 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
             background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '16px',
             marginBottom: 16, border: '1px solid rgba(26, 46, 38, 0.1)',
           }}>
-            <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>Tu calificación</p>
+            <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>{ui.your_rating}</p>
             <StarPicker value={stars} onChange={setStars} />
             <textarea
               value={comentario}
               onChange={e => setComentario(e.target.value)}
-              placeholder="Cuéntanos tu experiencia..."
+              placeholder={ui.review_ph}
               rows={3}
               style={{
                 width: '100%', marginTop: 12, padding: '10px 12px',
@@ -363,7 +493,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
                 fontWeight: 600, fontSize: 14,
               }}
             >
-              {submitting ? 'Enviando…' : 'Publicar reseña'}
+              {submitting ? ui.submitting : ui.publish_review}
             </button>
           </div>
         )}
@@ -377,7 +507,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
         {/* Reviews list */}
         {resenas.length === 0 && !showForm && (
           <p style={{ fontSize: 13, color: '#8a9690', textAlign: 'center', padding: '16px 0', opacity: 0.8 }}>
-            Sin reseñas todavía. ¡Sé el primero!
+            {ui.no_reviews}
           </p>
         )}
         {resenas.map(r => (
@@ -420,6 +550,8 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
 // ─── Routing overlay ────────────────────────────────────────────────────────
 
 function RoutingOverlay({ negocio, onClose, isDesktop }: { negocio: Negocio; onClose: () => void; isDesktop?: boolean }) {
+  const { idioma } = useTranslation()
+  const ui = MAP_UI[idioma] ?? MAP_UI.en
   const googleUrl = `https://www.google.com/maps/dir/?api=1&destination=${negocio.lat},${negocio.lng}`
   const wazeUrl   = `https://waze.com/ul?ll=${negocio.lat},${negocio.lng}&navigate=yes`
 
@@ -435,15 +567,15 @@ function RoutingOverlay({ negocio, onClose, isDesktop }: { negocio: Negocio; onC
     }}>
       <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 14px' }} />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
-        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#1A2E26' }}>Ruta a {negocio.nombre}</h3>
+        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#1A2E26' }}>{ui.route_to} {negocio.nombre}</h3>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a9690' }}><CloseIcon /></button>
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
         {[
-          { icon: '🚶', label: 'A pie',   time: '~5 min' },
-          { icon: '🚗', label: 'Auto',    time: '~2 min' },
-          { icon: '🚇', label: 'Metro',   time: '~8 min' },
+          { icon: '🚶', label: ui.on_foot, time: '~5 min' },
+          { icon: '🚗', label: ui.by_car, time: '~2 min' },
+          { icon: '🚇', label: ui.by_metro, time: '~8 min' },
         ].map((m, i) => (
           <div key={m.label} style={{
             flex: 1, padding: '10px', borderRadius: 12, textAlign: 'center',
@@ -485,12 +617,16 @@ function RoutingOverlay({ negocio, onClose, isDesktop }: { negocio: Negocio; onC
 type ChatMsg = { from: 'bot' | 'user'; text: string }
 
 function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: boolean }) {
-  const [msgs, setMsgs]       = useState<ChatMsg[]>([
-    { from: 'bot', text: '¡Hola! Soy tu guía de Ruta Azteca. ¿Qué experiencia buscas hoy?' },
-  ])
+  const { idioma } = useTranslation()
+  const ui = MAP_UI[idioma] ?? MAP_UI.en
+  const [msgs, setMsgs]       = useState<ChatMsg[]>([])
   const [input, setInput]     = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMsgs([{ from: 'bot', text: (MAP_UI[idioma] ?? MAP_UI.en).chat_greeting }])
+  }, [idioma])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -512,9 +648,9 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
         body: JSON.stringify({ mensaje: text, historial }),
       })
       const json = await res.json()
-      setMsgs(prev => [...prev, { from: 'bot', text: json.data?.respuesta ?? 'Lo siento, intenta de nuevo.' }])
+      setMsgs(prev => [...prev, { from: 'bot', text: json.data?.respuesta ?? ui.chat_error }])
     } catch {
-      setMsgs(prev => [...prev, { from: 'bot', text: 'Error de conexión. Intenta de nuevo.' }])
+      setMsgs(prev => [...prev, { from: 'bot', text: ui.chat_conn_error }])
     } finally {
       setLoading(false)
     }
@@ -543,9 +679,10 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
             width: 28, height: 28, borderRadius: '50%',
             background: '#0D7C66',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 14,
-          }}>🐍</div>
-          <span style={{ color: '#1A2E26', fontWeight: 600, fontSize: 14 }}>Asistente Ruta Azteca</span>
+          }}>
+            <Bot size={15} color="#fff" />
+          </div>
+          <span style={{ color: '#1A2E26', fontWeight: 600, fontSize: 14 }}>{ui.chat_title}</span>
         </div>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: 4 }}>
           <CloseIcon />
@@ -571,7 +708,7 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
             alignSelf: 'flex-start', padding: '10px 14px',
             borderRadius: '14px 14px 14px 4px', background: 'rgba(26, 46, 38, 0.08)', border: '1px solid rgba(26, 46, 38, 0.12)',
             color: '#8a9690', fontSize: 14,
-          }}>Escribiendo…</div>
+          }}>{ui.chat_typing}</div>
         )}
         <div ref={bottomRef} />
       </div>
@@ -585,7 +722,7 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && send()}
-          placeholder="¿Qué buscas hoy?"
+          placeholder={ui.chat_ph}
           disabled={loading}
           style={{
             flex: 1, padding: '10px 14px',
@@ -611,6 +748,9 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
 export default function MapaPage() {
   const router = useRouter()
   const { data: session } = useSession()
+  const { idioma: idiomaGlobal } = useTranslation()
+  const ui = MAP_UI[idiomaGlobal] ?? MAP_UI.en
+  const catLabel = (slug: string) => (CAT_LABELS[idiomaGlobal] ?? CAT_LABELS.en)[slug] ?? slug
 
   const [negocios,    setNegocios]    = useState<Negocio[]>([])
   const [selected,    setSelected]    = useState<Negocio | null>(null)
@@ -732,6 +872,12 @@ export default function MapaPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <span style={{ fontSize: 16, fontWeight: 800, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
               <VerifiedBadge />
+              {idiomaGlobal !== 'es' && (
+                <span style={{ display: 'flex', alignItems: 'center', gap: 3, padding: '2px 7px', borderRadius: 10, background: 'rgba(13,124,102,0.1)', border: '1px solid rgba(13,124,102,0.2)' }}>
+                  <Globe size={11} color='#0D7C66' />
+                  <span style={{ fontSize: 10, fontWeight: 700, color: '#0D7C66', textTransform: 'uppercase' }}>{idiomaGlobal}</span>
+                </span>
+              )}
               <span style={{ marginLeft: 'auto', fontSize: 11, color: '#8a9690', fontWeight: 500 }}>CDMX</span>
               <button onClick={() => setShowProfile(true)} style={{ width: 34, height: 34, borderRadius: '50%', overflow: 'hidden', padding: 0, background: session?.user?.image ? 'transparent' : session ? '#0D7C66' : 'rgba(26, 46, 38, 0.12)', border: '1px solid rgba(26, 46, 38, 0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {session?.user?.image
@@ -748,7 +894,7 @@ export default function MapaPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px 8px 14px', background: 'rgba(255, 255, 255, 0.5)', borderRadius: 12, border: '1px solid rgba(26, 46, 38, 0.12)' }}>
                 <span style={{ color: '#8a9690', display: 'flex' }}><SearchIcon /></span>
                 <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Escape' && setSearch('')}
-                  placeholder="Buscar negocios locales..."
+                  placeholder={ui.search_ph}
                   style={{ flex: 1, border: 'none', outline: 'none', fontSize: 14, background: 'transparent', color: '#1A2E26' }}
                 />
                 {search.trim()
@@ -788,7 +934,7 @@ export default function MapaPage() {
               {CATS.map(cat => (
                 <button key={cat.slug} onClick={() => setCategoria(cat.slug as CategoriaSlug | '')}
                   style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 20, flexShrink: 0, background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.5)', color: categoria === cat.slug ? '#fff' : '#8a9690', border: categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(255, 255, 255, 0.3)', cursor: 'pointer', fontSize: 12, fontWeight: categoria === cat.slug ? 600 : 400 }}>
-                  {cat.icon} {cat.label}
+                  {cat.icon} {catLabel(cat.slug)}
                 </button>
               ))}
             </div>
@@ -796,7 +942,7 @@ export default function MapaPage() {
 
           {/* Count */}
           <div style={{ padding: '8px 16px', background: 'rgba(255, 255, 255, 0.3)', borderRadius: 12, margin: '8px 16px 0', fontSize: 12, color: '#8a9690', fontWeight: 600, flexShrink: 0, textAlign: 'center' }}>
-            {loading ? 'Cargando…' : `${filtered.length} negocios verificados`}
+            {loading ? ui.loading : ui.count_verified.replace('{n}', filtered.length.toString())}
           </div>
 
           {/* List */}
@@ -967,7 +1113,7 @@ export default function MapaPage() {
               })}
               {filtered.length > 7 && (
                 <div style={{ padding: '8px 16px', fontSize: 12, color: '#8a9690', textAlign: 'center', borderTop: '1px solid #f2f1ee' }}>
-                  +{filtered.length - 7} resultados más — sigue escribiendo para filtrar
+                  {ui.more_results.replace('{n}', (filtered.length - 7).toString())}
                 </div>
               )}
             </div>
@@ -1000,7 +1146,7 @@ export default function MapaPage() {
                 : '0 1px 4px rgba(0,0,0,.05)',
             }}
           >
-            {cat.icon} {cat.label}
+            {cat.icon} {catLabel(cat.slug)}
           </button>
         ))}
       </div>
@@ -1023,7 +1169,7 @@ export default function MapaPage() {
             <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 10px' }} />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1A2E26' }}>
-                {loading ? 'Cargando…' : `${filtered.length} negocios verificados`}
+                {loading ? ui.loading : ui.count_verified.replace('{n}', filtered.length.toString())}
               </span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8a9690" strokeWidth="2" strokeLinecap="round">
                 {sheetState === 'full'
@@ -1121,8 +1267,8 @@ export default function MapaPage() {
                   <BookmarkIcon filled />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: 16, color: '#1A2E26' }}>Guardados</div>
-                  <div style={{ fontSize: 12, color: '#8a9690' }}>{`${favNegocios.length} lugar${favNegocios.length !== 1 ? 'es' : ''}`}</div>
+                  <div style={{ fontWeight: 700, fontSize: 16, color: '#1A2E26' }}>{ui.saved}</div>
+                  <div style={{ fontSize: 12, color: '#8a9690' }}>{ui.saved_places.replace('{n}', favNegocios.length.toString())}</div>
                 </div>
               </div>
             </div>
@@ -1132,8 +1278,8 @@ export default function MapaPage() {
               {favNegocios.length === 0 && (
                 <div style={{ textAlign: 'center', padding: '40px 20px' }}>
                   <div style={{ fontSize: 40, marginBottom: 12 }}>🔖</div>
-                  <div style={{ fontWeight: 600, fontSize: 15, color: '#1A2E26', marginBottom: 6 }}>Sin lugares guardados</div>
-                  <div style={{ fontSize: 13, color: '#8a9690' }}>Dale ❤️ a un negocio para guardarlo aquí</div>
+                  <div style={{ fontWeight: 600, fontSize: 15, color: '#1A2E26', marginBottom: 6 }}>{ui.no_saved}</div>
+                  <div style={{ fontSize: 13, color: '#8a9690' }}>{ui.no_saved_hint}</div>
                 </div>
               )}
 
@@ -1220,7 +1366,7 @@ export default function MapaPage() {
                     }
                   </div>
                   <div style={{ fontWeight: 700, fontSize: 18, color: '#1A2E26', textAlign: 'center' }}>
-                    {session.user?.name ?? 'Turista'}
+                    {session.user?.name ?? ui.tourist_fallback}
                   </div>
                   {session.user?.email && (
                     <div style={{ fontSize: 13, color: '#8a9690', marginTop: 4 }}>{session.user.email}</div>
@@ -1235,7 +1381,7 @@ export default function MapaPage() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   }}
                 >
-                  <BookmarkIcon filled /> Mis guardados
+                  <BookmarkIcon filled /> {ui.my_saved}
                 </button>
                 <button
                   onClick={() => { setShowProfile(false); signOut({ callbackUrl: '/api/auth/logout' }) }}
@@ -1245,7 +1391,7 @@ export default function MapaPage() {
                     fontSize: 15, fontWeight: 600, color: '#fc8181', cursor: 'pointer',
                   }}
                 >
-                  Cerrar sesión
+                  {ui.sign_out}
                 </button>
               </>
             ) : (
@@ -1258,9 +1404,9 @@ export default function MapaPage() {
                   }}>
                     <PersonIcon />
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: 18, color: '#1A2E26' }}>Explorador anónimo</div>
+                  <div style={{ fontWeight: 700, fontSize: 18, color: '#1A2E26' }}>{ui.anon_user}</div>
                   <div style={{ fontSize: 13, color: '#8a9690', marginTop: 4, textAlign: 'center' }}>
-                    Inicia sesión para personalizar tu experiencia
+                    {ui.login_to_personalize}
                   </div>
                 </div>
                 <button
@@ -1272,7 +1418,7 @@ export default function MapaPage() {
                     fontSize: 15, fontWeight: 600, color: '#fff', cursor: 'pointer',
                   }}
                 >
-                  Iniciar sesión
+                  {ui.sign_in}
                 </button>
               </>
             )}
@@ -1289,9 +1435,9 @@ export default function MapaPage() {
           zIndex: 35, boxShadow: 'none'
         }}>
           {[
-            { key: 'explorar',  label: 'Explorar',  Icon: Compass,     action: () => setActiveTab('explorar') },
-            { key: 'favoritos', label: 'Favoritos', Icon: Heart,       action: () => { setActiveTab('favoritos'); openFavoritos() } },
-            { key: 'rutas',     label: 'Rutas',     Icon: Navigation2, action: () => setActiveTab('rutas') },
+            { key: 'explorar',  label: ui.nav_explore,   Icon: Compass,     action: () => setActiveTab('explorar') },
+            { key: 'favoritos', label: ui.nav_favorites, Icon: Heart,       action: () => { setActiveTab('favoritos'); openFavoritos() } },
+            { key: 'rutas',     label: ui.nav_routes,    Icon: Navigation2, action: () => setActiveTab('rutas') },
           ].map(({ key, label, Icon, action }) => (
             <button key={key} onClick={action} style={{
               flex: 1, display: 'flex', flexDirection: 'column',

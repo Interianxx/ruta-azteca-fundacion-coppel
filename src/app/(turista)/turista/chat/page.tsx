@@ -1,15 +1,26 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { Bot } from 'lucide-react'
+import { useTranslation } from '@/hooks/useTranslation'
 
 interface Msg { from: 'user' | 'bot'; text: string }
 
-const SUGERENCIAS = [
-  '¿Dónde puedo comer tacos auténticos cerca del centro?',
-  '¿Qué artesanías típicas puedo comprar en CDMX?',
-  '¿Cómo llego al Zócalo desde el aeropuerto?',
-  '¿Qué hostal económico recomiendan en Coyoacán?',
-]
+const SUGERENCIAS: Record<string, string[]> = {
+  es: ['¿Dónde puedo comer tacos auténticos cerca del centro?', '¿Qué artesanías típicas puedo comprar en CDMX?', '¿Cómo llego al Zócalo desde el aeropuerto?', '¿Qué hostal económico recomiendan en Coyoacán?'],
+  en: ['Where can I eat authentic tacos near the center?', 'What typical crafts can I buy in CDMX?', 'How do I get to the Zócalo from the airport?', 'What affordable hostel do you recommend in Coyoacán?'],
+  fr: ["Où puis-je manger des tacos authentiques près du centre?", "Quels artisanats typiques puis-je acheter à CDMX?", "Comment aller au Zócalo depuis l'aéroport?", "Quel auberge économique recommandez-vous à Coyoacán?"],
+  pt: ['Onde posso comer tacos autênticos perto do centro?', 'Que artesanatos típicos posso comprar na CDMX?', 'Como chego ao Zócalo do aeroporto?', 'Que hostel econômico recomendam em Coyoacán?'],
+  de: ['Wo kann ich authentische Tacos in der Nähe des Zentrums essen?', 'Welche typischen Handwerksprodukte kann ich in CDMX kaufen?', 'Wie komme ich vom Flughafen zum Zócalo?', 'Welche günstige Herberge empfehlen Sie in Coyoacán?'],
+}
+
+const UI_CHAT: Record<string, Record<string, string>> = {
+  es: { title: 'Asistente Ruta Azteca', powered: 'Powered by Amazon Bedrock', try: 'Prueba preguntando:', placeholder: 'Escribe tu pregunta...', disclaimer: 'Respuestas generadas por IA — verifica información importante', assistant: 'Asistente', greeting: '¡Hola! Soy tu guía de Ruta Azteca.\n\nPuedo ayudarte a encontrar negocios locales, recomendarte lugares auténticos y responder cualquier duda sobre tu visita a México. ¿En qué te puedo ayudar?' },
+  en: { title: 'Ruta Azteca Assistant', powered: 'Powered by Amazon Bedrock', try: 'Try asking:', placeholder: 'Type your question...', disclaimer: 'AI-generated answers — verify important information', assistant: 'Assistant', greeting: "Hi! I'm your Ruta Azteca guide.\n\nI can help you find local businesses, recommend authentic spots and answer any questions about your visit to Mexico. How can I help you?" },
+  fr: { title: 'Assistant Ruta Azteca', powered: 'Powered by Amazon Bedrock', try: 'Essayez de demander:', placeholder: 'Écrivez votre question...', disclaimer: 'Réponses générées par IA — vérifiez les informations importantes', assistant: 'Assistant', greeting: "Bonjour! Je suis votre guide Ruta Azteca.\n\nJe peux vous aider à trouver des commerces locaux, vous recommander des endroits authentiques et répondre à vos questions. Comment puis-je vous aider?" },
+  pt: { title: 'Assistente Ruta Azteca', powered: 'Powered by Amazon Bedrock', try: 'Tente perguntar:', placeholder: 'Escreva sua pergunta...', disclaimer: 'Respostas geradas por IA — verifique informações importantes', assistant: 'Assistente', greeting: 'Olá! Sou seu guia Ruta Azteca.\n\nPosso ajudá-lo a encontrar negócios locais e responder suas dúvidas sobre o México. Como posso ajudá-lo?' },
+  de: { title: 'Ruta Azteca Assistent', powered: 'Powered by Amazon Bedrock', try: 'Versuchen Sie zu fragen:', placeholder: 'Schreiben Sie Ihre Frage...', disclaimer: 'KI-generierte Antworten — überprüfen Sie wichtige Informationen', assistant: 'Assistent', greeting: 'Hallo! Ich bin Ihr Ruta Azteca Guide.\n\nIch kann Ihnen helfen, lokale Geschäfte zu finden und Fragen zu Ihrem Mexiko-Besuch zu beantworten. Wie kann ich Ihnen helfen?' },
+}
 
 function ArrowIcon() {
   return (
@@ -31,10 +42,17 @@ function SendIcon() {
 
 export default function ChatPage() {
   const router = useRouter()
+  const { idioma } = useTranslation()
+  const ui = UI_CHAT[idioma] ?? UI_CHAT.en
+  const sugerencias = SUGERENCIAS[idioma] ?? SUGERENCIAS.en
 
-  const [msgs, setMsgs] = useState<Msg[]>([
-    { from: 'bot', text: '¡Hola! Soy tu asistente de Ruta Azteca 🐍\n\nPuedo ayudarte a encontrar negocios locales, recomendarte lugares auténticos y responder cualquier duda sobre tu visita a México. ¿En qué te puedo ayudar?' },
-  ])
+  const [msgs, setMsgs] = useState<Msg[]>([])
+
+  useEffect(() => {
+    const u = UI_CHAT[idioma] ?? UI_CHAT.en
+    setMsgs([{ from: 'bot', text: u.greeting }])
+  }, [idioma])
+
   const [input,   setInput]   = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
@@ -53,42 +71,34 @@ export default function ChatPage() {
     setLoading(true)
 
     try {
-      // Build historial excluding the hardcoded greeting (index 0).
-      // Bedrock requires: starts with 'user', alternates roles, ends with 'assistant'.
       const raw = msgs.slice(1).map(m => ({
         rol:      m.from === 'user' ? 'user' : 'assistant',
         contenido: m.text,
       }))
-      // Remove consecutive same-role entries (can happen on rapid sends)
       const deduped = raw.filter((item, i) => i === 0 || item.rol !== raw[i - 1].rol)
-      // Must start with 'user'
       while (deduped.length && deduped[0].rol === 'assistant') deduped.shift()
-      // Must end with 'assistant' so appending the new user msg doesn't create consecutive users
       while (deduped.length && deduped[deduped.length - 1].rol === 'user') deduped.pop()
       const historial = deduped
       const res  = await fetch('/api/chat', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ mensaje: text, historial }),
+        body:    JSON.stringify({ mensaje: text, historial, idioma }),
       })
       const json = await res.json()
       const errMsg =
         json.data?.statusCode === 403 ? 'El servicio de IA no está disponible en este momento.' :
         json.data?.statusCode === 429 ? 'Demasiadas solicitudes seguidas. Espera unos segundos e intenta de nuevo.' :
         'Lo siento, no pude procesar tu mensaje. Intenta de nuevo.'
-      setMsgs(prev => [...prev, {
-        from: 'bot',
-        text: json.data?.respuesta ?? errMsg,
-      }])
+      setMsgs(prev => [...prev, { from: 'bot', text: json.data?.respuesta ?? errMsg }])
     } catch {
       setMsgs(prev => [...prev, { from: 'bot', text: 'Error de conexión. Intenta de nuevo.' }])
     } finally {
       setLoading(false)
       setTimeout(() => inputRef.current?.focus(), 100)
     }
-  }, [input, loading, msgs])
+  }, [input, loading, msgs, idioma])
 
-  const showSugerencias = msgs.length === 1  // solo cuando está el mensaje de bienvenida
+  const showSugerencias = msgs.length === 1
 
   return (
     <div style={{
@@ -101,30 +111,17 @@ export default function ChatPage() {
 
       {/* ── Top bar ──────────────────────────────────────────── */}
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 12,
+        display: 'flex', alignItems: 'center', gap: 12,
         padding: '14px 16px',
         background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
         boxShadow: '0 2px 8px rgba(0,0,0,.12)',
         flexShrink: 0,
       }}>
-        <button
-          onClick={() => router.back()}
-          style={{
-            background: 'rgba(255,255,255,.15)',
-            border: 'none',
-            borderRadius: 10,
-            width: 36,
-            height: 36,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: '#fff',
-            flexShrink: 0,
-          }}
-        >
+        <button onClick={() => router.back()} style={{
+          background: 'rgba(255,255,255,.15)', border: 'none', borderRadius: 10,
+          width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', color: '#fff', flexShrink: 0,
+        }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
@@ -135,58 +132,42 @@ export default function ChatPage() {
             width: 36, height: 36, borderRadius: '50%',
             background: 'rgba(255,255,255,.2)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 18, flexShrink: 0,
-          }}>🐍</div>
+            flexShrink: 0,
+          }}>
+            <Bot size={20} color="#fff" />
+          </div>
           <div>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, lineHeight: 1.2 }}>
-              Asistente Ruta Azteca
-            </div>
-            <div style={{ color: 'rgba(255,255,255,.75)', fontSize: 12 }}>
-              Powered by Amazon Bedrock
-            </div>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, lineHeight: 1.2 }}>{ui.title}</div>
+            <div style={{ color: 'rgba(255,255,255,.75)', fontSize: 12 }}>{ui.powered}</div>
           </div>
         </div>
       </div>
 
       {/* ── Messages ─────────────────────────────────────────── */}
       <div style={{
-        flex: 1,
-        overflowY: 'auto',
-        padding: '16px 16px 8px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 12,
+        flex: 1, overflowY: 'auto', padding: '16px 16px 8px',
+        display: 'flex', flexDirection: 'column', gap: 12,
       }}>
         {msgs.map((m, i) => (
-          <div key={i} style={{
-            alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start',
-            maxWidth: '82%',
-          }}>
+          <div key={i} style={{ alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start', maxWidth: '82%' }}>
             {m.from === 'bot' && (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                marginBottom: 4,
-              }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
                 <div style={{
                   width: 22, height: 22, borderRadius: '50%',
                   background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 11,
-                }}>🐍</div>
-                <span style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>Asistente</span>
+                }}>
+                  <Bot size={13} color="#fff" />
+                </div>
+                <span style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>{ui.assistant}</span>
               </div>
             )}
             <div style={{
               padding: '11px 15px',
               borderRadius: m.from === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-              background: m.from === 'user'
-                ? 'linear-gradient(135deg, #0D7C66, #1A9E78)'
-                : '#fff',
-              color:     m.from === 'user' ? '#fff' : '#1A2E26',
-              fontSize:  14,
-              lineHeight: 1.55,
+              background: m.from === 'user' ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#fff',
+              color: m.from === 'user' ? '#fff' : '#1A2E26',
+              fontSize: 14, lineHeight: 1.55,
               boxShadow: '0 1px 4px rgba(0,0,0,.08)',
               whiteSpace: 'pre-wrap',
             }}>
@@ -202,21 +183,19 @@ export default function ChatPage() {
                 width: 22, height: 22, borderRadius: '50%',
                 background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11,
-              }}>🐍</div>
-              <span style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>Asistente</span>
+              }}>
+                <Bot size={13} color="#fff" />
+              </div>
+              <span style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>{ui.assistant}</span>
             </div>
             <div style={{
-              padding: '11px 15px',
-              borderRadius: '16px 16px 16px 4px',
-              background: '#fff',
-              boxShadow: '0 1px 4px rgba(0,0,0,.08)',
+              padding: '11px 15px', borderRadius: '16px 16px 16px 4px',
+              background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,.08)',
               display: 'flex', gap: 5, alignItems: 'center',
             }}>
               {[0, 1, 2].map(i => (
                 <div key={i} style={{
-                  width: 7, height: 7, borderRadius: '50%',
-                  background: '#0D7C66',
+                  width: 7, height: 7, borderRadius: '50%', background: '#0D7C66',
                   animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite`,
                 }} />
               ))}
@@ -224,28 +203,16 @@ export default function ChatPage() {
           </div>
         )}
 
-        {/* Sugerencias rápidas (solo al inicio) */}
         {showSugerencias && !loading && (
           <div style={{ alignSelf: 'stretch', marginTop: 4 }}>
-            <p style={{ fontSize: 12, color: '#8a9690', marginBottom: 8, textAlign: 'center' }}>
-              Prueba preguntando:
-            </p>
+            <p style={{ fontSize: 12, color: '#8a9690', marginBottom: 8, textAlign: 'center' }}>{ui.try}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {SUGERENCIAS.map((s, i) => (
+              {sugerencias.map((s, i) => (
                 <button key={i} onClick={() => send(s)} style={{
-                  textAlign: 'left',
-                  background: '#fff',
-                  border: '1.5px solid #e0ddd5',
-                  borderRadius: 12,
-                  padding: '10px 14px',
-                  fontSize: 13,
-                  color: '#1A2E26',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 8,
-                  boxShadow: '0 1px 3px rgba(0,0,0,.06)',
+                  textAlign: 'left', background: '#fff', border: '1.5px solid #e0ddd5',
+                  borderRadius: 12, padding: '10px 14px', fontSize: 13, color: '#1A2E26',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center',
+                  justifyContent: 'space-between', gap: 8, boxShadow: '0 1px 3px rgba(0,0,0,.06)',
                 }}>
                   <span>{s}</span>
                   <span style={{ color: '#0D7C66', flexShrink: 0 }}><ArrowIcon /></span>
@@ -259,19 +226,10 @@ export default function ChatPage() {
       </div>
 
       {/* ── Input bar ────────────────────────────────────────── */}
-      <div style={{
-        padding: '10px 14px 14px',
-        background: '#fff',
-        borderTop: '1px solid #eee',
-        flexShrink: 0,
-      }}>
+      <div style={{ padding: '10px 14px 14px', background: '#fff', borderTop: '1px solid #eee', flexShrink: 0 }}>
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          background: '#f7f6f2',
-          borderRadius: 16,
-          border: '1.5px solid #e0ddd5',
+          display: 'flex', alignItems: 'center', gap: 8,
+          background: '#f7f6f2', borderRadius: 16, border: '1.5px solid #e0ddd5',
           padding: '6px 6px 6px 14px',
         }}>
           <input
@@ -279,44 +237,26 @@ export default function ChatPage() {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-            placeholder="Escribe tu pregunta..."
+            placeholder={ui.placeholder}
             disabled={loading}
-            style={{
-              flex: 1,
-              border: 'none',
-              background: 'transparent',
-              fontSize: 14,
-              color: '#1A2E26',
-              outline: 'none',
-              minHeight: 28,
-            }}
+            style={{ flex: 1, border: 'none', background: 'transparent', fontSize: 14, color: '#1A2E26', outline: 'none', minHeight: 28 }}
           />
           <button
             onClick={() => send()}
             disabled={loading || !input.trim()}
             style={{
-              width: 38,
-              height: 38,
-              borderRadius: 12,
-              background: input.trim() && !loading
-                ? 'linear-gradient(135deg, #0D7C66, #1A9E78)'
-                : '#e0ddd5',
-              border: 'none',
-              cursor: input.trim() && !loading ? 'pointer' : 'default',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: 38, height: 38, borderRadius: 12,
+              background: input.trim() && !loading ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#e0ddd5',
+              border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: input.trim() && !loading ? '#fff' : '#aaa',
-              transition: 'background .2s, color .2s',
-              flexShrink: 0,
+              transition: 'background .2s, color .2s', flexShrink: 0,
             }}
           >
             <SendIcon />
           </button>
         </div>
-        <p style={{ fontSize: 11, color: '#b0aa9e', textAlign: 'center', marginTop: 6 }}>
-          Respuestas generadas por IA — verifica información importante
-        </p>
+        <p style={{ fontSize: 11, color: '#b0aa9e', textAlign: 'center', marginTop: 6 }}>{ui.disclaimer}</p>
       </div>
 
       <style>{`

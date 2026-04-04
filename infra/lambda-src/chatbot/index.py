@@ -17,19 +17,27 @@ bedrock = boto3.client("bedrock-runtime", region_name=os.environ.get("AWS_REGION
 MODEL_ID    = os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
 MAX_RETRIES = 2  # reintentos ante ThrottlingException
 
-SYSTEM_PROMPT = """Eres el asistente oficial de Ruta Azteca, una plataforma que conecta
-turistas del Mundial FIFA 2026 con negocios locales verificados del programa Ola México en CDMX.
+BASE_SYSTEM_PROMPT = """You are the official assistant of Ruta Azteca, a platform that connects
+FIFA World Cup 2026 tourists with verified local businesses from the Ola México program in Mexico City.
 
-Tu rol:
-- Ayudar a turistas a encontrar negocios locales (comida, artesanías, tours, hospedaje, transporte)
-- Dar recomendaciones culturales sobre CDMX
-- Responder en el idioma del usuario (español o inglés)
-- Ser amigable, breve y útil
+Your role:
+- Help tourists find local businesses (food, crafts, tours, accommodation, transport)
+- Give cultural recommendations about Mexico City
+- Be friendly, brief and helpful
 
-Límites:
-- Solo habla de temas relacionados con turismo en CDMX y negocios Ola México
-- No inventes información de negocios específicos
-- Si no sabes algo, redirige a buscar en el mapa de Ruta Azteca
+Limits:
+- Only discuss topics related to tourism in Mexico City and Ola México businesses
+- Do not invent specific business information
+- If you do not know something, redirect to the Ruta Azteca map
+
+CRITICAL LANGUAGE RULE: You MUST ALWAYS reply in the EXACT SAME language the user writes in.
+- If the user writes in English → reply in English
+- If the user writes in Spanish → reply in Spanish
+- If the user writes in French → reply in French
+- If the user writes in Portuguese → reply in Portuguese
+- If the user writes in German → reply in German
+- If the user writes in any other language → reply in that same language
+NEVER switch languages. NEVER default to Spanish. Match the user's language exactly.
 """
 
 
@@ -37,6 +45,11 @@ def lambda_handler(event, context):
     try:
         mensaje    = event.get("mensaje", "")
         historial  = event.get("historial", [])
+        idioma     = event.get("idioma", "")
+
+        system_prompt = BASE_SYSTEM_PROMPT
+        if idioma and idioma != "es":
+            system_prompt += f"\nThe user's browser language is '{idioma}'. Prioritize replying in that language."
 
         if not mensaje:
             return {"statusCode": 400, "error": "mensaje requerido"}
@@ -69,7 +82,7 @@ def lambda_handler(event, context):
         payload = {
             "anthropic_version": "bedrock-2023-05-31",
             "max_tokens":        512,
-            "system":            SYSTEM_PROMPT,
+            "system":            system_prompt,
             "messages":          messages,
         }
 

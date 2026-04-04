@@ -11,6 +11,223 @@ const patterns = [
   { x: 50, y: 5, r: 60 }, { x: 50, y: 92, r: 300 },
 ]
 
+// ─── i18n ─────────────────────────────────────────────────────────────────────
+
+type LangCode = 'es' | 'en' | 'fr' | 'pt' | 'de'
+
+type LangUI = {
+  subtitle_brand: string; subtitle_footer: string; verified_footer: string
+  tourist_btn: string; tourist_sub: string; business_btn: string; business_sub: string
+  title_select: string; title_tourist: string; title_t_login: string; title_t_signup: string
+  title_t_verify: string; title_t_forgot: string; title_t_reset: string; title_business: string
+  sub_select: string; sub_tourist: string; sub_t_login: string; sub_t_signup: string
+  sub_t_verify: string; sub_t_forgot: string; sub_t_reset: string; sub_business: string
+  email_fallback: string
+  google: string; redirecting: string; email_btn: string; explore: string; back: string
+  or_no_acct: string; or_email: string
+  login_btn: string; logging_in: string; signup_btn: string; creating_acct: string
+  verify_btn: string; verifying_act: string; send_btn: string; sending_act: string
+  change_pass_btn: string; updating_act: string
+  forgot: string; no_account: string; have_account: string; register: string; verify_resend: string
+  email_ph: string; pass_ph: string; name_opt_ph: string; pass_min_ph: string; new_pass_ph: string
+  ok_verified: string; ok_resent: string; ok_pass_changed: string
+  err_credentials: string; err_network: string
+}
+
+function getUILang(): LangCode {
+  if (typeof navigator === 'undefined') return 'es'
+  const l = navigator.language.slice(0, 2).toLowerCase()
+  return (['es', 'en', 'fr', 'pt', 'de'] as LangCode[]).includes(l as LangCode) ? l as LangCode : 'en'
+}
+
+const UI_LANGS: Record<LangCode, LangUI> = {
+  es: {
+    subtitle_brand: 'Conecta con los negocios locales que dan vida a nuestras ciudades',
+    subtitle_footer: 'FIFA World Cup 2026 — Experiencias locales verificadas',
+    verified_footer: 'Verificado por Ola México — Impact Hub',
+    tourist_btn: 'Soy turista', tourist_sub: 'Explorar negocios locales al instante',
+    business_btn: 'Tengo un negocio', business_sub: 'Registrar o gestionar mi perfil',
+    title_select: 'Bienvenido', title_tourist: 'Soy turista', title_t_login: 'Iniciar sesión',
+    title_t_signup: 'Crear cuenta', title_t_verify: 'Verifica tu correo',
+    title_t_forgot: 'Recuperar contraseña', title_t_reset: 'Nueva contraseña', title_business: 'Acceso negocio',
+    sub_select: 'Elige cómo quieres comenzar tu experiencia',
+    sub_tourist: 'Explora negocios locales al instante',
+    sub_t_login: 'Ingresa con tu correo y contraseña',
+    sub_t_signup: 'Únete a la comunidad Ruta Azteca',
+    sub_t_verify: 'Enviamos un código a {email}',
+    sub_t_forgot: 'Te enviaremos un código de recuperación',
+    sub_t_reset: 'Revisa {email} y escribe el código',
+    sub_business: 'Inicia sesión para gestionar tu negocio o panel',
+    email_fallback: 'tu correo',
+    google: 'Continuar con Google', redirecting: 'Redirigiendo...',
+    email_btn: 'Continuar con correo', explore: 'Explorar el mapa ahora', back: '← Volver',
+    or_no_acct: 'o sin cuenta', or_email: 'o con correo',
+    login_btn: 'Iniciar sesión', logging_in: 'Ingresando...',
+    signup_btn: 'Crear cuenta', creating_acct: 'Creando cuenta...',
+    verify_btn: 'Verificar cuenta', verifying_act: 'Verificando...',
+    send_btn: 'Enviar código', sending_act: 'Enviando...',
+    change_pass_btn: 'Cambiar contraseña', updating_act: 'Actualizando...',
+    forgot: '¿Olvidaste tu contraseña?', no_account: '¿No tienes cuenta?',
+    have_account: '¿Ya tienes cuenta?', register: 'Regístrate',
+    verify_resend: '¿No recibiste el código? Reenviar',
+    email_ph: 'correo@ejemplo.com', pass_ph: 'Contraseña',
+    name_opt_ph: 'Nombre (opcional)', pass_min_ph: 'Contraseña (mín. 8 caracteres)', new_pass_ph: 'Nueva contraseña',
+    ok_verified: '¡Cuenta verificada! Ya puedes iniciar sesión.',
+    ok_resent: 'Código reenviado a tu correo.',
+    ok_pass_changed: '¡Contraseña actualizada! Ya puedes iniciar sesión.',
+    err_credentials: 'Correo o contraseña incorrectos. Si acabas de registrarte, verifica tu correo primero.',
+    err_network: 'Error de red. Intenta de nuevo.',
+  },
+  en: {
+    subtitle_brand: 'Connect with local businesses that bring our cities to life',
+    subtitle_footer: 'FIFA World Cup 2026 — Verified local experiences',
+    verified_footer: 'Verified by Ola México — Impact Hub',
+    tourist_btn: "I'm a tourist", tourist_sub: 'Explore local businesses instantly',
+    business_btn: 'I have a business', business_sub: 'Register or manage my profile',
+    title_select: 'Welcome', title_tourist: "I'm a tourist", title_t_login: 'Sign in',
+    title_t_signup: 'Create account', title_t_verify: 'Verify your email',
+    title_t_forgot: 'Recover password', title_t_reset: 'New password', title_business: 'Business access',
+    sub_select: 'Choose how you want to start your experience',
+    sub_tourist: 'Explore local businesses instantly',
+    sub_t_login: 'Enter your email and password',
+    sub_t_signup: 'Join the Ruta Azteca community',
+    sub_t_verify: 'We sent a code to {email}',
+    sub_t_forgot: "We'll send you a recovery code",
+    sub_t_reset: 'Check {email} and enter the code',
+    sub_business: 'Sign in to manage your business or panel',
+    email_fallback: 'your email',
+    google: 'Continue with Google', redirecting: 'Redirecting...',
+    email_btn: 'Continue with email', explore: 'Explore the map now', back: '← Back',
+    or_no_acct: 'or without account', or_email: 'or with email',
+    login_btn: 'Sign in', logging_in: 'Signing in...',
+    signup_btn: 'Create account', creating_acct: 'Creating account...',
+    verify_btn: 'Verify account', verifying_act: 'Verifying...',
+    send_btn: 'Send code', sending_act: 'Sending...',
+    change_pass_btn: 'Change password', updating_act: 'Updating...',
+    forgot: 'Forgot your password?', no_account: "Don't have an account?",
+    have_account: 'Already have an account?', register: 'Sign up',
+    verify_resend: "Didn't receive the code? Resend",
+    email_ph: 'email@example.com', pass_ph: 'Password',
+    name_opt_ph: 'Name (optional)', pass_min_ph: 'Password (min. 8 characters)', new_pass_ph: 'New password',
+    ok_verified: 'Account verified! You can now sign in.',
+    ok_resent: 'Code resent to your email.',
+    ok_pass_changed: 'Password updated! You can now sign in.',
+    err_credentials: 'Wrong email or password. If you just registered, verify your email first.',
+    err_network: 'Network error. Please try again.',
+  },
+  fr: {
+    subtitle_brand: 'Connectez-vous avec les commerces locaux qui donnent vie à nos villes',
+    subtitle_footer: 'FIFA Coupe du Monde 2026 — Expériences locales vérifiées',
+    verified_footer: 'Vérifié par Ola México — Impact Hub',
+    tourist_btn: 'Je suis touriste', tourist_sub: 'Explorer les commerces locaux instantanément',
+    business_btn: "J'ai un commerce", business_sub: 'Enregistrer ou gérer mon profil',
+    title_select: 'Bienvenue', title_tourist: 'Je suis touriste', title_t_login: 'Se connecter',
+    title_t_signup: 'Créer un compte', title_t_verify: 'Vérifiez votre email',
+    title_t_forgot: 'Récupérer le mot de passe', title_t_reset: 'Nouveau mot de passe', title_business: 'Accès commerce',
+    sub_select: 'Choisissez comment commencer votre expérience',
+    sub_tourist: 'Explorez les commerces locaux instantanément',
+    sub_t_login: 'Entrez votre email et mot de passe',
+    sub_t_signup: 'Rejoignez la communauté Ruta Azteca',
+    sub_t_verify: 'Nous avons envoyé un code à {email}',
+    sub_t_forgot: 'Nous vous enverrons un code de récupération',
+    sub_t_reset: 'Vérifiez {email} et entrez le code',
+    sub_business: 'Connectez-vous pour gérer votre commerce ou panneau',
+    email_fallback: 'votre email',
+    google: 'Continuer avec Google', redirecting: 'Redirection...',
+    email_btn: 'Continuer avec email', explore: 'Explorer la carte maintenant', back: '← Retour',
+    or_no_acct: 'ou sans compte', or_email: 'ou avec email',
+    login_btn: 'Se connecter', logging_in: 'Connexion...',
+    signup_btn: 'Créer un compte', creating_acct: 'Création du compte...',
+    verify_btn: 'Vérifier le compte', verifying_act: 'Vérification...',
+    send_btn: 'Envoyer le code', sending_act: 'Envoi...',
+    change_pass_btn: 'Changer le mot de passe', updating_act: 'Mise à jour...',
+    forgot: 'Mot de passe oublié?', no_account: 'Pas de compte?',
+    have_account: 'Déjà un compte?', register: "S'inscrire",
+    verify_resend: 'Code non reçu? Renvoyer',
+    email_ph: 'email@exemple.com', pass_ph: 'Mot de passe',
+    name_opt_ph: 'Nom (optionnel)', pass_min_ph: 'Mot de passe (min. 8 caractères)', new_pass_ph: 'Nouveau mot de passe',
+    ok_verified: 'Compte vérifié! Vous pouvez maintenant vous connecter.',
+    ok_resent: 'Code renvoyé à votre email.',
+    ok_pass_changed: 'Mot de passe mis à jour! Vous pouvez maintenant vous connecter.',
+    err_credentials: "Email ou mot de passe incorrect. Si vous venez de vous inscrire, vérifiez d'abord votre email.",
+    err_network: 'Erreur réseau. Veuillez réessayer.',
+  },
+  pt: {
+    subtitle_brand: 'Conecte-se com os negócios locais que dão vida às nossas cidades',
+    subtitle_footer: 'FIFA Copa do Mundo 2026 — Experiências locais verificadas',
+    verified_footer: 'Verificado por Ola México — Impact Hub',
+    tourist_btn: 'Sou turista', tourist_sub: 'Explorar negócios locais instantaneamente',
+    business_btn: 'Tenho um negócio', business_sub: 'Registrar ou gerenciar meu perfil',
+    title_select: 'Bem-vindo', title_tourist: 'Sou turista', title_t_login: 'Entrar',
+    title_t_signup: 'Criar conta', title_t_verify: 'Verifique seu email',
+    title_t_forgot: 'Recuperar senha', title_t_reset: 'Nova senha', title_business: 'Acesso negócio',
+    sub_select: 'Escolha como quer começar sua experiência',
+    sub_tourist: 'Explore negócios locais instantaneamente',
+    sub_t_login: 'Entre com seu email e senha',
+    sub_t_signup: 'Junte-se à comunidade Ruta Azteca',
+    sub_t_verify: 'Enviamos um código para {email}',
+    sub_t_forgot: 'Enviaremos um código de recuperação',
+    sub_t_reset: 'Verifique {email} e insira o código',
+    sub_business: 'Entre para gerenciar seu negócio ou painel',
+    email_fallback: 'seu email',
+    google: 'Continuar com Google', redirecting: 'Redirecionando...',
+    email_btn: 'Continuar com email', explore: 'Explorar o mapa agora', back: '← Voltar',
+    or_no_acct: 'ou sem conta', or_email: 'ou com email',
+    login_btn: 'Entrar', logging_in: 'Entrando...',
+    signup_btn: 'Criar conta', creating_acct: 'Criando conta...',
+    verify_btn: 'Verificar conta', verifying_act: 'Verificando...',
+    send_btn: 'Enviar código', sending_act: 'Enviando...',
+    change_pass_btn: 'Alterar senha', updating_act: 'Atualizando...',
+    forgot: 'Esqueceu sua senha?', no_account: 'Não tem conta?',
+    have_account: 'Já tem conta?', register: 'Cadastre-se',
+    verify_resend: 'Não recebeu o código? Reenviar',
+    email_ph: 'email@exemplo.com', pass_ph: 'Senha',
+    name_opt_ph: 'Nome (opcional)', pass_min_ph: 'Senha (mín. 8 caracteres)', new_pass_ph: 'Nova senha',
+    ok_verified: 'Conta verificada! Já pode entrar.',
+    ok_resent: 'Código reenviado para seu email.',
+    ok_pass_changed: 'Senha atualizada! Já pode entrar.',
+    err_credentials: 'Email ou senha incorretos. Se acabou de se registrar, verifique seu email primeiro.',
+    err_network: 'Erro de rede. Tente novamente.',
+  },
+  de: {
+    subtitle_brand: 'Verbinde dich mit lokalen Unternehmen, die unsere Städte zum Leben erwecken',
+    subtitle_footer: 'FIFA Weltmeisterschaft 2026 — Verifizierte lokale Erlebnisse',
+    verified_footer: 'Verifiziert von Ola México — Impact Hub',
+    tourist_btn: 'Ich bin Tourist', tourist_sub: 'Lokale Unternehmen sofort erkunden',
+    business_btn: 'Ich habe ein Unternehmen', business_sub: 'Mein Profil registrieren oder verwalten',
+    title_select: 'Willkommen', title_tourist: 'Ich bin Tourist', title_t_login: 'Anmelden',
+    title_t_signup: 'Konto erstellen', title_t_verify: 'E-Mail bestätigen',
+    title_t_forgot: 'Passwort wiederherstellen', title_t_reset: 'Neues Passwort', title_business: 'Unternehmens-Zugang',
+    sub_select: 'Wählen Sie, wie Sie Ihr Erlebnis beginnen möchten',
+    sub_tourist: 'Erkunden Sie lokale Unternehmen sofort',
+    sub_t_login: 'Geben Sie Ihre E-Mail und Ihr Passwort ein',
+    sub_t_signup: 'Treten Sie der Ruta Azteca Community bei',
+    sub_t_verify: 'Wir haben einen Code an {email} gesendet',
+    sub_t_forgot: 'Wir senden Ihnen einen Wiederherstellungscode',
+    sub_t_reset: 'Überprüfen Sie {email} und geben Sie den Code ein',
+    sub_business: 'Melden Sie sich an, um Ihr Unternehmen zu verwalten',
+    email_fallback: 'Ihre E-Mail',
+    google: 'Mit Google fortfahren', redirecting: 'Weiterleitung...',
+    email_btn: 'Mit E-Mail fortfahren', explore: 'Karte jetzt erkunden', back: '← Zurück',
+    or_no_acct: 'oder ohne Konto', or_email: 'oder mit E-Mail',
+    login_btn: 'Anmelden', logging_in: 'Anmelden...',
+    signup_btn: 'Konto erstellen', creating_acct: 'Konto wird erstellt...',
+    verify_btn: 'Konto bestätigen', verifying_act: 'Bestätigung...',
+    send_btn: 'Code senden', sending_act: 'Senden...',
+    change_pass_btn: 'Passwort ändern', updating_act: 'Aktualisierung...',
+    forgot: 'Passwort vergessen?', no_account: 'Kein Konto?',
+    have_account: 'Bereits ein Konto?', register: 'Registrieren',
+    verify_resend: 'Keinen Code erhalten? Erneut senden',
+    email_ph: 'email@beispiel.de', pass_ph: 'Passwort',
+    name_opt_ph: 'Name (optional)', pass_min_ph: 'Passwort (min. 8 Zeichen)', new_pass_ph: 'Neues Passwort',
+    ok_verified: 'Konto bestätigt! Sie können sich jetzt anmelden.',
+    ok_resent: 'Code erneut an Ihre E-Mail gesendet.',
+    ok_pass_changed: 'Passwort aktualisiert! Sie können sich jetzt anmelden.',
+    err_credentials: 'E-Mail oder Passwort falsch. Wenn Sie sich gerade registriert haben, bestätigen Sie zuerst Ihre E-Mail.',
+    err_network: 'Netzwerkfehler. Bitte versuchen Sie es erneut.',
+  },
+}
+
 // ─── Icons ────────────────────────────────────────────────────────────────────
 const GoogleIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24">
@@ -73,9 +290,16 @@ export default function LoginPage() {
   const [error,       setError]       = useState('')
   const [success,     setSuccess]     = useState('')
 
+  const [lang, setLang] = useState<LangCode>('es')
+  const ui = UI_LANGS[lang]
+
   useEffect(() => {
     if (session) router.replace('/turista/mapa')
   }, [session, router])
+
+  useEffect(() => {
+    setLang(getUILang())
+  }, [])
 
   function nav(to: View, dir: 'fwd' | 'back' = 'fwd') {
     dirRef.current = dir
@@ -101,7 +325,7 @@ export default function LoginPage() {
     const res = await signIn('credentials', { redirect: false, email, password })
     setLoading(false)
     if (res?.error) {
-      setError('Correo o contraseña incorrectos. Si acabas de registrarte, verifica tu correo primero.')
+      setError(ui.err_credentials)
     } else {
       router.replace(view === 'business' ? '/negocio/perfil' : '/turista/mapa')
     }
@@ -121,7 +345,7 @@ export default function LoginPage() {
       if (data.error) { setError(data.error); setLoading(false); return }
       nav('t-verify', 'fwd')
     } catch {
-      setError('Error de red. Intenta de nuevo.')
+      setError(ui.err_network)
     }
     setLoading(false)
   }
@@ -140,13 +364,13 @@ export default function LoginPage() {
       if (data.error) { setError(data.error); setLoading(false); return }
       const login = await signIn('credentials', { redirect: false, email, password })
       if (login?.error) {
-        setSuccess('¡Cuenta verificada! Ya puedes iniciar sesión.')
+        setSuccess(ui.ok_verified)
         nav('t-login', 'fwd')
       } else {
         router.replace('/turista/mapa')
       }
     } catch {
-      setError('Error de red. Intenta de nuevo.')
+      setError(ui.err_network)
       setLoading(false)
     }
   }
@@ -162,9 +386,9 @@ export default function LoginPage() {
       })
       const data = await res.json()
       if (data.error) setError(data.error)
-      else setSuccess('Código reenviado a tu correo.')
+      else setSuccess(ui.ok_resent)
     } catch {
-      setError('Error de red.')
+      setError(ui.err_network)
     }
     setLoading(false)
   }
@@ -184,7 +408,7 @@ export default function LoginPage() {
       setCode('')
       nav('t-reset', 'fwd')
     } catch {
-      setError('Error de red.')
+      setError(ui.err_network)
     }
     setLoading(false)
   }
@@ -202,10 +426,10 @@ export default function LoginPage() {
       const data = await res.json()
       if (data.error) { setError(data.error); setLoading(false); return }
       setPassword('')
-      setSuccess('¡Contraseña actualizada! Ya puedes iniciar sesión.')
+      setSuccess(ui.ok_pass_changed)
       nav('t-login', 'fwd')
     } catch {
-      setError('Error de red.')
+      setError(ui.err_network)
     }
     setLoading(false)
   }
@@ -213,28 +437,28 @@ export default function LoginPage() {
   // ── Derived View Content ────────────────────────────────────────────────────
 
   const TITLES: Record<View, string> = {
-    select:    'Bienvenido',
-    tourist:   'Soy turista',
-    't-login': 'Iniciar sesión',
-    't-signup': 'Crear cuenta',
-    't-verify': 'Verifica tu correo',
-    't-forgot': 'Recuperar contraseña',
-    't-reset':  'Nueva contraseña',
-    business:  'Acceso negocio',
+    select:     ui.title_select,
+    tourist:    ui.title_tourist,
+    't-login':  ui.title_t_login,
+    't-signup': ui.title_t_signup,
+    't-verify': ui.title_t_verify,
+    't-forgot': ui.title_t_forgot,
+    't-reset':  ui.title_t_reset,
+    business:   ui.title_business,
   }
 
   const SUBTITLES: Record<View, string> = {
-    select:    'Elige cómo quieres comenzar tu experiencia',
-    tourist:   'Explora negocios locales al instante',
-    't-login': 'Ingresa con tu correo y contraseña',
-    't-signup': 'Únete a la comunidad Ruta Azteca',
-    't-verify': `Enviamos un código a ${email || 'tu correo'}`,
-    't-forgot': 'Te enviaremos un código de recuperación',
-    't-reset':  `Revisa ${email || 'tu correo'} y escribe el código`,
-    business:  'Inicia sesión para gestionar tu negocio o panel',
+    select:     ui.sub_select,
+    tourist:    ui.sub_tourist,
+    't-login':  ui.sub_t_login,
+    't-signup': ui.sub_t_signup,
+    't-verify': ui.sub_t_verify.replace('{email}', email || ui.email_fallback),
+    't-forgot': ui.sub_t_forgot,
+    't-reset':  ui.sub_t_reset.replace('{email}', email || ui.email_fallback),
+    business:   ui.sub_business,
   }
 
-  const animClass = viewKey > 0 
+  const animClass = viewKey > 0
     ? (dirRef.current === 'fwd' ? 'animate-[slideInFwd_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]' : 'animate-[slideInBack_0.4s_cubic-bezier(0.16,1,0.3,1)_forwards]')
     : ''
 
@@ -244,7 +468,7 @@ export default function LoginPage() {
   const twOutlineBtn = "flex items-center justify-center gap-2.5 w-full p-3.5 bg-[rgba(241,239,232,0.08)] hover:bg-[rgba(241,239,232,0.15)] border border-[rgba(255,255,255,0.12)] rounded-xl text-[var(--color-jade-50)] text-[15px] font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
   const twLinkBtn = "bg-transparent border-none cursor-pointer text-[var(--color-jade-100)] text-[13px] py-1 underline hover:text-[var(--color-jade-50)] transition-colors"
   const twBackBtn = "bg-transparent border-none cursor-pointer text-[var(--color-obs-100)] text-[13px] mt-1 p-2 hover:text-[var(--color-jade-50)] transition-colors"
-  
+
   const divider = (text: string) => (
     <div className="flex items-center gap-4 my-2 opacity-60">
       <div className="flex-1 h-px bg-[var(--color-obs-100)] opacity-20"></div>
@@ -286,9 +510,9 @@ export default function LoginPage() {
         ))}
 
         <div className="relative z-10 w-56 md:w-[320px] mb-6 drop-shadow-[0_0_24px_rgba(29,158,117,0.3)] flex justify-center">
-          <img 
-            src="/Ruta_Azteca.svg" 
-            alt="Ruta Azteca Logo" 
+          <img
+            src="/Ruta_Azteca.svg"
+            alt="Ruta Azteca Logo"
             className="w-full h-auto object-contain"
           />
         </div>
@@ -300,7 +524,7 @@ export default function LoginPage() {
         <div className="relative z-10 w-12 h-1 bg-gradient-to-r from-[var(--color-gold-200)] to-[var(--color-jade-400)] my-5 rounded-full" />
 
         <p className="relative z-10 m-0 text-[14px] md:text-[16px] text-[var(--color-jade-100)] text-center max-w-[340px] leading-relaxed tracking-wide font-light">
-          Conecta con los negocios locales que dan vida a nuestras ciudades
+          {ui.subtitle_brand}
         </p>
 
         <div className="hidden md:flex gap-3 mt-10 relative z-10">
@@ -312,16 +536,16 @@ export default function LoginPage() {
         </div>
 
         <p className="hidden md:block absolute bottom-8 text-[11px] text-[var(--color-jade-100)]/40 tracking-[0.1em] uppercase font-semibold">
-          FIFA World Cup 2026 — Experiencias locales verificadas
+          {ui.subtitle_footer}
         </p>
       </div>
 
       {/* ── Form Panel (Right on Desktop, Bottom on Mobile) ──────────────── */}
       <div className="flex-1 md:w-1/2 flex items-start md:items-center justify-center p-6 md:p-16 relative bg-gradient-to-b from-[var(--color-obs-900)] to-[#0c1a16] md:bg-none">
-        
+
         {/* Glass Form Container */}
         <div className="glass-panel w-full max-w-[420px] p-8 md:p-10 relative z-10">
-          
+
           <div className={animClass}>
             <h2 className="m-0 mb-2 text-2xl md:text-3xl font-semibold text-[var(--color-jade-50)] tracking-tight">
               {TITLES[view]}
@@ -340,8 +564,8 @@ export default function LoginPage() {
                     </svg>
                   </span>
                   <div>
-                    <div className="text-[var(--color-jade-50)] font-semibold text-[16px] mb-0.5">Soy turista</div>
-                    <div className="text-[var(--color-jade-100)] opacity-70 text-[13px] font-light">Explorar negocios locales al instante</div>
+                    <div className="text-[var(--color-jade-50)] font-semibold text-[16px] mb-0.5">{ui.tourist_btn}</div>
+                    <div className="text-[var(--color-jade-100)] opacity-70 text-[13px] font-light">{ui.tourist_sub}</div>
                   </div>
                 </button>
 
@@ -352,8 +576,8 @@ export default function LoginPage() {
                     </svg>
                   </span>
                   <div>
-                    <div className="text-[var(--color-jade-50)] font-semibold text-[16px] mb-0.5">Tengo un negocio</div>
-                    <div className="text-[var(--color-jade-100)] opacity-70 text-[13px] font-light">Registrar o gestionar mi perfil</div>
+                    <div className="text-[var(--color-jade-50)] font-semibold text-[16px] mb-0.5">{ui.business_btn}</div>
+                    <div className="text-[var(--color-jade-100)] opacity-70 text-[13px] font-light">{ui.business_sub}</div>
                   </div>
                 </button>
               </div>
@@ -363,20 +587,20 @@ export default function LoginPage() {
             {view === 'tourist' && (
               <div className="flex flex-col gap-3.5">
                 <button onClick={handleGoogle} disabled={loading} className={twOutlineBtn}>
-                  <GoogleIcon /> {loading ? 'Redirigiendo...' : 'Continuar con Google'}
+                  <GoogleIcon /> {loading ? ui.redirecting : ui.google}
                 </button>
 
                 <button onClick={() => nav('t-login', 'fwd')} className={twOutlineBtn}>
-                  <MailIcon /> Continuar con correo
+                  <MailIcon /> {ui.email_btn}
                 </button>
 
-                {divider('o sin cuenta')}
+                {divider(ui.or_no_acct)}
 
                 <a href="/turista/mapa" className={twPrimaryBtn + " text-center block"}>
-                  Explorar el mapa ahora
+                  {ui.explore}
                 </a>
 
-                <button onClick={() => nav('select', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('select', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
 
@@ -386,12 +610,12 @@ export default function LoginPage() {
                 <SuccessBox />
                 <form onSubmit={handleLogin} className="flex flex-col gap-3.5">
                   <input
-                    type="email" placeholder="correo@ejemplo.com" value={email}
+                    type="email" placeholder={ui.email_ph} value={email}
                     onChange={e => setEmail(e.target.value)} required autoFocus className={twInput}
                   />
                   <div className="relative">
                     <input
-                      type={showPass ? 'text' : 'password'} placeholder="Contraseña" value={password}
+                      type={showPass ? 'text' : 'password'} placeholder={ui.pass_ph} value={password}
                       onChange={e => setPassword(e.target.value)} required
                       className={twInput + " pr-14"}
                     />
@@ -401,19 +625,19 @@ export default function LoginPage() {
                   </div>
                   <div className="text-right">
                     <button type="button" onClick={() => nav('t-forgot', 'fwd')} className={twLinkBtn}>
-                      ¿Olvidaste tu contraseña?
+                      {ui.forgot}
                     </button>
                   </div>
                   <ErrorBox />
                   <button type="submit" disabled={loading} className={twPrimaryBtn}>
-                    {loading ? 'Ingresando...' : 'Iniciar sesión'}
+                    {loading ? ui.logging_in : ui.login_btn}
                   </button>
                 </form>
                 <div className="text-center mt-2">
-                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">¿No tienes cuenta? </span>
-                  <button onClick={() => nav('t-signup', 'fwd')} className={twLinkBtn + " font-medium"}>Regístrate</button>
+                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">{ui.no_account} </span>
+                  <button onClick={() => nav('t-signup', 'fwd')} className={twLinkBtn + " font-medium"}>{ui.register}</button>
                 </div>
-                <button onClick={() => nav('tourist', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('tourist', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
 
@@ -422,16 +646,16 @@ export default function LoginPage() {
               <div className="flex flex-col gap-3.5">
                 <form onSubmit={handleSignup} className="flex flex-col gap-3.5">
                   <input
-                    type="text" placeholder="Nombre (opcional)" value={name}
+                    type="text" placeholder={ui.name_opt_ph} value={name}
                     onChange={e => setName(e.target.value)} autoFocus className={twInput}
                   />
                   <input
-                    type="email" placeholder="correo@ejemplo.com" value={email}
+                    type="email" placeholder={ui.email_ph} value={email}
                     onChange={e => setEmail(e.target.value)} required className={twInput}
                   />
                   <div className="relative">
                     <input
-                      type={showPass ? 'text' : 'password'} placeholder="Contraseña (mín. 8 caracteres)" value={password}
+                      type={showPass ? 'text' : 'password'} placeholder={ui.pass_min_ph} value={password}
                       onChange={e => setPassword(e.target.value)} required
                       className={twInput + " pr-14"}
                     />
@@ -441,14 +665,14 @@ export default function LoginPage() {
                   </div>
                   <ErrorBox />
                   <button type="submit" disabled={loading} className={twPrimaryBtn}>
-                    {loading ? 'Creando cuenta...' : 'Crear cuenta'}
+                    {loading ? ui.creating_acct : ui.signup_btn}
                   </button>
                 </form>
                 <div className="text-center mt-2">
-                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">¿Ya tienes cuenta? </span>
-                  <button onClick={() => nav('t-login', 'back')} className={twLinkBtn + " font-medium"}>Iniciar sesión</button>
+                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">{ui.have_account} </span>
+                  <button onClick={() => nav('t-login', 'back')} className={twLinkBtn + " font-medium"}>{ui.login_btn}</button>
                 </div>
-                <button onClick={() => nav('tourist', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('tourist', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
 
@@ -469,15 +693,15 @@ export default function LoginPage() {
                   <ErrorBox />
                   <SuccessBox />
                   <button type="submit" disabled={loading || code.length < 6} className={twPrimaryBtn}>
-                    {loading ? 'Verificando...' : 'Verificar cuenta'}
+                    {loading ? ui.verifying_act : ui.verify_btn}
                   </button>
                 </form>
                 <div className="text-center mt-2">
                   <button onClick={handleResend} disabled={loading} className={twLinkBtn}>
-                    ¿No recibiste el código? Reenviar
+                    {ui.verify_resend}
                   </button>
                 </div>
-                <button onClick={() => nav('t-signup', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('t-signup', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
 
@@ -486,15 +710,15 @@ export default function LoginPage() {
               <div className="flex flex-col gap-3.5">
                 <form onSubmit={handleForgot} className="flex flex-col gap-3.5">
                   <input
-                    type="email" placeholder="correo@ejemplo.com" value={email}
+                    type="email" placeholder={ui.email_ph} value={email}
                     onChange={e => setEmail(e.target.value)} required autoFocus className={twInput}
                   />
                   <ErrorBox />
                   <button type="submit" disabled={loading} className={twPrimaryBtn}>
-                    {loading ? 'Enviando...' : 'Enviar código'}
+                    {loading ? ui.sending_act : ui.send_btn}
                   </button>
                 </form>
-                <button onClick={() => nav('t-login', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('t-login', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
 
@@ -510,7 +734,7 @@ export default function LoginPage() {
                   />
                   <div className="relative">
                     <input
-                      type={showNewPass ? 'text' : 'password'} placeholder="Nueva contraseña" value={newPassword}
+                      type={showNewPass ? 'text' : 'password'} placeholder={ui.new_pass_ph} value={newPassword}
                       onChange={e => setNewPassword(e.target.value)} required
                       className={twInput + " pr-14"}
                     />
@@ -520,10 +744,10 @@ export default function LoginPage() {
                   </div>
                   <ErrorBox />
                   <button type="submit" disabled={loading || code.length < 6} className={twPrimaryBtn}>
-                    {loading ? 'Actualizando...' : 'Cambiar contraseña'}
+                    {loading ? ui.updating_act : ui.change_pass_btn}
                   </button>
                 </form>
-                <button onClick={() => nav('t-forgot', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('t-forgot', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
 
@@ -531,19 +755,19 @@ export default function LoginPage() {
             {view === 'business' && (
               <div className="flex flex-col gap-3.5">
                 <button onClick={handleGoogle} disabled={loading} className={twOutlineBtn}>
-                  <GoogleIcon /> {loading ? 'Redirigiendo...' : 'Continuar con Google'}
+                  <GoogleIcon /> {loading ? ui.redirecting : ui.google}
                 </button>
 
-                {divider('o con correo')}
+                {divider(ui.or_email)}
 
                 <form onSubmit={handleLogin} className="flex flex-col gap-3.5">
                   <input
-                    type="email" placeholder="correo@ejemplo.com" value={email}
+                    type="email" placeholder={ui.email_ph} value={email}
                     onChange={e => setEmail(e.target.value)} required className={twInput}
                   />
                   <div className="relative">
                     <input
-                      type={showPass ? 'text' : 'password'} placeholder="Contraseña" value={password}
+                      type={showPass ? 'text' : 'password'} placeholder={ui.pass_ph} value={password}
                       onChange={e => setPassword(e.target.value)} required
                       className={twInput + " pr-14"}
                     />
@@ -553,24 +777,24 @@ export default function LoginPage() {
                   </div>
                   <ErrorBox />
                   <button type="submit" disabled={loading} className={twPrimaryBtn}>
-                    {loading ? 'Ingresando...' : 'Iniciar sesión'}
+                    {loading ? ui.logging_in : ui.login_btn}
                   </button>
                 </form>
-                <button onClick={() => nav('select', 'back')} className={twBackBtn}>← Volver</button>
+                <button onClick={() => nav('select', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
           </div>
         </div>
-        
+
         {/* Verification Footer Text */}
         <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-2 text-[11px] text-[var(--color-jade-100)]/40 tracking-[0.05em] font-medium uppercase">
           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          Verificado por Ola México — Impact Hub
+          {ui.verified_footer}
         </div>
       </div>
-      
+
     </div>
   )
 }
