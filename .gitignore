@@ -54,3 +54,7 @@ infra/lambda-src/**/package/
 infra/lambda-src/**/*.zip
 
 # Env
+
+# Antigravity AI Instructions
+STYLE_GUIDE.md
+FRONTEND_BOUNDARIES.md
