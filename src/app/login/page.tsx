@@ -285,13 +285,11 @@ export default function LoginPage() {
           </div>
         ))}
 
-        <div className="relative z-10 w-56 h-56 md:w-[320px] md:h-[320px] mb-6 drop-shadow-[0_0_24px_rgba(29,158,117,0.3)]">
-          <Image 
+        <div className="relative z-10 w-56 md:w-[320px] mb-6 drop-shadow-[0_0_24px_rgba(29,158,117,0.3)] flex justify-center">
+          <img 
             src="/Ruta_Azteca.svg" 
             alt="Ruta Azteca Logo" 
-            fill
-            className="object-contain"
-            priority
+            className="w-full h-auto object-contain"
           />
         </div>
 

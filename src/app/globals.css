@@ -22,21 +22,47 @@
 
 @layer utilities {
   .glass-panel {
-    /* Liquid Glass Implementation based on STYLE_GUIDE.md */
-    background-color: rgba(4, 52, 44, 0.15); /* base dark tint (jade-900 variant) for contrast */
-    backdrop-filter: blur(24px); /* 20-32px iOS Standard */
+    /* Estado original oscuro (Obsidian) del Login */
+    background-color: rgba(4, 52, 44, 0.15);
+    backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     
-    /* 1px border with light source simulation */
     border-top: 1px solid rgba(255, 255, 255, 0.30);
     border-left: 1px solid rgba(255, 255, 255, 0.12);
     border-right: 1px solid rgba(255, 255, 255, 0.12);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     
-    /* Inner Glow (The Secret) */
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 
-                0 8px 32px rgba(4, 52, 44, 0.5); /* Jade tinted shadow, no black */
+                0 8px 32px rgba(4, 52, 44, 0.5);
     
-    border-radius: 20px; /* No 0px corners, min 12px, ideal 20px */
+    border-radius: 20px;
+  }
+
+  .glass-panel-map {
+    /* Estado transparente y fuertemente difuminado */
+    background-color: rgba(230, 248, 240, 0.85); /* Aumentado a 85% para mayor legibilidad */
+    backdrop-filter: blur(48px);
+    -webkit-backdrop-filter: blur(48px);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.40);
+    border-left: 1px solid rgba(255, 255, 255, 0.20);
+    border-right: 1px solid rgba(255, 255, 255, 0.20);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+    
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 
+                0 12px 40px rgba(13, 124, 102, 0.15); /* Sombras jade */
+    
+    border-radius: 20px; 
+  }
+}
+
+@layer base {
+  /* Fix: Evita que el autocompletado del navegador ponga los inputs en blanco */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s !important;
+    -webkit-text-fill-color: var(--color-jade-50) !important;
   }
 }
