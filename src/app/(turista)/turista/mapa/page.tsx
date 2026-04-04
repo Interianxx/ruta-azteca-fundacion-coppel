@@ -159,14 +159,16 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
     : negocio.calificacion?.toFixed(1)
 
   return (
-    <div style={{
-      position: 'absolute', bottom: isDesktop ? 0 : 20, left: 0, right: 0,
-      background: '#fff', borderRadius: '20px 20px 0 0',
+    <div className="glass-panel-map text-[#1A2E26]" style={{
+      position: 'absolute', 
+      bottom: isDesktop ? 16 : 20, 
+      left: isDesktop ? 412 : 0, 
+      right: isDesktop ? 16 : 0,
+      borderRadius: isDesktop ? 24 : '20px 20px 0 0',
       padding: '8px 20px 36px',
-      boxShadow: '0 -4px 24px rgba(0,0,0,.12)',
       zIndex: 30, maxHeight: '72vh', overflowY: 'auto',
     }}>
-      <div style={{ width: 36, height: 4, borderRadius: 2, background: '#ddd', margin: '0 auto 12px' }} />
+      <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 12px' }} />
 
       {/* Back + Fav */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -178,8 +180,8 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           <BackIcon /> Volver al mapa
         </button>
         <button onClick={toggleFav} disabled={!session || favLoading} style={{
-          width: 38, height: 38, borderRadius: '50%', border: 'none',
-          background: isFav ? '#fff0f0' : '#f2f1ee',
+          width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(26, 46, 38, 0.12)',
+          background: isFav ? 'rgba(229,62,62,0.15)' : 'rgba(26, 46, 38, 0.08)',
           cursor: session ? 'pointer' : 'default',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'background .2s',
@@ -269,15 +271,15 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
         <span style={{
           padding: '3px 10px', borderRadius: 8,
-          background: `${color}18`, color: color,
-          fontSize: 12, fontWeight: 600,
+          background: `rgba(26, 46, 38, 0.1)`, color: color,
+          fontSize: 12, fontWeight: 700, textShadow: '0 0 8px rgba(0,0,0,0.4)',
         }}>{cat?.label ?? negocio.categoria}</span>
         <span style={{ fontSize: 12, color: '#8a9690', display: 'flex', alignItems: 'center', gap: 3 }}>
           <ClockIcon /> {negocio.direccion.split(',')[0]}
         </span>
       </div>
 
-      <p style={{ margin: '0 0 12px', fontSize: 14, color: '#4a5a52', lineHeight: 1.6 }}>
+      <p style={{ margin: '0 0 12px', fontSize: 14, color: '#1A2E26', lineHeight: 1.6, opacity: 0.9 }}>
         {negocio.descripcion}
       </p>
 
@@ -286,7 +288,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           {negocio.tags.map(t => (
             <span key={t} style={{
               padding: '4px 12px', borderRadius: 20,
-              background: '#f2f1ee', color: '#5a6a62', fontSize: 12,
+              background: 'rgba(26, 46, 38, 0.08)', color: '#8a9690', border: '1px solid rgba(26, 46, 38, 0.12)', fontSize: 12,
             }}>{t}</span>
           ))}
         </div>
@@ -296,22 +298,23 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
         <button onClick={onRoute} style={{
           flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          padding: '14px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
-          border: 'none', borderRadius: 14, cursor: 'pointer',
+          padding: '14px', background: '#0D7C66',
+          border: '1px solid #0D7C66', borderRadius: 14, cursor: 'pointer',
           color: '#fff', fontWeight: 600, fontSize: 15,
         }}>
           <RouteIcon /> Cómo llegar
         </button>
         <button onClick={onFullPage} style={{
           width: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: '#f2f1ee', border: 'none', borderRadius: 14, cursor: 'pointer',
+          background: 'rgba(26, 46, 38, 0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 14, cursor: 'pointer',
+          color: '#1A2E26'
         }}>
           <ShareIcon />
         </button>
       </div>
 
       {/* ── Reseñas ── */}
-      <div style={{ borderTop: '1px solid #f2f1ee', paddingTop: 20 }}>
+      <div style={{ borderTop: '1px solid rgba(26, 46, 38, 0.12)', paddingTop: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <span style={{ fontWeight: 700, fontSize: 15, color: '#1A2E26' }}>
             Reseñas {resenas.length > 0 && `(${resenas.length})`}
@@ -319,9 +322,9 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           {session
             ? <button onClick={() => setShowForm(f => !f)} style={{
                 padding: '6px 14px', borderRadius: 20,
-                background: showForm ? '#f2f1ee' : 'linear-gradient(135deg, #0D7C66, #1A9E78)',
-                border: 'none', cursor: 'pointer',
-                color: showForm ? '#4a5a52' : '#fff', fontSize: 13, fontWeight: 600,
+                background: showForm ? 'rgba(26, 46, 38, 0.08)' : '#0D7C66',
+                border: showForm ? '1px solid rgba(26, 46, 38, 0.15)' : '1px solid #0D7C66', cursor: 'pointer',
+                color: '#1A2E26', fontSize: 13, fontWeight: 600,
               }}>
                 {showForm ? 'Cancelar' : '+ Escribir reseña'}
               </button>
@@ -332,8 +335,8 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
         {/* Form */}
         {showForm && (
           <div style={{
-            background: '#faf9f6', borderRadius: 14, padding: '16px',
-            marginBottom: 16, border: '1px solid #e0ddd5',
+            background: 'rgba(255,255,255,0.03)', borderRadius: 14, padding: '16px',
+            marginBottom: 16, border: '1px solid rgba(26, 46, 38, 0.1)',
           }}>
             <p style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>Tu calificación</p>
             <StarPicker value={stars} onChange={setStars} />
@@ -344,9 +347,9 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
               rows={3}
               style={{
                 width: '100%', marginTop: 12, padding: '10px 12px',
-                border: '1px solid #e0ddd5', borderRadius: 10,
+                border: '1px solid rgba(255,255,255,0.12)', borderRadius: 10,
                 fontSize: 14, resize: 'none', outline: 'none',
-                background: '#fff', color: '#1A2E26', boxSizing: 'border-box',
+                background: 'rgba(26, 46, 38, 0.08)', color: '#1A2E26', boxSizing: 'border-box',
               }}
             />
             <button
@@ -354,9 +357,9 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
               disabled={submitting || stars === 0 || !comentario.trim()}
               style={{
                 marginTop: 10, width: '100%', padding: '12px',
-                background: stars > 0 && comentario.trim() ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#e0ddd5',
-                border: 'none', borderRadius: 12, cursor: stars > 0 && comentario.trim() ? 'pointer' : 'default',
-                color: stars > 0 && comentario.trim() ? '#fff' : '#aaa',
+                background: stars > 0 && comentario.trim() ? '#0D7C66' : 'rgba(255,255,255,0.03)',
+                border: stars > 0 && comentario.trim() ? '1px solid #0D7C66' : '1px solid rgba(26, 46, 38, 0.12)', borderRadius: 12, cursor: stars > 0 && comentario.trim() ? 'pointer' : 'default',
+                color: stars > 0 && comentario.trim() ? '#fff' : '#8a9690',
                 fontWeight: 600, fontSize: 14,
               }}
             >
@@ -366,23 +369,23 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
         )}
 
         {submitMsg && (
-          <div style={{ padding: '10px 14px', background: '#e6f7f0', borderRadius: 10, marginBottom: 12, fontSize: 13, color: '#0D7C66', fontWeight: 600 }}>
+          <div style={{ padding: '10px 14px', background: 'rgba(26, 46, 38, 0.1)', border: '1px solid #0D7C66', borderRadius: 10, marginBottom: 12, fontSize: 13, color: '#8a9690', fontWeight: 600 }}>
             {submitMsg}
           </div>
         )}
 
         {/* Reviews list */}
         {resenas.length === 0 && !showForm && (
-          <p style={{ fontSize: 13, color: '#8a9690', textAlign: 'center', padding: '16px 0' }}>
+          <p style={{ fontSize: 13, color: '#8a9690', textAlign: 'center', padding: '16px 0', opacity: 0.8 }}>
             Sin reseñas todavía. ¡Sé el primero!
           </p>
         )}
         {resenas.map(r => (
-          <div key={r.id} style={{ marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid #f2f1ee' }}>
+          <div key={r.id} style={{ marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid rgba(26, 46, 38, 0.1)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+                background: '#0D7C66', border: '1px solid rgba(26, 46, 38, 0.12)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 overflow: 'hidden',
               }}>
@@ -396,17 +399,17 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
                 <div style={{ display: 'flex', gap: 2, marginTop: 2 }}>
                   {[1,2,3,4,5].map(n => (
                     <svg key={n} width="11" height="11" viewBox="0 0 24 24"
-                      fill={n <= r.calificacion ? '#C5A044' : '#e0ddd5'} stroke="none">
+                      fill={n <= r.calificacion ? '#C5A044' : 'rgba(26, 46, 38, 0.15)'} stroke="none">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
                   ))}
                 </div>
               </div>
-              <span style={{ fontSize: 11, color: '#8a9690' }}>
+              <span style={{ fontSize: 11, color: '#8a9690', opacity: 0.7 }}>
                 {new Date(r.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}
               </span>
             </div>
-            <p style={{ margin: 0, fontSize: 13, color: '#4a5a52', lineHeight: 1.55 }}>{r.comentario}</p>
+            <p style={{ margin: 0, fontSize: 13, color: '#1A2E26', lineHeight: 1.55, opacity: 0.9 }}>{r.comentario}</p>
           </div>
         ))}
       </div>
@@ -416,18 +419,21 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
 
 // ─── Routing overlay ────────────────────────────────────────────────────────
 
-function RoutingOverlay({ negocio, onClose }: { negocio: Negocio; onClose: () => void }) {
+function RoutingOverlay({ negocio, onClose, isDesktop }: { negocio: Negocio; onClose: () => void; isDesktop?: boolean }) {
   const googleUrl = `https://www.google.com/maps/dir/?api=1&destination=${negocio.lat},${negocio.lng}`
   const wazeUrl   = `https://waze.com/ul?ll=${negocio.lat},${negocio.lng}&navigate=yes`
 
   return (
-    <div style={{
-      position: 'absolute', bottom: 0, left: 0, right: 0,
-      background: '#fff', borderRadius: '20px 20px 0 0',
+    <div className="glass-panel-map" style={{
+      position: 'absolute', 
+      bottom: isDesktop ? 16 : 0, 
+      left: isDesktop ? 412 : 0, 
+      right: isDesktop ? 16 : 0,
+      borderRadius: isDesktop ? 24 : '20px 20px 0 0',
       padding: '8px 20px 32px',
-      boxShadow: '0 -4px 24px rgba(0,0,0,.12)', zIndex: 35,
+      zIndex: 35,
     }}>
-      <div style={{ width: 36, height: 4, borderRadius: 2, background: '#ddd', margin: '0 auto 14px' }} />
+      <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 14px' }} />
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
         <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#1A2E26' }}>Ruta a {negocio.nombre}</h3>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a9690' }}><CloseIcon /></button>
@@ -441,8 +447,8 @@ function RoutingOverlay({ negocio, onClose }: { negocio: Negocio; onClose: () =>
         ].map((m, i) => (
           <div key={m.label} style={{
             flex: 1, padding: '10px', borderRadius: 12, textAlign: 'center',
-            background: i === 0 ? '#0D7C6612' : '#f8f7f4',
-            border: i === 0 ? '2px solid #0D7C66' : '1px solid #eee',
+            background: i === 0 ? '#0D7C66' : 'rgba(26, 46, 38, 0.08)',
+            border: i === 0 ? '1px solid #0D7C66' : '1px solid rgba(26, 46, 38, 0.12)',
           }}>
             <div style={{ fontSize: 18 }}>{m.icon}</div>
             <div style={{ fontSize: 14, fontWeight: 600, color: '#1A2E26' }}>{m.time}</div>
@@ -454,7 +460,8 @@ function RoutingOverlay({ negocio, onClose }: { negocio: Negocio; onClose: () =>
       <div style={{ display: 'flex', gap: 10 }}>
         <a href={googleUrl} target="_blank" rel="noopener noreferrer" style={{
           flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          padding: '14px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+          padding: '14px', background: '#0D7C66',
+          border: '1px solid #0D7C66',
           borderRadius: 14, color: '#fff', fontWeight: 600, fontSize: 15,
           textDecoration: 'none',
         }}>
@@ -477,7 +484,7 @@ function RoutingOverlay({ negocio, onClose }: { negocio: Negocio; onClose: () =>
 
 type ChatMsg = { from: 'bot' | 'user'; text: string }
 
-function ChatPanel({ onClose }: { onClose: () => void }) {
+function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: boolean }) {
   const [msgs, setMsgs]       = useState<ChatMsg[]>([
     { from: 'bot', text: '¡Hola! Soy tu guía de Ruta Azteca. ¿Qué experiencia buscas hoy?' },
   ])
@@ -514,10 +521,13 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div style={{
-      position: 'absolute', bottom: 160, right: 16, left: 16,
-      background: '#fff', borderRadius: 20,
-      boxShadow: '0 8px 32px rgba(0,0,0,.18)',
+    <div className="glass-panel-map" style={{
+      position: 'absolute', 
+      bottom: isDesktop ? 116 : 160, 
+      right: 16, 
+      left: isDesktop ? 412 : 16,
+      width: isDesktop ? 360 : undefined,
+      borderRadius: isDesktop ? 24 : 20,
       zIndex: 40, display: 'flex', flexDirection: 'column',
       maxHeight: '60vh', overflow: 'hidden',
     }}>
@@ -525,17 +535,17 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '14px 18px',
-        background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+        background: 'rgba(26, 46, 38, 0.08)', borderBottom: '1px solid rgba(26, 46, 38, 0.12)',
         borderRadius: '20px 20px 0 0',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{
             width: 28, height: 28, borderRadius: '50%',
-            background: 'rgba(255,255,255,.2)',
+            background: '#0D7C66',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 14,
           }}>🐍</div>
-          <span style={{ color: '#fff', fontWeight: 600, fontSize: 14 }}>Asistente Ruta Azteca</span>
+          <span style={{ color: '#1A2E26', fontWeight: 600, fontSize: 14 }}>Asistente Ruta Azteca</span>
         </div>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: 4 }}>
           <CloseIcon />
@@ -550,7 +560,8 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
             maxWidth: '85%',
             padding: '10px 14px',
             borderRadius: m.from === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
-            background: m.from === 'user' ? '#0D7C66' : '#f2f1ee',
+            background: m.from === 'user' ? '#0D7C66' : 'rgba(26, 46, 38, 0.1)',
+            border: m.from === 'user' ? 'none' : '1px solid rgba(26, 46, 38, 0.12)',
             color: m.from === 'user' ? '#fff' : '#1A2E26',
             fontSize: 14, lineHeight: 1.5,
           }}>{m.text}</div>
@@ -558,7 +569,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
         {loading && (
           <div style={{
             alignSelf: 'flex-start', padding: '10px 14px',
-            borderRadius: '14px 14px 14px 4px', background: '#f2f1ee',
+            borderRadius: '14px 14px 14px 4px', background: 'rgba(26, 46, 38, 0.08)', border: '1px solid rgba(26, 46, 38, 0.12)',
             color: '#8a9690', fontSize: 14,
           }}>Escribiendo…</div>
         )}
@@ -568,7 +579,7 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
       {/* Input */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 8,
-        padding: '10px 14px', borderTop: '1px solid #eee',
+        padding: '10px 14px', borderTop: '1px solid rgba(26, 46, 38, 0.12)',
       }}>
         <input
           value={input}
@@ -578,8 +589,8 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
           disabled={loading}
           style={{
             flex: 1, padding: '10px 14px',
-            border: '1px solid #e0ddd5', borderRadius: 12,
-            fontSize: 14, outline: 'none', background: '#faf9f6',
+            border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12,
+            fontSize: 14, outline: 'none', background: 'rgba(255,255,255,0.04)', color: '#1A2E26'
           }}
         />
         <button onClick={send} disabled={loading} style={{
@@ -699,7 +710,7 @@ export default function MapaPage() {
   const SHEET_HEIGHTS = { peek: 72, half: 340, full: Math.round(typeof window !== 'undefined' ? window.innerHeight * 0.85 : 600) }
 
   return (
-    <div style={{ width: '100%', height: '100vh', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui,-apple-system,sans-serif', display: 'flex' }}>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui,-apple-system,sans-serif' }}>
       <style>{`
         .img-thumb { overflow: hidden; }
         .img-thumb img { transition: transform .35s ease; }
@@ -708,30 +719,33 @@ export default function MapaPage() {
 
       {/* ── Desktop left panel ── */}
       {isDesktop && (
-        <div style={{
-          width: 380, flexShrink: 0, height: '100vh',
-          background: '#fff', display: 'flex', flexDirection: 'column',
-          boxShadow: '2px 0 16px rgba(0,0,0,.10)', zIndex: 20, position: 'relative',
+        <div className="glass-panel-map" style={{
+          width: 380, flexShrink: 0, height: 'calc(100vh - 32px)',
+          display: 'flex', flexDirection: 'column', overflow: 'hidden',
+          zIndex: 20, position: 'absolute', top: 16, left: 16, 
+          borderRadius: 24, paddingBottom: 16,
+          boxShadow: '0 12px 48px rgba(0,0,0,0.15), 0 2px 14px rgba(0,0,0,0.05)',
+          border: '1px solid rgba(255, 255, 255, 0.4)'
         }}>
           {/* Panel header */}
-          <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid #f0efeb', flexShrink: 0 }}>
+          <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid rgba(26, 46, 38, 0.12)', flexShrink: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <span style={{ fontSize: 16, fontWeight: 800, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
               <VerifiedBadge />
               <span style={{ marginLeft: 'auto', fontSize: 11, color: '#8a9690', fontWeight: 500 }}>CDMX</span>
-              <button onClick={() => setShowProfile(true)} style={{ width: 34, height: 34, borderRadius: '50%', overflow: 'hidden', padding: 0, background: session?.user?.image ? 'transparent' : session ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#f2f1ee', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button onClick={() => setShowProfile(true)} style={{ width: 34, height: 34, borderRadius: '50%', overflow: 'hidden', padding: 0, background: session?.user?.image ? 'transparent' : session ? '#0D7C66' : 'rgba(26, 46, 38, 0.12)', border: '1px solid rgba(26, 46, 38, 0.15)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {session?.user?.image
                   ? <img src={session.user.image} alt="" referrerPolicy="no-referrer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   : session?.user?.name
                     ? <span style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>{session.user.name[0].toUpperCase()}</span>
-                    : <PersonIcon />
+                    : <span style={{ color: '#8a9690' }}><PersonIcon /></span>
                 }
               </button>
             </div>
 
             {/* Search */}
             <div style={{ position: 'relative' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px 8px 14px', background: '#f7f6f2', borderRadius: 12, border: '1px solid #e8e6e0' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px 8px 14px', background: 'rgba(255, 255, 255, 0.5)', borderRadius: 12, border: '1px solid rgba(26, 46, 38, 0.12)' }}>
                 <span style={{ color: '#8a9690', display: 'flex' }}><SearchIcon /></span>
                 <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Escape' && setSearch('')}
                   placeholder="Buscar negocios locales..."
@@ -741,21 +755,21 @@ export default function MapaPage() {
                   ? <button onClick={() => setSearch('')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a9690', display: 'flex' }}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
-                  : <button onClick={startVoice} style={{ width: 32, height: 32, borderRadius: 8, background: listening ? '#D85A30' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: listening ? '#fff' : '#4a5a52' }}>
+                  : <button onClick={startVoice} style={{ width: 32, height: 32, borderRadius: 8, background: listening ? '#0D7C66' : 'transparent', border: listening ? '1px solid #0D7C66' : 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: listening ? '#fff' : '#8a9690' }}>
                       <MicIcon />
                     </button>
                 }
               </div>
               {/* Desktop search dropdown */}
               {search.trim() && filtered.length > 0 && (
-                <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: '#fff', borderRadius: '0 0 12px 12px', boxShadow: '0 8px 20px rgba(0,0,0,.12)', overflow: 'hidden', maxHeight: 260, overflowY: 'auto', zIndex: 10, border: '1px solid #f0efeb', borderTop: 'none' }}>
+                <div className="glass-panel-map" style={{ position: 'absolute', top: '100%', left: 0, right: 0, borderRadius: '0 0 12px 12px', boxShadow: '0 8px 32px rgba(0,0,0,.5)', overflow: 'hidden', maxHeight: 260, overflowY: 'auto', zIndex: 10, border: '1px solid rgba(26, 46, 38, 0.12)', borderTop: 'none' }}>
                   {filtered.slice(0, 7).map((n, i) => {
                     const CatIcon = CATEGORIA_LUCIDE[n.categoria] ?? Store
                     const color   = CATEGORIA_COLOR[n.categoria] ?? '#1A9E78'
                     return (
                       <button key={n.id} onClick={() => { handleSelect(n); setSearch('') }}
-                        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', background: 'none', border: 'none', borderTop: i > 0 ? '1px solid #f7f6f2' : 'none', cursor: 'pointer', textAlign: 'left' }}>
-                        <div style={{ width: 32, height: 32, borderRadius: 8, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', background: 'none', border: 'none', borderTop: i > 0 ? '1px solid rgba(26, 46, 38, 0.08)' : 'none', cursor: 'pointer', textAlign: 'left' }}>
+                        <div style={{ width: 32, height: 32, borderRadius: 8, flexShrink: 0, background: `${color}25`, border: `1px solid ${color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <CatIcon size={14} color={color} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
@@ -773,7 +787,7 @@ export default function MapaPage() {
             <div style={{ display: 'flex', gap: 6, marginTop: 10, overflowX: 'auto', scrollbarWidth: 'none' }}>
               {CATS.map(cat => (
                 <button key={cat.slug} onClick={() => setCategoria(cat.slug as CategoriaSlug | '')}
-                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 20, flexShrink: 0, background: categoria === cat.slug ? '#0D7C66' : '#f7f6f2', color: categoria === cat.slug ? '#fff' : '#4a5a52', border: categoria === cat.slug ? 'none' : '1px solid #e8e6e0', cursor: 'pointer', fontSize: 12, fontWeight: categoria === cat.slug ? 600 : 400 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 20, flexShrink: 0, background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.5)', color: categoria === cat.slug ? '#fff' : '#8a9690', border: categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(255, 255, 255, 0.3)', cursor: 'pointer', fontSize: 12, fontWeight: categoria === cat.slug ? 600 : 400 }}>
                   {cat.icon} {cat.label}
                 </button>
               ))}
@@ -781,36 +795,36 @@ export default function MapaPage() {
           </div>
 
           {/* Count */}
-          <div style={{ padding: '10px 16px 6px', fontSize: 12, color: '#8a9690', fontWeight: 500, flexShrink: 0 }}>
-            {loading ? 'Cargando…' : `${filtered.length} negocios verificados cerca de ti`}
+          <div style={{ padding: '8px 16px', background: 'rgba(255, 255, 255, 0.3)', borderRadius: 12, margin: '8px 16px 0', fontSize: 12, color: '#8a9690', fontWeight: 600, flexShrink: 0, textAlign: 'center' }}>
+            {loading ? 'Cargando…' : `${filtered.length} negocios verificados`}
           </div>
 
           {/* List */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '4px 12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '12px 12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {filtered.map(n => {
               const CatIcon = CATEGORIA_LUCIDE[n.categoria] ?? Store
               const color   = CATEGORIA_COLOR[n.categoria] ?? '#1A9E78'
               const isSelected = selected?.id === n.id
               return (
                 <button key={n.id} onClick={() => handleSelect(n)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', background: isSelected ? '#f0fdf8' : '#fff', borderRadius: 12, border: isSelected ? '1.5px solid #0D7C66' : '1px solid #f0efeb', cursor: 'pointer', textAlign: 'left', transition: 'all .15s', boxShadow: isSelected ? '0 2px 8px rgba(13,124,102,.15)' : '0 1px 3px rgba(0,0,0,.05)' }}>
-                  <div className="img-thumb" style={{ width: 46, height: 46, borderRadius: 10, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', background: isSelected ? '#0D7C66' : 'rgba(255, 255, 255, 0.4)', borderRadius: 12, border: isSelected ? '1px solid #0D7C66' : '1px solid rgba(255, 255, 255, 0.3)', cursor: 'pointer', textAlign: 'left', transition: 'all .15s', boxShadow: isSelected ? '0 2px 14px rgba(13,124,102,.3)' : 'none' }}>
+                  <div className="img-thumb" style={{ width: 46, height: 46, borderRadius: 10, flexShrink: 0, background: isSelected ? 'rgba(255,255,255,0.15)' : `${color}25`, border: isSelected ? '1px solid rgba(255,255,255,0.3)' : `1px solid ${color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {n.imagenUrl
                       ? <img src={n.imagenUrl} alt={n.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
-                      : <CatIcon size={20} color={color} />
+                      : <CatIcon size={20} color={isSelected ? '#fff' : color} />
                     }
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
-                      <span style={{ fontWeight: 600, fontSize: 13, color: '#1A2E26', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.nombre}</span>
+                      <span style={{ fontWeight: 600, fontSize: 13, color: isSelected ? '#fff' : '#1A2E26', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.nombre}</span>
                       <VerifiedBadge />
                     </div>
-                    <div style={{ fontSize: 11, color: '#8a9690', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.direccion.split(',')[0]}</div>
+                    <div style={{ fontSize: 11, color: isSelected ? '#e0f7f1' : '#8a9690', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.direccion.split(',')[0]}</div>
                     {n.calificacion && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                         <StarIcon size={11} />
-                        <span style={{ fontSize: 11, fontWeight: 600, color: '#1A2E26' }}>{n.calificacion.toFixed(1)}</span>
-                        {n.totalReviews && <span style={{ fontSize: 11, color: '#8a9690' }}>({n.totalReviews})</span>}
+                        <span style={{ fontSize: 11, fontWeight: 600, color: isSelected ? '#fff' : '#1A2E26' }}>{n.calificacion.toFixed(1)}</span>
+                        {n.totalReviews && <span style={{ fontSize: 11, color: isSelected ? '#e0f7f1' : '#8a9690' }}>({n.totalReviews})</span>}
                       </div>
                     )}
                   </div>
@@ -822,7 +836,7 @@ export default function MapaPage() {
       )}
 
       {/* ── Map area ── */}
-      <div style={{ flex: 1, position: 'relative', height: '100vh' }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
         <MapView negocios={filtered} onSelect={handleSelect} selected={selected} />
 
       {/* ── Overlay para cerrar al tocar el mapa ── */}
@@ -841,23 +855,22 @@ export default function MapaPage() {
       <div style={{ position: 'absolute', top: 12, left: 12, right: 12, zIndex: 20, display: isDesktop ? 'none' : undefined }}>
         {/* Branding */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: '#0D7C66', letterSpacing: '0.06em', textShadow: '0 1px 3px rgba(255,255,255,.8)' }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#0D7C66', letterSpacing: '0.06em', textShadow: '0 1px 3px rgba(0,0,0,.5)' }}>
             RUTA AZTECA
           </span>
           <VerifiedBadge />
-          <span style={{ marginLeft: 'auto', padding: '3px 8px', borderRadius: 8, background: 'rgba(255,255,255,.9)', fontSize: 10, color: '#8a9690', fontWeight: 500 }}>
+          <span style={{ marginLeft: 'auto', padding: '3px 8px', borderRadius: 8, background: 'rgba(26, 46, 38, 0.12)', border: '1px solid rgba(26, 46, 38, 0.12)', fontSize: 10, color: '#8a9690', fontWeight: 500 }}>
             CDMX
           </span>
         </div>
 
         {/* Search — Google Maps style with avatar inside */}
         <div style={{ position: 'relative' }}>
-          <div style={{
+          <div className="glass-panel-map" style={{
             display: 'flex', alignItems: 'center', gap: 0,
             padding: '6px 6px 6px 16px',
-            background: 'rgba(255,255,255,.97)',
             borderRadius: search.trim() && filtered.length > 0 ? '20px 20px 0 0' : 28,
-            boxShadow: '0 2px 14px rgba(0,0,0,.13)',
+            boxShadow: '0 2px 14px rgba(0,0,0,.3)', border: '1px solid rgba(26, 46, 38, 0.12)',
           }}>
             <span style={{ color: '#8a9690', display: 'flex', marginRight: 10 }}><SearchIcon /></span>
             <input
@@ -879,21 +892,21 @@ export default function MapaPage() {
               onClick={startVoice}
               style={{
                 width: 38, height: 38, borderRadius: '50%',
-                background: listening ? '#D85A30' : 'transparent',
+                background: listening ? '#0D7C66' : 'transparent',
                 border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: listening ? '#fff' : '#4a5a52', flexShrink: 0,
+                color: listening ? '#fff' : '#8a9690', flexShrink: 0,
               }}
             >
               <MicIcon />
             </button>
-            <div style={{ width: 1, height: 22, background: '#e0ddd5', flexShrink: 0, margin: '0 6px' }} />
+            <div style={{ width: 1, height: 22, background: 'rgba(26, 46, 38, 0.12)', flexShrink: 0, margin: '0 6px' }} />
             <button
               onClick={() => setShowProfile(true)}
               style={{
                 width: 38, height: 38, borderRadius: '50%', overflow: 'hidden', padding: 0,
-                background: session?.user?.image ? 'transparent' : session ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#f2f1ee',
-                border: 'none', cursor: 'pointer', flexShrink: 0,
+                background: session?.user?.image ? 'transparent' : session ? '#0D7C66' : 'rgba(26, 46, 38, 0.12)',
+                border: '1px solid rgba(26, 46, 38, 0.12)', cursor: 'pointer', flexShrink: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginRight: 2,
               }}
@@ -977,9 +990,9 @@ export default function MapaPage() {
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
               padding: '7px 14px', borderRadius: 20, flexShrink: 0,
-              background: categoria === cat.slug ? '#0D7C66' : 'rgba(255,255,255,.92)',
-              color:      categoria === cat.slug ? '#fff'     : '#4a5a52',
-              border:     categoria === cat.slug ? 'none'     : '1px solid #e0ddd5',
+              background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.5)',
+              color:      categoria === cat.slug ? '#fff'     : '#8a9690',
+              border:     categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(26, 46, 38, 0.12)',
               cursor: 'pointer', whiteSpace: 'nowrap',
               fontSize: 13, fontWeight: categoria === cat.slug ? 600 : 400,
               boxShadow: categoria === cat.slug
@@ -994,20 +1007,20 @@ export default function MapaPage() {
 
       {/* ── Mobile bottom sheet ── */}
       {!isDesktop && !showDetail && !showRoute && (
-        <div style={{
+        <div className="glass-panel-map text-[#1A2E26]" style={{
           position: 'absolute', bottom: 60, left: 0, right: 0, zIndex: 25,
           height: sheetState === 'peek' ? 80 : sheetState === 'half' ? 340 : '85vh',
           transition: 'height .35s cubic-bezier(.4,0,.2,1)',
-          background: '#fff', borderRadius: '20px 20px 0 0',
-          boxShadow: '0 -4px 24px rgba(0,0,0,.13)',
+          borderRadius: '20px 20px 0 0', border: 'none', borderTop: '1px solid rgba(26, 46, 38, 0.12)',
           display: 'flex', flexDirection: 'column',
+          boxShadow: '0 -8px 24px rgba(0,0,0,.15)',
         }}>
           {/* Drag handle + header */}
           <div
             onClick={() => setSheetState(s => s === 'peek' ? 'half' : s === 'half' ? 'full' : 'peek')}
             style={{ padding: '10px 16px 8px', cursor: 'pointer', flexShrink: 0 }}
           >
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#ddd', margin: '0 auto 10px' }} />
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 10px' }} />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 13, fontWeight: 700, color: '#1A2E26' }}>
                 {loading ? 'Cargando…' : `${filtered.length} negocios verificados`}
@@ -1032,31 +1045,31 @@ export default function MapaPage() {
                   <button key={n.id} onClick={() => handleSelect(n)}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12,
-                      padding: '12px 14px', background: isSel ? '#f0fdf8' : '#fff',
-                      borderRadius: 14, border: isSel ? '1.5px solid #0D7C66' : '1px solid #f0efeb',
+                      padding: '12px 14px', background: isSel ? '#0D7C66' : 'rgba(255, 255, 255, 0.4)',
+                      borderRadius: 14, border: isSel ? '1px solid #0D7C66' : '1px solid rgba(255, 255, 255, 0.3)',
                       cursor: 'pointer', textAlign: 'left',
-                      boxShadow: '0 1px 4px rgba(0,0,0,.06)', flexShrink: 0,
+                      boxShadow: isSel ? '0 4px 12px rgba(13,124,102,.3)' : 'none', flexShrink: 0,
                     }}>
-                    <div className="img-thumb" style={{ width: 48, height: 48, borderRadius: 12, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="img-thumb" style={{ width: 48, height: 48, borderRadius: 12, flexShrink: 0, background: isSel ? 'rgba(255,255,255,0.15)' : `${color}25`, border: isSel ? '1px solid rgba(255,255,255,0.3)' : `1px solid ${color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       {n.imagenUrl
                         ? <img src={n.imagenUrl} alt={n.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12 }} />
-                        : <CatIcon size={22} color={color} />
+                        : <CatIcon size={22} color={isSel ? '#fff' : color} />
                       }
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 2 }}>
-                        <span style={{ fontWeight: 600, fontSize: 14, color: '#1A2E26', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.nombre}</span>
+                        <span style={{ fontWeight: 600, fontSize: 14, color: isSel ? '#fff' : '#1A2E26', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.nombre}</span>
                         <VerifiedBadge />
                       </div>
-                      <div style={{ fontSize: 11, color: '#8a9690', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.direccion.split(',')[0]}</div>
+                      <div style={{ fontSize: 11, color: isSel ? '#e0f7f1' : '#8a9690', marginBottom: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.direccion.split(',')[0]}</div>
                       {n.calificacion && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                           <StarIcon size={11} />
-                          <span style={{ fontSize: 12, fontWeight: 600, color: '#1A2E26' }}>{n.calificacion.toFixed(1)}</span>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: isSel ? '#fff' : '#1A2E26' }}>{n.calificacion.toFixed(1)}</span>
                         </div>
                       )}
                     </div>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c0bbb4" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isSel ? '#fff' : '#c0bbb4'} strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
                   </button>
                 )
               })}
@@ -1079,11 +1092,11 @@ export default function MapaPage() {
 
       {/* ── Routing overlay ── */}
       {showRoute && selected && (
-        <RoutingOverlay negocio={selected} onClose={handleBack} />
+        <RoutingOverlay negocio={selected} onClose={handleBack} isDesktop={isDesktop} />
       )}
 
       {/* ── Chat panel ── */}
-      {showChat && <ChatPanel onClose={() => setShowChat(false)} />}
+      {showChat && <ChatPanel onClose={() => setShowChat(false)} isDesktop={isDesktop} />}
 
       {/* ── Favoritos panel ── */}
       {showFavoritos && (
@@ -1092,14 +1105,19 @@ export default function MapaPage() {
           onClick={() => setShowFavoritos(false)}
         >
           <div
+            className="glass-panel-map"
             onClick={e => e.stopPropagation()}
-            style={{ width: '100%', background: '#f7f6f2', borderRadius: '20px 20px 0 0', maxHeight: '80vh', display: 'flex', flexDirection: 'column', boxShadow: '0 -4px 24px rgba(0,0,0,.14)' }}
+            style={{ 
+              position: 'absolute', bottom: isDesktop ? 16 : 0, left: isDesktop ? 412 : 0, right: isDesktop ? 16 : 0,
+              borderRadius: isDesktop ? 24 : '20px 20px 0 0', 
+              maxHeight: '80vh', display: 'flex', flexDirection: 'column', boxShadow: '0 -4px 24px rgba(0,0,0,.3)' 
+            }}
           >
             {/* Header */}
-            <div style={{ padding: '8px 20px 0', background: '#fff', borderRadius: '20px 20px 0 0', flexShrink: 0 }}>
-              <div style={{ width: 36, height: 4, borderRadius: 2, background: '#ddd', margin: '0 auto 16px' }} />
+            <div style={{ padding: '8px 20px 0', background: 'rgba(26, 46, 38, 0.08)', borderBottom: '1px solid rgba(26, 46, 38, 0.12)', borderRadius: '20px 20px 0 0', flexShrink: 0 }}>
+              <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 16px' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#e0f7f1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#0D7C66', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <BookmarkIcon filled />
                 </div>
                 <div>
@@ -1128,14 +1146,14 @@ export default function MapaPage() {
                     onClick={() => { setShowFavoritos(false); handleSelect(n) }}
                     style={{
                       width: '100%', display: 'flex', alignItems: 'center', gap: 14,
-                      padding: '12px 14px', background: '#fff', border: 'none',
+                      padding: '12px 14px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(26, 46, 38, 0.12)',
                       borderRadius: 14, marginBottom: 10, cursor: 'pointer', textAlign: 'left',
-                      boxShadow: '0 1px 4px rgba(0,0,0,.07)',
+                      boxShadow: 'none',
                     }}
                   >
                     <div className="img-thumb" style={{
                       width: 48, height: 48, borderRadius: 12, flexShrink: 0,
-                      background: `${color}18`,
+                      background: `${color}25`, border: `1px solid ${color}40`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
                       {n.imagenUrl
@@ -1160,7 +1178,7 @@ export default function MapaPage() {
                         <span style={{ fontSize: 12, color: '#8a9690' }}>· {n.direccion.split(',')[0]}</span>
                       </div>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c0bbb4" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
                   </button>
                 )
               })}
@@ -1176,18 +1194,23 @@ export default function MapaPage() {
           onClick={() => setShowProfile(false)}
         >
           <div
+            className="glass-panel-map"
             onClick={e => e.stopPropagation()}
-            style={{ width: '100%', background: '#fff', borderRadius: '20px 20px 0 0', padding: '8px 24px 44px', boxShadow: '0 -4px 24px rgba(0,0,0,.14)' }}
+            style={{ 
+               position: 'absolute', bottom: isDesktop ? 16 : 0, left: isDesktop ? 412 : 0, right: isDesktop ? 16 : 0,
+               borderRadius: isDesktop ? 24 : '20px 20px 0 0', 
+               padding: '8px 24px 44px', boxShadow: '0 -4px 32px rgba(0,0,0,.4)' 
+            }}
           >
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#ddd', margin: '0 auto 22px' }} />
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 22px' }} />
             {session ? (
               <>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
                   <div style={{
                     width: 76, height: 76, borderRadius: '50%', overflow: 'hidden',
-                    background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+                    background: '#0D7C66',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: 14, flexShrink: 0, border: '3px solid #e0f7f1',
+                    marginBottom: 14, flexShrink: 0, border: '3px solid rgba(26, 46, 38, 0.12)',
                   }}>
                     {session.user?.image
                       ? <img src={session.user.image} alt={session.user.name ?? ''} referrerPolicy="no-referrer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -1206,9 +1229,9 @@ export default function MapaPage() {
                 <button
                   onClick={() => { setShowProfile(false); openFavoritos() }}
                   style={{
-                    width: '100%', padding: '15px', background: '#f0fdf8',
-                    border: '1.5px solid #b2f0de', borderRadius: 14, marginBottom: 10,
-                    fontSize: 15, fontWeight: 600, color: '#0D7C66', cursor: 'pointer',
+                    width: '100%', padding: '15px', background: '#0D7C66',
+                    border: '1px solid #0D7C66', borderRadius: 14, marginBottom: 10,
+                    fontSize: 15, fontWeight: 600, color: '#fff', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   }}
                 >
@@ -1217,9 +1240,9 @@ export default function MapaPage() {
                 <button
                   onClick={() => { setShowProfile(false); signOut({ callbackUrl: '/api/auth/logout' }) }}
                   style={{
-                    width: '100%', padding: '15px', background: '#fff6f6',
-                    border: '1.5px solid #fcc', borderRadius: 14,
-                    fontSize: 15, fontWeight: 600, color: '#C53030', cursor: 'pointer',
+                    width: '100%', padding: '15px', background: 'rgba(229,62,62,0.1)',
+                    border: '1px solid rgba(229,62,62,0.4)', borderRadius: 14,
+                    fontSize: 15, fontWeight: 600, color: '#fc8181', cursor: 'pointer',
                   }}
                 >
                   Cerrar sesión
@@ -1229,7 +1252,7 @@ export default function MapaPage() {
               <>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
                   <div style={{
-                    width: 76, height: 76, borderRadius: '50%', background: '#f2f1ee',
+                    width: 76, height: 76, borderRadius: '50%', background: 'rgba(26, 46, 38, 0.08)', border: '1px solid rgba(26, 46, 38, 0.12)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     marginBottom: 14, color: '#8a9690',
                   }}>
@@ -1244,8 +1267,8 @@ export default function MapaPage() {
                   onClick={() => { setShowProfile(false); router.push('/login') }}
                   style={{
                     width: '100%', padding: '15px',
-                    background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
-                    border: 'none', borderRadius: 14,
+                    background: '#0D7C66', border: '1px solid #0D7C66',
+                    borderRadius: 14,
                     fontSize: 15, fontWeight: 600, color: '#fff', cursor: 'pointer',
                   }}
                 >
@@ -1259,11 +1282,11 @@ export default function MapaPage() {
 
       {/* ── Bottom navigation bar (mobile only) ── */}
       {!isDesktop && (
-        <div style={{
+        <div className="glass-panel-map" style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
-          background: '#fff', borderTop: '1px solid #f0efeb',
+          borderTop: '1px solid rgba(26, 46, 38, 0.12)',
           display: 'flex', alignItems: 'stretch',
-          zIndex: 35, boxShadow: '0 -2px 10px rgba(0,0,0,.08)',
+          zIndex: 35, boxShadow: 'none'
         }}>
           {[
             { key: 'explorar',  label: 'Explorar',  Icon: Compass,     action: () => setActiveTab('explorar') },
@@ -1273,9 +1296,9 @@ export default function MapaPage() {
             <button key={key} onClick={action} style={{
               flex: 1, display: 'flex', flexDirection: 'column',
               alignItems: 'center', justifyContent: 'center', gap: 3,
-              background: 'none', border: 'none', cursor: 'pointer',
-              color: activeTab === key ? '#0D7C66' : '#8a9690',
-              transition: 'color .2s',
+              background: activeTab === key ? '#0D7C66' : 'none', border: 'none', cursor: 'pointer',
+              color: activeTab === key ? '#fff' : '#8a9690',
+              transition: 'all .2s', margin: '6px 4px', borderRadius: 14,
             }}>
               <Icon size={22} />
               <span style={{ fontSize: 10, fontWeight: activeTab === key ? 700 : 400 }}>{label}</span>
@@ -1304,7 +1327,7 @@ export default function MapaPage() {
           <div style={{
             position: 'absolute', top: -4, right: -4,
             width: 18, height: 18, borderRadius: '50%',
-            background: '#C5A044', border: '2px solid #fff',
+            background: '#C5A044', border: '2px solid var(--color-obs-900)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <span style={{ fontSize: 9, color: '#fff', fontWeight: 700 }}>IA</span>
