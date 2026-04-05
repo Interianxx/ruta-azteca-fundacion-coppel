@@ -1695,6 +1695,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@serwist/utils@npm:9.5.7":
+  version: 9.5.7
+  resolution: "@serwist/utils@npm:9.5.7"
+  peerDependencies:
+    browserslist: ">=4"
+  peerDependenciesMeta:
+    browserslist:
+      optional: true
+  checksum: 10c0/98ec0faad357b0949ad564c9f5949a982fd3bbe219ab28507d8ecc9a7010575cbcd86b80aba633991c945a8939f01f97c2dbbf125110f125237f47ffc6ded51d
+  languageName: node
+  linkType: hard
+
 "@smithy/chunked-blob-reader-native@npm:^4.2.3":
   version: 4.2.3
   resolution: "@smithy/chunked-blob-reader-native@npm:4.2.3"
@@ -4200,6 +4212,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"idb@npm:8.0.3":
+  version: 8.0.3
+  resolution: "idb@npm:8.0.3"
+  checksum: 10c0/421cd9a3281b7564528857031cc33fd9e95753f8191e483054cb25d1ceea7303a0d1462f4f69f5b41606f0f066156999e067478abf2460dfcf9cab80dae2a2b2
+  languageName: node
+  linkType: hard
+
 "ignore@npm:^5.2.0":
   version: 5.3.2
   resolution: "ignore@npm:5.3.2"
@@ -5611,6 +5630,7 @@ __metadata:
     next-auth: "npm:^4.24.11"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
+    serwist: "npm:^9.5.7"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"
   languageName: unknown
@@ -5672,6 +5692,21 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 10c0/5215ad0234e2845d4ea5bb9d836d42b03499546ddafb12075566899fc617f68794bb6f146076b6881d755de17d6c6cc73372555879ec7dce2c2feee947866ad2
+  languageName: node
+  linkType: hard
+
+"serwist@npm:^9.5.7":
+  version: 9.5.7
+  resolution: "serwist@npm:9.5.7"
+  dependencies:
+    "@serwist/utils": "npm:9.5.7"
+    idb: "npm:8.0.3"
+  peerDependencies:
+    typescript: ">=5.0.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/f962e2084bab54f60767d4058db245a54e6776b1cba8eb3c3f820eb8e90232856c5507b8e09e88ed502f2ad49a57309166d631ba992d6bc2c0e1624ccccc289a
   languageName: node
   linkType: hard
 
