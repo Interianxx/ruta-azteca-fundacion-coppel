@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { MapView, CATEGORIA_COLOR, CATEGORIA_LUCIDE } from '@/components/Map/MapView'
-import type { Negocio, CategoriaSlug } from '@/types/negocio'
+import type { Negocio, CategoriaSlug, Horario } from '@/types/negocio'
 import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User, Globe, Bot } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 
@@ -45,6 +45,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     tourist_fallback: 'Turista', my_saved: 'Mis guardados', sign_out: 'Cerrar sesión',
     anon_user: 'Explorador anónimo', login_to_personalize: 'Inicia sesión para personalizar tu experiencia',
     sign_in: 'Iniciar sesión', nav_explore: 'Explorar', nav_favorites: 'Favoritos', nav_routes: 'Rutas',
+    hours: 'Horarios', open_now: 'Abierto', closed_now: 'Cerrado', closed_day: 'Cerrado',
+    days_short: 'Lun,Mar,Mié,Jue,Vie,Sáb,Dom',
   },
   en: {
     search_ph: 'Search local businesses...', loading: 'Loading…',
@@ -63,6 +65,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     tourist_fallback: 'Tourist', my_saved: 'My saved', sign_out: 'Sign out',
     anon_user: 'Anonymous explorer', login_to_personalize: 'Sign in to personalize your experience',
     sign_in: 'Sign in', nav_explore: 'Explore', nav_favorites: 'Favorites', nav_routes: 'Routes',
+    hours: 'Hours', open_now: 'Open now', closed_now: 'Closed', closed_day: 'Closed',
+    days_short: 'Mon,Tue,Wed,Thu,Fri,Sat,Sun',
   },
   fr: {
     search_ph: 'Rechercher des commerces locaux...', loading: 'Chargement…',
@@ -81,6 +85,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     tourist_fallback: 'Touriste', my_saved: 'Mes enregistrés', sign_out: 'Se déconnecter',
     anon_user: 'Explorateur anonyme', login_to_personalize: 'Connectez-vous pour personnaliser votre expérience',
     sign_in: 'Se connecter', nav_explore: 'Explorer', nav_favorites: 'Favoris', nav_routes: 'Itinéraires',
+    hours: 'Horaires', open_now: 'Ouvert', closed_now: 'Fermé', closed_day: 'Fermé',
+    days_short: 'Lun,Mar,Mer,Jeu,Ven,Sam,Dim',
   },
   pt: {
     search_ph: 'Pesquisar negócios locais...', loading: 'Carregando…',
@@ -99,6 +105,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     tourist_fallback: 'Turista', my_saved: 'Meus salvos', sign_out: 'Sair',
     anon_user: 'Explorador anônimo', login_to_personalize: 'Entre para personalizar sua experiência',
     sign_in: 'Entrar', nav_explore: 'Explorar', nav_favorites: 'Favoritos', nav_routes: 'Rotas',
+    hours: 'Horários', open_now: 'Aberto', closed_now: 'Fechado', closed_day: 'Fechado',
+    days_short: 'Seg,Ter,Qua,Qui,Sex,Sáb,Dom',
   },
   de: {
     search_ph: 'Lokale Unternehmen suchen...', loading: 'Laden…',
@@ -117,7 +125,24 @@ const MAP_UI: Record<string, Record<string, string>> = {
     tourist_fallback: 'Tourist', my_saved: 'Meine Gespeicherten', sign_out: 'Abmelden',
     anon_user: 'Anonymer Entdecker', login_to_personalize: 'Anmelden um Ihr Erlebnis zu personalisieren',
     sign_in: 'Anmelden', nav_explore: 'Erkunden', nav_favorites: 'Favoriten', nav_routes: 'Routen',
+    hours: 'Öffnungszeiten', open_now: 'Geöffnet', closed_now: 'Geschlossen', closed_day: 'Geschlossen',
+    days_short: 'Mo,Di,Mi,Do,Fr,Sa,So',
   },
+}
+
+// ─── Horario helpers ────────────────────────────────────────────────────────
+
+const HORARIO_DIAS = ['dom','lun','mar','mie','jue','vie','sab'] as const
+
+function isOpenNow(horario: Horario): boolean {
+  const now  = new Date()
+  const key  = HORARIO_DIAS[now.getDay()]
+  const dia  = horario[key]
+  if (!dia.abierto) return false
+  const cur  = now.getHours() * 60 + now.getMinutes()
+  const [oh, om] = dia.apertura.split(':').map(Number)
+  const [ch, cm] = dia.cierre.split(':').map(Number)
+  return cur >= oh * 60 + om && cur < ch * 60 + cm
 }
 
 // ─── SVG icons ─────────────────────────────────────────────────────────────
@@ -423,6 +448,50 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
           ))}
         </div>
       )}
+
+      {/* Horarios */}
+      {negocio.horario && (() => {
+        const abierto = isOpenNow(negocio.horario)
+        const dayNames = ui.days_short.split(',')
+        const todayIdx = new Date().getDay() // 0=Sun
+        return (
+          <div style={{ marginBottom: 18 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#1A2E26', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <ClockIcon /> {ui.hours}
+              </span>
+              <span style={{
+                fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 20,
+                background: abierto ? 'rgba(13,124,102,0.12)' : 'rgba(220,38,38,0.1)',
+                color: abierto ? '#0D7C66' : '#DC2626',
+              }}>
+                {abierto ? ui.open_now : ui.closed_now}
+              </span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {HORARIO_DIAS.map((key, i) => {
+                const dia = negocio.horario![key]
+                const isToday = i === todayIdx
+                return (
+                  <div key={key} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '3px 6px', borderRadius: 6,
+                    background: isToday ? 'rgba(13,124,102,0.07)' : 'transparent',
+                  }}>
+                    <span style={{ fontSize: 12, fontWeight: isToday ? 700 : 500, color: isToday ? '#0D7C66' : '#8a9690', width: 32 }}>
+                      {dayNames[i === 0 ? 6 : i - 1]}
+                    </span>
+                    {dia.abierto
+                      ? <span style={{ fontSize: 12, color: isToday ? '#0D7C66' : '#1A2E26', fontWeight: isToday ? 600 : 400 }}>{dia.apertura} – {dia.cierre}</span>
+                      : <span style={{ fontSize: 12, color: '#DC2626' }}>{ui.closed_day}</span>
+                    }
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Actions */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>

@@ -105,6 +105,8 @@ export default function RegistroNegocioPage() {
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') { router.replace('/login?next=/negocio/registro'); return }
+    const rol = (session as { rol?: string } | null)?.rol
+    if (rol === 'admin') { router.replace('/admin/dashboard'); return }
     // Verificar si ya tiene negocio registrado
     fetch('/api/negocios/mio')
       .then(r => r.json())

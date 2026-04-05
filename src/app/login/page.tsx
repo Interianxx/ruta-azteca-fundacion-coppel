@@ -20,8 +20,10 @@ type LangUI = {
   tourist_btn: string; tourist_sub: string; business_btn: string; business_sub: string
   title_select: string; title_tourist: string; title_t_login: string; title_t_signup: string
   title_t_verify: string; title_t_forgot: string; title_t_reset: string; title_business: string
+  title_b_signup: string
   sub_select: string; sub_tourist: string; sub_t_login: string; sub_t_signup: string
   sub_t_verify: string; sub_t_forgot: string; sub_t_reset: string; sub_business: string
+  sub_b_signup: string
   email_fallback: string
   google: string; redirecting: string; email_btn: string; explore: string; back: string
   or_no_acct: string; or_email: string
@@ -50,10 +52,12 @@ const UI_LANGS: Record<LangCode, LangUI> = {
     title_select: 'Bienvenido', title_tourist: 'Soy turista', title_t_login: 'Iniciar sesión',
     title_t_signup: 'Crear cuenta', title_t_verify: 'Verifica tu correo',
     title_t_forgot: 'Recuperar contraseña', title_t_reset: 'Nueva contraseña', title_business: 'Acceso negocio',
+    title_b_signup: 'Registro de negocio',
     sub_select: 'Elige cómo quieres comenzar tu experiencia',
     sub_tourist: 'Explora negocios locales al instante',
     sub_t_login: 'Ingresa con tu correo y contraseña',
     sub_t_signup: 'Únete a la comunidad Ruta Azteca',
+    sub_b_signup: 'Crea tu cuenta para registrar tu negocio',
     sub_t_verify: 'Enviamos un código a {email}',
     sub_t_forgot: 'Te enviaremos un código de recuperación',
     sub_t_reset: 'Revisa {email} y escribe el código',
@@ -87,10 +91,12 @@ const UI_LANGS: Record<LangCode, LangUI> = {
     title_select: 'Welcome', title_tourist: "I'm a tourist", title_t_login: 'Sign in',
     title_t_signup: 'Create account', title_t_verify: 'Verify your email',
     title_t_forgot: 'Recover password', title_t_reset: 'New password', title_business: 'Business access',
+    title_b_signup: 'Business registration',
     sub_select: 'Choose how you want to start your experience',
     sub_tourist: 'Explore local businesses instantly',
     sub_t_login: 'Enter your email and password',
     sub_t_signup: 'Join the Ruta Azteca community',
+    sub_b_signup: 'Create your account to register your business',
     sub_t_verify: 'We sent a code to {email}',
     sub_t_forgot: "We'll send you a recovery code",
     sub_t_reset: 'Check {email} and enter the code',
@@ -124,10 +130,12 @@ const UI_LANGS: Record<LangCode, LangUI> = {
     title_select: 'Bienvenue', title_tourist: 'Je suis touriste', title_t_login: 'Se connecter',
     title_t_signup: 'Créer un compte', title_t_verify: 'Vérifiez votre email',
     title_t_forgot: 'Récupérer le mot de passe', title_t_reset: 'Nouveau mot de passe', title_business: 'Accès commerce',
+    title_b_signup: 'Inscription commerce',
     sub_select: 'Choisissez comment commencer votre expérience',
     sub_tourist: 'Explorez les commerces locaux instantanément',
     sub_t_login: 'Entrez votre email et mot de passe',
     sub_t_signup: 'Rejoignez la communauté Ruta Azteca',
+    sub_b_signup: 'Créez votre compte pour enregistrer votre commerce',
     sub_t_verify: 'Nous avons envoyé un code à {email}',
     sub_t_forgot: 'Nous vous enverrons un code de récupération',
     sub_t_reset: 'Vérifiez {email} et entrez le code',
@@ -161,10 +169,12 @@ const UI_LANGS: Record<LangCode, LangUI> = {
     title_select: 'Bem-vindo', title_tourist: 'Sou turista', title_t_login: 'Entrar',
     title_t_signup: 'Criar conta', title_t_verify: 'Verifique seu email',
     title_t_forgot: 'Recuperar senha', title_t_reset: 'Nova senha', title_business: 'Acesso negócio',
+    title_b_signup: 'Cadastro de negócio',
     sub_select: 'Escolha como quer começar sua experiência',
     sub_tourist: 'Explore negócios locais instantaneamente',
     sub_t_login: 'Entre com seu email e senha',
     sub_t_signup: 'Junte-se à comunidade Ruta Azteca',
+    sub_b_signup: 'Crie sua conta para cadastrar seu negócio',
     sub_t_verify: 'Enviamos um código para {email}',
     sub_t_forgot: 'Enviaremos um código de recuperação',
     sub_t_reset: 'Verifique {email} e insira o código',
@@ -198,8 +208,10 @@ const UI_LANGS: Record<LangCode, LangUI> = {
     title_select: 'Willkommen', title_tourist: 'Ich bin Tourist', title_t_login: 'Anmelden',
     title_t_signup: 'Konto erstellen', title_t_verify: 'E-Mail bestätigen',
     title_t_forgot: 'Passwort wiederherstellen', title_t_reset: 'Neues Passwort', title_business: 'Unternehmens-Zugang',
+    title_b_signup: 'Unternehmensregistrierung',
     sub_select: 'Wählen Sie, wie Sie Ihr Erlebnis beginnen möchten',
     sub_tourist: 'Erkunden Sie lokale Unternehmen sofort',
+    sub_b_signup: 'Erstellen Sie Ihr Konto, um Ihr Unternehmen zu registrieren',
     sub_t_login: 'Geben Sie Ihre E-Mail und Ihr Passwort ein',
     sub_t_signup: 'Treten Sie der Ruta Azteca Community bei',
     sub_t_verify: 'Wir haben einen Code an {email} gesendet',
@@ -267,7 +279,7 @@ const EyeIcon = ({ show }: { show: boolean }) => (
   </svg>
 )
 
-type View = 'select' | 'tourist' | 't-login' | 't-signup' | 't-verify' | 't-forgot' | 't-reset' | 'business'
+type View = 'select' | 'tourist' | 't-login' | 't-signup' | 't-verify' | 't-forgot' | 't-reset' | 'business' | 'b-signup' | 'b-verify'
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -294,7 +306,15 @@ export default function LoginPage() {
   const ui = UI_LANGS[lang]
 
   useEffect(() => {
-    if (session) router.replace('/turista/mapa')
+    if (!session) return
+    const rol = (session as { rol?: string }).rol
+    if (rol === 'admin') {
+      router.replace('/admin/dashboard')
+    } else if (rol === 'negocio_activo' || rol === 'negocio_pendiente') {
+      router.replace('/negocio/perfil')
+    } else {
+      router.replace('/turista/mapa')
+    }
   }, [session, router])
 
   useEffect(() => {
@@ -326,9 +346,8 @@ export default function LoginPage() {
     setLoading(false)
     if (res?.error) {
       setError(ui.err_credentials)
-    } else {
-      router.replace(view === 'business' ? '/negocio/perfil' : '/turista/mapa')
     }
+    // redirect handled by session useEffect based on session.rol
   }
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -343,7 +362,7 @@ export default function LoginPage() {
       })
       const data = await res.json()
       if (data.error) { setError(data.error); setLoading(false); return }
-      nav('t-verify', 'fwd')
+      nav(view === 'b-signup' ? 'b-verify' : 't-verify', 'fwd')
     } catch {
       setError(ui.err_network)
     }
@@ -365,9 +384,9 @@ export default function LoginPage() {
       const login = await signIn('credentials', { redirect: false, email, password })
       if (login?.error) {
         setSuccess(ui.ok_verified)
-        nav('t-login', 'fwd')
+        nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
-        router.replace('/turista/mapa')
+        router.replace(view === 'b-verify' ? '/negocio/registro' : '/turista/mapa')
       }
     } catch {
       setError(ui.err_network)
@@ -445,6 +464,8 @@ export default function LoginPage() {
     't-forgot': ui.title_t_forgot,
     't-reset':  ui.title_t_reset,
     business:   ui.title_business,
+    'b-signup': ui.title_b_signup,
+    'b-verify': ui.title_t_verify,
   }
 
   const SUBTITLES: Record<View, string> = {
@@ -456,6 +477,8 @@ export default function LoginPage() {
     't-forgot': ui.sub_t_forgot,
     't-reset':  ui.sub_t_reset.replace('{email}', email || ui.email_fallback),
     business:   ui.sub_business,
+    'b-signup': ui.sub_b_signup,
+    'b-verify': ui.sub_t_verify.replace('{email}', email || ui.email_fallback),
   }
 
   const animClass = viewKey > 0
@@ -754,16 +777,11 @@ export default function LoginPage() {
             {/* ── business ─────────────────────────────────────────────────── */}
             {view === 'business' && (
               <div className="flex flex-col gap-3.5">
-                <button onClick={handleGoogle} disabled={loading} className={twOutlineBtn}>
-                  <GoogleIcon /> {loading ? ui.redirecting : ui.google}
-                </button>
-
-                {divider(ui.or_email)}
-
+                <SuccessBox />
                 <form onSubmit={handleLogin} className="flex flex-col gap-3.5">
                   <input
                     type="email" placeholder={ui.email_ph} value={email}
-                    onChange={e => setEmail(e.target.value)} required className={twInput}
+                    onChange={e => setEmail(e.target.value)} required autoFocus className={twInput}
                   />
                   <div className="relative">
                     <input
@@ -775,12 +793,85 @@ export default function LoginPage() {
                       <EyeIcon show={showPass} />
                     </button>
                   </div>
+                  <div className="text-right">
+                    <button type="button" onClick={() => nav('t-forgot', 'fwd')} className={twLinkBtn}>
+                      {ui.forgot}
+                    </button>
+                  </div>
                   <ErrorBox />
                   <button type="submit" disabled={loading} className={twPrimaryBtn}>
                     {loading ? ui.logging_in : ui.login_btn}
                   </button>
                 </form>
+                <div className="text-center mt-2">
+                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">{ui.no_account} </span>
+                  <button onClick={() => nav('b-signup', 'fwd')} className={twLinkBtn + " font-medium"}>{ui.register}</button>
+                </div>
                 <button onClick={() => nav('select', 'back')} className={twBackBtn}>{ui.back}</button>
+              </div>
+            )}
+
+            {/* ── b-signup ─────────────────────────────────────────────────── */}
+            {view === 'b-signup' && (
+              <div className="flex flex-col gap-3.5">
+                <form onSubmit={handleSignup} className="flex flex-col gap-3.5">
+                  <input
+                    type="text" placeholder={ui.name_opt_ph} value={name}
+                    onChange={e => setName(e.target.value)} autoFocus className={twInput}
+                  />
+                  <input
+                    type="email" placeholder={ui.email_ph} value={email}
+                    onChange={e => setEmail(e.target.value)} required className={twInput}
+                  />
+                  <div className="relative">
+                    <input
+                      type={showPass ? 'text' : 'password'} placeholder={ui.pass_min_ph} value={password}
+                      onChange={e => setPassword(e.target.value)} required
+                      className={twInput + " pr-14"}
+                    />
+                    <button type="button" onClick={() => setShowPass(!showPass)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-jade-100)] opacity-60 hover:opacity-100 transition-opacity">
+                      <EyeIcon show={showPass} />
+                    </button>
+                  </div>
+                  <ErrorBox />
+                  <button type="submit" disabled={loading} className={twPrimaryBtn}>
+                    {loading ? ui.creating_acct : ui.signup_btn}
+                  </button>
+                </form>
+                <div className="text-center mt-2">
+                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">{ui.have_account} </span>
+                  <button onClick={() => nav('business', 'back')} className={twLinkBtn + " font-medium"}>{ui.login_btn}</button>
+                </div>
+                <button onClick={() => nav('business', 'back')} className={twBackBtn}>{ui.back}</button>
+              </div>
+            )}
+
+            {/* ── b-verify ─────────────────────────────────────────────────── */}
+            {view === 'b-verify' && (
+              <div className="flex flex-col gap-3.5">
+                <div className="flex items-center gap-3 p-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-xl">
+                  <div className="text-[var(--color-jade-400)]"><MailIcon /></div>
+                  <span className="text-[14px] text-[var(--color-jade-50)] font-medium break-all">{email}</span>
+                </div>
+                <form onSubmit={handleVerify} className="flex flex-col gap-3.5 mt-2">
+                  <input
+                    type="text" placeholder="000 000" value={code} inputMode="numeric"
+                    onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required maxLength={6} autoFocus
+                    className={twInput + " text-center text-[28px] tracking-[0.3em] font-bold py-4"}
+                  />
+                  <ErrorBox />
+                  <SuccessBox />
+                  <button type="submit" disabled={loading || code.length < 6} className={twPrimaryBtn}>
+                    {loading ? ui.verifying_act : ui.verify_btn}
+                  </button>
+                </form>
+                <div className="text-center mt-2">
+                  <button onClick={handleResend} disabled={loading} className={twLinkBtn}>
+                    {ui.verify_resend}
+                  </button>
+                </div>
+                <button onClick={() => nav('b-signup', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
             )}
           </div>

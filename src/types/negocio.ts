@@ -1,5 +1,16 @@
 export type EstadoNegocio = 'PENDING' | 'ACTIVE' | 'REJECTED'
 
+export interface HorarioDia {
+  abierto: boolean
+  apertura: string // "09:00"
+  cierre: string   // "21:00"
+}
+
+export interface Horario {
+  lun: HorarioDia; mar: HorarioDia; mie: HorarioDia; jue: HorarioDia
+  vie: HorarioDia; sab: HorarioDia; dom: HorarioDia
+}
+
 export type CategoriaSlug =
   | 'comida'
   | 'artesanias'
@@ -24,6 +35,7 @@ export interface Negocio {
   tags: string[]
   calificacion?: number
   totalReviews?: number
+  horario?: Horario
   createdAt: string
   updatedAt: string
 }
