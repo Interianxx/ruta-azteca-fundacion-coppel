@@ -23,7 +23,7 @@
 @layer utilities {
   .glass-panel {
     /* Estado original oscuro (Obsidian) del Login */
-    background-color: rgba(4, 52, 44, 0.15);
+    background-color: rgba(4, 52, 44, 0.85);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     
