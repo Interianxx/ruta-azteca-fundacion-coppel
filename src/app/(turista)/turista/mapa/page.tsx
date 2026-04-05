@@ -138,7 +138,7 @@ function isOpenNow(horario: Horario): boolean {
   const now  = new Date()
   const key  = HORARIO_DIAS[now.getDay()]
   const dia  = horario[key]
-  if (!dia.abierto) return false
+  if (!dia || !dia.abierto) return false
   const cur  = now.getHours() * 60 + now.getMinutes()
   const [oh, om] = dia.apertura.split(':').map(Number)
   const [ch, cm] = dia.cierre.split(':').map(Number)
@@ -481,7 +481,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
                     <span style={{ fontSize: 12, fontWeight: isToday ? 700 : 500, color: isToday ? '#0D7C66' : '#8a9690', width: 32 }}>
                       {dayNames[i === 0 ? 6 : i - 1]}
                     </span>
-                    {dia.abierto
+                    {dia?.abierto
                       ? <span style={{ fontSize: 12, color: isToday ? '#0D7C66' : '#1A2E26', fontWeight: isToday ? 600 : 400 }}>{dia.apertura} – {dia.cierre}</span>
                       : <span style={{ fontSize: 12, color: '#DC2626' }}>{ui.closed_day}</span>
                     }
