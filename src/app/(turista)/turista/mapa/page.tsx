@@ -683,9 +683,93 @@ function RoutingOverlay({ negocio, onClose, isDesktop }: { negocio: Negocio; onC
 
 // ─── Chat panel ─────────────────────────────────────────────────────────────
 
-type ChatMsg = { from: 'bot' | 'user'; text: string }
+interface ChatCardItem {
+  id: string; name: string; description: string; address: string
+  image: string; rating: number; tags: string[]
+  action: { type: string; target: string }
+}
+interface ChatCardData { type: 'cards' | 'empty'; title?: string; items?: ChatCardItem[]; message?: string }
+type ChatMsg = { from: 'bot' | 'user'; text?: string; cards?: ChatCardData }
 
-function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: boolean }) {
+function tryParseCards(text: string): ChatCardData | null {
+  const attempt = (s: string) => {
+    try {
+      const p = JSON.parse(s)
+      if (p.type === 'cards' || p.type === 'empty') return p as ChatCardData
+    } catch { /* not json */ }
+    return null
+  }
+  const direct = attempt(text.trim())
+  if (direct) return direct
+  const match = text.match(/\{[\s\S]*\}/)
+  return match ? attempt(match[0]) : null
+}
+
+function ChatCardBubble({ cards, onNavigate }: { cards: ChatCardData; onNavigate: (id: string) => void }) {
+  if (cards.type === 'empty') {
+    return (
+      <div style={{ padding: '10px 14px', borderRadius: '14px 14px 14px 4px', background: 'rgba(26,46,38,0.1)', border: '1px solid rgba(26,46,38,0.12)', fontSize: 14, color: '#8a9690' }}>
+        {cards.message}
+      </div>
+    )
+  }
+  return (
+    <div style={{ alignSelf: 'flex-start', width: '100%' }}>
+      {cards.title && (
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#1A2E26', marginBottom: 8 }}>{cards.title}</div>
+      )}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {cards.items?.map(item => (
+          <button
+            key={item.id}
+            onClick={() => onNavigate(item.action.target)}
+            style={{
+              display: 'flex', alignItems: 'stretch',
+              background: '#fff', border: '1.5px solid #e8e5de',
+              borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
+              boxShadow: '0 2px 6px rgba(0,0,0,.07)', textAlign: 'left',
+              padding: 0, width: '100%',
+            }}
+          >
+            <div style={{
+              width: 60, minHeight: 60, flexShrink: 0,
+              background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div style={{ flex: 1, padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#1A2E26' }}>{item.name}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 2, fontSize: 11, color: '#C5A044', fontWeight: 700 }}>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="#C5A044"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {item.rating.toFixed(1)}
+                </span>
+              </div>
+              <span style={{ fontSize: 11, color: '#5a6e67', lineHeight: 1.3 }}>{item.description}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#0D7C66" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span style={{ fontSize: 10, color: '#8a9690' }}>{item.address}</span>
+              </div>
+              {item.tags.length > 0 && (
+                <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+                  {item.tags.slice(0, 3).map(tag => (
+                    <span key={tag} style={{ fontSize: 9, padding: '1px 6px', borderRadius: 8, background: 'rgba(13,124,102,0.1)', color: '#0D7C66', fontWeight: 600 }}>{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', paddingRight: 8, color: '#0D7C66' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ChatPanel({ onClose, isDesktop, onSelectNegocio }: { onClose: () => void; isDesktop?: boolean; onSelectNegocio?: (id: string) => void }) {
   const { idioma } = useTranslation()
   const ui = MAP_UI[idioma] ?? MAP_UI.en
   const [msgs, setMsgs]       = useState<ChatMsg[]>([])
@@ -710,14 +794,16 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
     setLoading(true)
 
     try {
-      const historial = msgs.map(m => ({ role: m.from === 'user' ? 'user' : 'assistant', content: m.text }))
+      const historial = msgs.map(m => ({ rol: m.from === 'user' ? 'user' : 'assistant', contenido: m.text ?? (m.cards?.title ?? '') }))
       const res  = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mensaje: text, historial }),
+        body: JSON.stringify({ mensaje: text, historial, idioma }),
       })
       const json = await res.json()
-      setMsgs(prev => [...prev, { from: 'bot', text: json.data?.respuesta ?? ui.chat_error }])
+      const respuesta: string = json.data?.respuesta ?? ui.chat_error
+      const cards = tryParseCards(respuesta)
+      setMsgs(prev => [...prev, cards ? { from: 'bot', cards } : { from: 'bot', text: respuesta }])
     } catch {
       setMsgs(prev => [...prev, { from: 'bot', text: ui.chat_conn_error }])
     } finally {
@@ -727,9 +813,9 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
 
   return (
     <div className="glass-panel-map" style={{
-      position: 'absolute', 
-      bottom: isDesktop ? 116 : 160, 
-      right: 16, 
+      position: 'absolute',
+      bottom: isDesktop ? 116 : 160,
+      right: 16,
       left: isDesktop ? 412 : 16,
       width: isDesktop ? 360 : undefined,
       borderRadius: isDesktop ? 24 : 20,
@@ -763,14 +849,22 @@ function ChatPanel({ onClose, isDesktop }: { onClose: () => void; isDesktop?: bo
         {msgs.map((m, i) => (
           <div key={i} style={{
             alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start',
-            maxWidth: '85%',
-            padding: '10px 14px',
-            borderRadius: m.from === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
-            background: m.from === 'user' ? '#0D7C66' : 'rgba(26, 46, 38, 0.1)',
-            border: m.from === 'user' ? 'none' : '1px solid rgba(26, 46, 38, 0.12)',
-            color: m.from === 'user' ? '#fff' : '#1A2E26',
-            fontSize: 14, lineHeight: 1.5,
-          }}>{m.text}</div>
+            maxWidth: m.cards ? '100%' : '85%',
+          }}>
+            {m.cards ? (
+              <ChatCardBubble cards={m.cards} onNavigate={(id) => { onSelectNegocio?.(id); onClose() }} />
+            ) : (
+              <div style={{
+                padding: '10px 14px',
+                borderRadius: m.from === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
+                background: m.from === 'user' ? '#0D7C66' : 'rgba(26, 46, 38, 0.1)',
+                border: m.from === 'user' ? 'none' : '1px solid rgba(26, 46, 38, 0.12)',
+                color: m.from === 'user' ? '#fff' : '#1A2E26',
+                fontSize: 14, lineHeight: 1.5,
+                whiteSpace: 'pre-wrap',
+              }}>{m.text}</div>
+            )}
+          </div>
         ))}
         {loading && (
           <div style={{
@@ -1311,7 +1405,14 @@ export default function MapaPage() {
       )}
 
       {/* ── Chat panel ── */}
-      {showChat && <ChatPanel onClose={() => setShowChat(false)} isDesktop={isDesktop} />}
+      {showChat && <ChatPanel
+        onClose={() => setShowChat(false)}
+        isDesktop={isDesktop}
+        onSelectNegocio={(id) => {
+          const neg = negocios.find(n => n.id === id)
+          if (neg) handleSelect(neg)
+        }}
+      />}
 
       {/* ── Favoritos panel ── */}
       {showFavoritos && (
