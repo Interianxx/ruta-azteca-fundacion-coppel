@@ -58,3 +58,4 @@ infra/lambda-src/**/*.zip
 # Antigravity AI Instructions
 STYLE_GUIDE.md
 FRONTEND_BOUNDARIES.md
+raul-referencia.md

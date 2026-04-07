@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Clock, CheckCircle, Map, BarChart2, Loader2, ShieldCheck, Check, ArrowLeft, MapPin, Phone, Store, Smartphone, LocateFixed, Utensils, Palette, BedDouble, Bus, LayoutGrid, type LucideIcon } from 'lucide-react'
 import type { CategoriaSlug } from '@/types/negocio'
@@ -16,6 +16,10 @@ const CATEGORIAS: { slug: CategoriaSlug; label: string; Icon: LucideIcon; desc: 
   { slug: 'transporte', label: 'Transporte',        Icon: Bus,        desc: 'Traslados, renta de vehículos' },
   { slug: 'otro',       label: 'Otro',              Icon: LayoutGrid, desc: 'Servicios, tiendas, otros' },
 ]
+
+const CATEGORIA_EMOJI_REG: Record<string, string> = {
+  comida: '🥘', artesanias: '🎨', hospedaje: '🏨', tours: '🗺️', transporte: '🚐', otro: '🏪'
+}
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -166,43 +170,50 @@ export default function RegistroNegocioPage() {
   if (negocioExistente && !done) {
     const neg = negocioExistente as { nombre?: string; categoria?: string; createdAt?: string }
     return (
-      <div style={{ minHeight: '100vh', background: '#f7f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: 'system-ui,-apple-system,sans-serif' }}>
-        <div style={{ maxWidth: 440, width: '100%' }}>
+      <div style={{ 
+        minHeight: '100vh', 
+        background: 'linear-gradient(135deg, #f3fbfa 0%, #dff2ec 100%)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+        fontFamily: 'var(--font-inter), sans-serif'
+      }}>
+        <div style={{ maxWidth: 460, width: '100%' }}>
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 32, height: 32, background: '#0D7C66', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ShieldCheck size={18} color="#fff" />
+              </div>
               <span style={{ fontSize: 16, fontWeight: 800, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
-              <ShieldCheck size={16} color="#1A9E78" />
             </div>
           </div>
 
-          {/* Status card */}
-          <div style={{ background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #e8e6e0', boxShadow: '0 4px 20px rgba(0,0,0,.06)', marginBottom: 16 }}>
+          {/* Status card - Glassmorphism */}
+          <div className="glass-panel-map" style={{ borderRadius: 24, padding: 32, border: '1px solid rgba(255,255,255,0.4)', boxShadow: '0 8px 32px rgba(0,0,0,0.05)', marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-              <div style={{ width: 56, height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #FFF8E7, #FEF3C7)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Clock size={28} color="#C5A044" />
+              <div style={{ width: 60, height: 60, borderRadius: 18, background: 'rgba(197, 160, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Clock size={32} color="#C5A044" />
               </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#C5A044', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 4 }}>En revisión</div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: '#1A2E26' }}>{neg.nombre ?? 'Tu negocio'}</div>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#C5A044', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 4 }}>Estado: En revisión</div>
+                <h2 style={{ fontSize: 22, fontWeight: 900, color: '#1A2E26' }}>{neg.nombre ?? 'Tu negocio'}</h2>
               </div>
             </div>
 
-            <p style={{ fontSize: 14, color: '#4a5a52', lineHeight: 1.7, marginBottom: 20 }}>
-              Recibimos tu solicitud el <strong>{neg.createdAt ? new Date(neg.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) : '—'}</strong>. El equipo de Ruta Azteca la está revisando.
+            <p style={{ fontSize: 15, color: '#4a5a52', lineHeight: 1.7, marginBottom: 24 }}>
+              Recibimos tu solicitud el <strong>{neg.createdAt ? new Date(neg.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) : 'recientemente'}</strong>. El equipo de administradores está verificando tu información.
             </p>
 
-            <div style={{ background: '#f7f6f2', borderRadius: 12, padding: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 12 }}>Próximos pasos</div>
+            <div style={{ background: 'rgba(255,255,255,0.3)', borderRadius: 16, padding: 20 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 16 }}>Próximos pasos</div>
               {[
-                { Icon: CheckCircle, t: 'Revisión del equipo',   d: 'Verificamos que tu negocio cumpla los requisitos' },
-                { Icon: Map,         t: 'Aprobación',             d: 'Apareces en el mapa para turistas del Mundial' },
-                { Icon: BarChart2,   t: 'Tu perfil activo',       d: 'Recibes reseñas y métricas de visitas' },
+                { Icon: CheckCircle, t: 'Validación de Datos',   d: 'Confirmamos la autenticidad de tu local' },
+                { Icon: Map,         t: 'Publicación en Mapa',    d: 'Te hacemos visible para miles de turistas' },
+                { Icon: BarChart2,   t: 'Acceso a Métricas',      d: 'Mide tus clics y vistas en tiempo real' },
               ].map(({ Icon, t, d }) => (
-                <div key={t} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
-                  <Icon size={16} color="#0D7C66" style={{ flexShrink: 0, marginTop: 2 }} />
+                <div key={t} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 14 }}>
+                  <Icon size={18} color="#0D7C66" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>{t}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#1A2E26' }}>{t}</div>
                     <div style={{ fontSize: 12, color: '#8a9690' }}>{d}</div>
                   </div>
                 </div>
@@ -210,16 +221,24 @@ export default function RegistroNegocioPage() {
             </div>
           </div>
 
-          <p style={{ fontSize: 12, color: '#8a9690', textAlign: 'center', lineHeight: 1.6, marginBottom: 20 }}>
-            Si tienes preguntas, contacta al equipo en la sección de soporte.
+          <p style={{ fontSize: 13, color: '#8a9690', textAlign: 'center', lineHeight: 1.6, marginBottom: 24, padding: '0 20px' }}>
+            Si eres redirigido al mapa, es posible que necesites <strong>cerrar sesión y volver a entrar</strong> para activar tu nuevo perfil de negocio.
           </p>
 
-          <button
-            onClick={() => router.replace('/turista/mapa')}
-            style={{ width: '100%', padding: '15px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer' }}
-          >
-            Explorar el mapa
-          </button>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <button
+              onClick={() => router.push('/negocio/perfil')}
+              style={{ width: '100%', padding: '16px', background: '#0D7C66', border: 'none', borderRadius: 16, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer', boxShadow: '0 4px 12px rgba(13,124,102,0.2)' }}
+            >
+              Ir a mi Perfil de Negocio
+            </button>
+            <button
+              onClick={() => signOut({ callbackUrl: '/login' })}
+              style={{ width: '100%', padding: '14px', background: 'transparent', border: '1px solid #e8e6e0', borderRadius: 16, fontSize: 14, fontWeight: 600, color: '#8a9690', cursor: 'pointer' }}
+            >
+              Cerrar sesión (Recomendado)
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -227,39 +246,54 @@ export default function RegistroNegocioPage() {
 
   // ── Pantalla de éxito ──
   if (done) return (
-    <div style={{ minHeight: '100vh', background: '#f7f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: 'system-ui,-apple-system,sans-serif' }}>
-      <div style={{ maxWidth: 420, width: '100%', textAlign: 'center' }}>
-        <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', boxShadow: '0 8px 24px rgba(13,124,102,.3)' }}>
-          <Check size={36} color="#fff" strokeWidth={3} />
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #f3fbfa 0%, #dff2ec 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+      fontFamily: 'var(--font-inter), sans-serif'
+    }}>
+      <div style={{ maxWidth: 440, width: '100%', textAlign: 'center' }}>
+        <div style={{ 
+          width: 88, height: 88, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', 
+          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px', 
+          boxShadow: '0 12px 32px rgba(13,124,102,0.25)', borderRadius: '50%'
+        }}>
+          <Check size={40} color="#fff" strokeWidth={3} />
         </div>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: '#1A2E26', marginBottom: 12 }}>¡Registro enviado!</h1>
-        <p style={{ fontSize: 15, color: '#4a5a52', lineHeight: 1.6, marginBottom: 8 }}>
-          Tu negocio <strong>{nombre}</strong> está en revisión por el equipo de Ola México.
+        
+        <h1 style={{ fontSize: 26, fontWeight: 900, color: '#1A2E26', marginBottom: 12 }}>¡Solicitud Enviada!</h1>
+        <p style={{ fontSize: 16, color: '#4a5a52', lineHeight: 1.6, marginBottom: 32 }}>
+          Tu negocio <strong>{nombre}</strong> ha iniciado su proceso de verificación de manera exitosa.
         </p>
-        <p style={{ fontSize: 13, color: '#8a9690', lineHeight: 1.6, marginBottom: 32 }}>
-          Recibirás una notificación cuando sea aprobado y aparezca en el mapa.
-        </p>
-        <div style={{ background: '#fff', borderRadius: 16, padding: '16px 20px', border: '1px solid #e8e6e0', marginBottom: 28, textAlign: 'left' }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 12 }}>¿Qué sigue?</div>
-          {[
-            ['1', 'El equipo revisa tu información'],
-            ['2', 'Te contactamos si necesitamos algo más'],
-            ['3', 'Tu negocio aparece en el mapa para turistas FIFA 2026'],
-          ].map(([n, t]) => (
-            <div key={n} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
-              <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#e0f7f1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#0D7C66' }}>{n}</span>
-              </div>
-              <span style={{ fontSize: 13, color: '#4a5a52', lineHeight: 1.5 }}>{t}</span>
-            </div>
-          ))}
+
+        <div className="glass-panel-map" style={{ borderRadius: 20, padding: 24, border: '1px solid rgba(255,255,255,0.4)', textAlign: 'left', marginBottom: 32 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, color: '#0D7C66', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 16 }}>Importante</div>
+          <p style={{ fontSize: 14, color: '#4a5a52', marginBottom: 0 }}>
+            Para que el sistema active todas tus herramientas de negocio, te recomendamos <strong>cerrar sesión y volver a entrar</strong>. Esto refrescará tus permisos en la aplicación.
+          </p>
         </div>
-        <button
-          onClick={() => router.replace('/turista/mapa')}
-          style={{ width: '100%', padding: '15px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer' }}
-        >
-          Explorar el mapa
-        </button>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <button
+            onClick={() => signOut({ callbackUrl: '/login' })}
+            style={{ 
+              width: '100%', padding: '16px', background: '#0D7C66', border: 'none', 
+              borderRadius: 16, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(13,124,102,0.2)'
+            }}
+          >
+            Cerrar sesión ahora
+          </button>
+          <button
+            onClick={() => router.push('/negocio/perfil')}
+            style={{ 
+              width: '100%', padding: '14px', background: 'transparent', border: '1px solid #e8e6e0', 
+              borderRadius: 16, fontSize: 14, fontWeight: 600, color: '#8a9690', cursor: 'pointer'
+            }}
+          >
+            Continuar sin cerrar sesión
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -487,7 +521,7 @@ export default function RegistroNegocioPage() {
             <div style={{ background: '#fff', borderRadius: 18, border: '1px solid #e8e6e0', overflow: 'hidden', marginBottom: 20 }}>
               {/* Cat badge */}
               <div style={{ background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 28 }}>{CATEGORIAS.find(c => c.slug === categoria)?.emoji}</span>
+                <span style={{ fontSize: 28 }}>{CATEGORIA_EMOJI_REG[categoria] ?? '🏪'}</span>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>{nombre}</div>
                   <div style={{ fontSize: 12, color: 'rgba(255,255,255,.75)' }}>{CATEGORIAS.find(c => c.slug === categoria)?.label}</div>

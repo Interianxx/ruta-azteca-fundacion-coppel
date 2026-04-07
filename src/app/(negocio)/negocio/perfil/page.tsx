@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Phone, MessageCircle, MapPin, Map, Star, MessageSquare, Tag, Loader2, LogOut, Clock, Pencil, Check, X } from 'lucide-react'
+import { Phone, MessageCircle, MapPin, Map, Star, MessageSquare, Tag, Loader2, LogOut, Clock, Pencil, Check, X, ShieldCheck } from 'lucide-react'
 import type { Horario, HorarioDia } from '@/types/negocio'
 
 const CATEGORIA_LABELS: Record<string, string> = {
@@ -106,48 +106,102 @@ export default function PerfilNegocioPage() {
   )
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f6f2', fontFamily: 'system-ui,-apple-system,sans-serif' }}>
-      {/* Header */}
-      <div style={{ background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', padding: '48px 24px 80px' }}>
-        <div style={{ maxWidth: 560, margin: '0 auto' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
-            <span style={{ fontSize: 14, fontWeight: 800, color: 'rgba(255,255,255,.9)', letterSpacing: '.06em' }}>RUTA AZTECA</span>
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #f3fbfa 0%, #dff2ec 100%)',
+      fontFamily: 'var(--font-inter), sans-serif',
+      paddingBottom: 60
+    }}>
+      {/* Dynamic Header with Liquid Glass Feel */}
+      <div style={{ 
+        background: 'linear-gradient(135deg, #0D7C66 0%, #1A9E78 100%)', 
+        padding: '60px 24px 100px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Decorative Aura */}
+        <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '40%', height: '80%', background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+        
+        <div style={{ maxWidth: 600, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 40 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 32, height: 32, background: 'rgba(255,255,255,0.2)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
+                <ShieldCheck size={18} color="#fff" />
+              </div>
+              <span style={{ fontSize: 16, fontWeight: 900, color: '#fff', letterSpacing: '.05em' }}>RUTA AZTECA</span>
+            </div>
             <button onClick={() => signOut({ callbackUrl: '/login' })}
-              style={{ padding: '7px 14px', borderRadius: 10, border: '1.5px solid rgba(255,255,255,.3)', background: 'transparent', color: 'rgba(255,255,255,.85)', fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <LogOut size={14} /> Cerrar sesión
+              style={{ padding: '8px 16px', borderRadius: 14, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, backdropFilter: 'blur(10px)', transition: 'all 0.2s' }}>
+              <LogOut size={14} /> Salir
             </button>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-            <div style={{ width: 64, height: 64, borderRadius: 20, background: 'rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div style={{ 
+              width: 80, height: 80, borderRadius: 24, 
+              background: 'rgba(255,255,255,0.2)', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              fontSize: 40, flexShrink: 0,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              backdropFilter: 'blur(12px)'
+            }}>
               {CATEGORIA_EMOJI[negocio.categoria] ?? '🏪'}
             </div>
-            <div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: '#fff', marginBottom: 4 }}>{negocio.nombre}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,.8)', background: 'rgba(255,255,255,.15)', borderRadius: 20, padding: '3px 10px', fontWeight: 600 }}>
+            <div style={{ flex: 1 }}>
+              <h1 style={{ fontSize: 28, fontWeight: 900, color: '#fff', marginBottom: 8, letterSpacing: '-0.02em' }}>{negocio.nombre}</h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 12, color: '#fff', background: 'rgba(255,255,255,0.2)', borderRadius: 12, padding: '5px 12px', fontWeight: 700, backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   {CATEGORIA_LABELS[negocio.categoria] ?? negocio.categoria}
                 </span>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,.8)', background: 'rgba(255,255,255,.15)', borderRadius: 20, padding: '3px 10px', fontWeight: 600 }}>
-                  ✓ Activo
-                </span>
+                {negocio.estado === 'PENDING' ? (
+                  <span style={{ fontSize: 12, color: '#FEF3C7', background: 'rgba(217, 119, 6, 0.2)', borderRadius: 12, padding: '5px 12px', fontWeight: 700, border: '1px solid rgba(251, 191, 36, 0.3)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Clock size={12} /> En revisión
+                  </span>
+                ) : (
+                  <span style={{ fontSize: 12, color: '#D1FAE5', background: 'rgba(5, 150, 105, 0.2)', borderRadius: 12, padding: '5px 12px', fontWeight: 700, border: '1px solid rgba(52, 211, 153, 0.3)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Check size={12} /> Verificado
+                  </span>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ maxWidth: 560, margin: '-40px auto 0', padding: '0 16px 40px' }}>
+      <div style={{ maxWidth: 600, margin: '-50px auto 0', padding: '0 20px 40px', position: 'relative', zIndex: 10 }}>
+        
+        {/* Warning Banner if Pending */}
+        {negocio.estado === 'PENDING' && (
+          <div className="glass-panel-map" style={{ 
+            borderRadius: 20, padding: '16px 24px', 
+            background: 'rgba(255, 251, 235, 0.9)', 
+            border: '1px solid #FEF3C7', 
+            color: '#92400e', 
+            marginBottom: 20,
+            display: 'flex', alignItems: 'center', gap: 16,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
+          }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Clock size={20} color="#D97706" />
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.5 }}>
+              <strong>Tu negocio aún no es público en el mapa.</strong> El equipo de Ola México lo activará en las próximas 24–48 horas tras validar tu información.
+            </div>
+          </div>
+        )}
 
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+        {/* Stats Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 24 }}>
           {[
-            { Icon: Star,          label: 'Calificación', value: negocio.calificacion ? `${Number(negocio.calificacion).toFixed(1)}` : '—' },
-            { Icon: MessageSquare, label: 'Reseñas',      value: negocio.totalReviews ?? 0 },
-            { Icon: MapPin,        label: 'En el mapa',   value: '✓' },
+            { Icon: Star,          label: 'Ranking', value: negocio.calificacion ? `${Number(negocio.calificacion).toFixed(1)}` : '—' },
+            { Icon: MessageSquare, label: 'Reseñas', value: negocio.totalReviews ?? 0 },
+            { Icon: MapPin,        label: 'Estado Map', value: negocio.estado === 'PENDING' ? '⏳' : '✓' },
           ].map(s => (
-            <div key={s.label} style={{ background: '#fff', borderRadius: 14, padding: '16px 12px', textAlign: 'center', boxShadow: '0 2px 12px rgba(0,0,0,.07)', border: '1px solid #f0efeb' }}>
-              <s.Icon size={18} color="#0D7C66" style={{ margin: '0 auto 6px' }} />
+            <div key={s.label} className="glass-panel-map" style={{ background: '#fff', borderRadius: 20, padding: '20px 12px', textAlign: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid rgba(255,255,255,0.8)' }}>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(13, 124, 102, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
+                <s.Icon size={18} color="#0D7C66" />
+              </div>
               <div style={{ fontSize: 20, fontWeight: 900, color: '#1A2E26', marginBottom: 2 }}>{s.value}</div>
               <div style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>{s.label}</div>
             </div>
@@ -277,9 +331,16 @@ export default function PerfilNegocioPage() {
 
         <button
           onClick={() => router.push('/turista/mapa')}
-          style={{ width: '100%', padding: '15px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer', boxShadow: '0 4px 16px rgba(13,124,102,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+          style={{ 
+            width: '100%', padding: '18px', 
+            background: 'linear-gradient(135deg, #0D7C66 0%, #1A9E78 100%)', 
+            border: 'none', borderRadius: 20, fontSize: 16, fontWeight: 800, color: '#fff', 
+            cursor: 'pointer', boxShadow: '0 8px 24px rgba(13,124,102,0.3)', 
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            transition: 'transform 0.2s'
+          }}
         >
-          <Map size={18} /> Ver mi negocio en el mapa
+          <Map size={20} /> Preview en el mapa
         </button>
       </div>
     </div>
