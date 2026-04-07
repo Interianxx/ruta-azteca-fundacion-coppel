@@ -4,7 +4,102 @@ import { useRouter } from 'next/navigation'
 import { Bot } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 
-interface Msg { from: 'user' | 'bot'; text: string }
+interface CardItem {
+  id: string
+  name: string
+  description: string
+  address: string
+  image: string
+  rating: number
+  tags: string[]
+  action: { type: string; target: string }
+}
+interface CardData { type: 'cards' | 'empty'; title?: string; items?: CardItem[]; message?: string }
+interface Msg { from: 'user' | 'bot'; text?: string; cards?: CardData }
+
+function tryParseCards(text: string): CardData | null {
+  const attempt = (s: string) => {
+    try {
+      const p = JSON.parse(s)
+      if (p.type === 'cards' || p.type === 'empty') return p as CardData
+    } catch { /* not json */ }
+    return null
+  }
+  const direct = attempt(text.trim())
+  if (direct) return direct
+  const match = text.match(/\{[\s\S]*\}/)
+  return match ? attempt(match[0]) : null
+}
+
+function StarMini({ rating }: { rating: number }) {
+  return (
+    <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 12, color: '#C5A044', fontWeight: 700 }}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#C5A044"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      {rating.toFixed(1)}
+    </span>
+  )
+}
+
+function CardBubble({ cards, onNavigate }: { cards: CardData; onNavigate: (id: string) => void }) {
+  if (cards.type === 'empty') {
+    return (
+      <div style={{ padding: '11px 15px', borderRadius: '16px 16px 16px 4px', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,.08)', fontSize: 14, color: '#8a9690' }}>
+        {cards.message}
+      </div>
+    )
+  }
+  return (
+    <div>
+      {cards.title && (
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#1A2E26', marginBottom: 10 }}>{cards.title}</div>
+      )}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {cards.items?.map(item => (
+          <button
+            key={item.id}
+            onClick={() => onNavigate(item.action.target)}
+            style={{
+              display: 'flex', alignItems: 'stretch', gap: 0,
+              background: '#fff', border: '1.5px solid #e8e5de',
+              borderRadius: 14, overflow: 'hidden', cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,.07)', textAlign: 'left',
+              padding: 0, width: '100%',
+            }}
+          >
+            <div style={{
+              width: 80, minHeight: 80, flexShrink: 0,
+              background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div style={{ flex: 1, padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#1A2E26', lineHeight: 1.2 }}>{item.name}</span>
+                <StarMini rating={item.rating} />
+              </div>
+              <span style={{ fontSize: 12, color: '#5a6e67', lineHeight: 1.4 }}>{item.description}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0D7C66" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span style={{ fontSize: 11, color: '#8a9690' }}>{item.address}</span>
+              </div>
+              {item.tags.length > 0 && (
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 2 }}>
+                  {item.tags.slice(0, 3).map(tag => (
+                    <span key={tag} style={{ fontSize: 10, padding: '2px 7px', borderRadius: 10, background: 'rgba(13,124,102,0.1)', color: '#0D7C66', fontWeight: 600 }}>{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', paddingRight: 12, color: '#0D7C66' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 const SUGERENCIAS: Record<string, string[]> = {
   es: ['¿Dónde puedo comer tacos auténticos cerca del centro?', '¿Qué artesanías típicas puedo comprar en CDMX?', '¿Cómo llego al Zócalo desde el aeropuerto?', '¿Qué hostal económico recomiendan en Coyoacán?'],
@@ -50,7 +145,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     const u = UI_CHAT[idioma] ?? UI_CHAT.en
-    setMsgs([{ from: 'bot', text: u.greeting }])
+    setMsgs([{ from: 'bot' as const, text: u.greeting }])
   }, [idioma])
 
   const [input,   setInput]   = useState('')
@@ -73,7 +168,7 @@ export default function ChatPage() {
     try {
       const raw = msgs.slice(1).map(m => ({
         rol:      m.from === 'user' ? 'user' : 'assistant',
-        contenido: m.text,
+        contenido: m.text ?? (m.cards?.title ?? ''),
       }))
       const deduped = raw.filter((item, i) => i === 0 || item.rol !== raw[i - 1].rol)
       while (deduped.length && deduped[0].rol === 'assistant') deduped.shift()
@@ -89,7 +184,9 @@ export default function ChatPage() {
         json.data?.statusCode === 403 ? 'El servicio de IA no está disponible en este momento.' :
         json.data?.statusCode === 429 ? 'Demasiadas solicitudes seguidas. Espera unos segundos e intenta de nuevo.' :
         'Lo siento, no pude procesar tu mensaje. Intenta de nuevo.'
-      setMsgs(prev => [...prev, { from: 'bot', text: json.data?.respuesta ?? errMsg }])
+      const respuesta: string = json.data?.respuesta ?? errMsg
+      const cards = tryParseCards(respuesta)
+      setMsgs(prev => [...prev, cards ? { from: 'bot', cards } : { from: 'bot', text: respuesta }])
     } catch {
       setMsgs(prev => [...prev, { from: 'bot', text: 'Error de conexión. Intenta de nuevo.' }])
     } finally {
@@ -149,7 +246,7 @@ export default function ChatPage() {
         display: 'flex', flexDirection: 'column', gap: 12,
       }}>
         {msgs.map((m, i) => (
-          <div key={i} style={{ alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start', maxWidth: '82%' }}>
+          <div key={i} style={{ alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start', maxWidth: m.cards ? '92%' : '82%' }}>
             {m.from === 'bot' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
                 <div style={{
@@ -162,17 +259,21 @@ export default function ChatPage() {
                 <span style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>{ui.assistant}</span>
               </div>
             )}
-            <div style={{
-              padding: '11px 15px',
-              borderRadius: m.from === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-              background: m.from === 'user' ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#fff',
-              color: m.from === 'user' ? '#fff' : '#1A2E26',
-              fontSize: 14, lineHeight: 1.55,
-              boxShadow: '0 1px 4px rgba(0,0,0,.08)',
-              whiteSpace: 'pre-wrap',
-            }}>
-              {m.text}
-            </div>
+            {m.cards ? (
+              <CardBubble cards={m.cards} onNavigate={(id) => router.push(`/turista/negocio/${id}`)} />
+            ) : (
+              <div style={{
+                padding: '11px 15px',
+                borderRadius: m.from === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                background: m.from === 'user' ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#fff',
+                color: m.from === 'user' ? '#fff' : '#1A2E26',
+                fontSize: 14, lineHeight: 1.55,
+                boxShadow: '0 1px 4px rgba(0,0,0,.08)',
+                whiteSpace: 'pre-wrap',
+              }}>
+                {m.text}
+              </div>
+            )}
           </div>
         ))}
 

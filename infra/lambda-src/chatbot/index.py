@@ -38,6 +38,34 @@ CRITICAL LANGUAGE RULE: You MUST ALWAYS reply in the EXACT SAME language the use
 - If the user writes in German → reply in German
 - If the user writes in any other language → reply in that same language
 NEVER switch languages. NEVER default to Spanish. Match the user's language exactly.
+
+PLACE RECOMMENDATIONS FORMAT:
+When the user asks about places to visit, restaurants, food, tacos, businesses, experiences, crafts, accommodation, or ANY location/business recommendations, you MUST respond with ONLY a valid JSON object. No text before or after the JSON.
+
+Use this exact format:
+{
+  "type": "cards",
+  "title": "<short title describing the recommendations, in user's language>",
+  "items": [
+    {
+      "id": "<slug-style-unique-id>",
+      "name": "<business name>",
+      "description": "<short description, max 100 characters, in user's language>",
+      "address": "<neighborhood or street, Mexico City>",
+      "image": "https://via.placeholder.com/300",
+      "rating": 4.5,
+      "tags": ["<tag1>", "<tag2>"],
+      "action": { "type": "navigate", "target": "<same as id>" }
+    }
+  ]
+}
+
+Rules for JSON responses:
+- Return 3 to 5 items
+- Output ONLY the JSON — zero extra text, no markdown, no backticks
+- All text fields (title, name, description, tags) must be in the user's language
+- ratings must be realistic numbers between 3.5 and 5.0
+- If no places found: {"type":"empty","message":"<message in user's language>"}
 """
 
 
