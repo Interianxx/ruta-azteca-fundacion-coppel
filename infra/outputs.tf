@@ -91,6 +91,18 @@ output "lambda_voz_name" {
   value       = module.lambda.voz_name
 }
 
+# --- Amplify ---
+
+output "amplify_app_url" {
+  description = "URL pública del frontend — úsala como nextauth_url en el segundo apply"
+  value       = module.amplify.app_url
+}
+
+output "amplify_app_id" {
+  description = "ID de la Amplify App"
+  value       = module.amplify.app_id
+}
+
 # --- DynamoDB ---
 
 output "dynamodb_table_name" {

@@ -17,11 +17,36 @@
 environment = "dev"
 aws_region  = "us-east-1"
 
+# ---------------------------------------------------------------------------
+# GitHub — reemplaza con tu repo y rama
+# github_token va en variable de entorno: export TF_VAR_github_token="ghp_..."
+# ---------------------------------------------------------------------------
+github_repo   = "https://github.com/Interianxx/ruta-azteca-fundacion-coppel"
+github_branch = "main"
+
+# ---------------------------------------------------------------------------
+# NextAuth
+# nextauth_secret va en variable de entorno: export TF_VAR_nextauth_secret="..."
+# nextauth_url: vacío en el primer apply.
+#   Después del primer apply, copia el output amplify_app_url aquí y vuelve a aplicar.
+# ---------------------------------------------------------------------------
+nextauth_url = ""
+
+# ---------------------------------------------------------------------------
+# Mapbox — va en variable de entorno: export TF_VAR_mapbox_token="pk.eyJ1..."
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Cognito callbacks — se actualizan en el segundo apply con la URL de Amplify
+# ---------------------------------------------------------------------------
 callback_urls = [
   "http://localhost:3000/api/auth/callback/cognito",
+  # Agrega aquí la URL de Amplify después del primer apply:
+  # "https://main.XXXXXXXX.amplifyapp.com/api/auth/callback/cognito",
 ]
 
 logout_urls = [
   "http://localhost:3000",
   "http://localhost:3000/login",
+  # "https://main.XXXXXXXX.amplifyapp.com",
 ]

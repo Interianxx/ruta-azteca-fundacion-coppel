@@ -94,3 +94,34 @@ module "monitoring" {
   lambda_traduccion_name = module.lambda.traduccion_name
   lambda_voz_name        = module.lambda.voz_name
 }
+
+module "amplify" {
+  source = "./modules/amplify"
+
+  environment   = var.environment
+  github_repo   = var.github_repo
+  github_branch = var.github_branch
+  github_token  = var.github_token
+
+  aws_region            = var.aws_region
+  aws_access_key_id     = module.ai_services.nextjs_bff_access_key_id
+  aws_secret_access_key = module.ai_services.nextjs_bff_secret_access_key
+
+  cognito_user_pool_id  = module.cognito.user_pool_id
+  cognito_client_id     = module.cognito.client_id
+  cognito_client_secret = module.cognito.client_secret
+  cognito_domain        = module.cognito.domain
+  cognito_jwks_uri      = module.cognito.jwks_uri
+
+  dynamodb_table_name = module.dynamodb.table_name
+  s3_bucket_name      = module.s3_cdn.bucket_name
+  cloudfront_url      = module.s3_cdn.cloudfront_url
+
+  lambda_chatbot_name    = module.lambda.chatbot_name
+  lambda_traduccion_name = module.lambda.traduccion_name
+  lambda_voz_name        = module.lambda.voz_name
+
+  nextauth_secret = var.nextauth_secret
+  nextauth_url    = var.nextauth_url
+  mapbox_token    = var.mapbox_token
+}

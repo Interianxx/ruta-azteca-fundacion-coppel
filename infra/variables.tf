@@ -83,3 +83,50 @@ variable "cors_origins" {
   type        = list(string)
   default     = ["http://localhost:3000"]
 }
+
+# ---------------------------------------------------------------------------
+# Amplify / GitHub
+# ---------------------------------------------------------------------------
+
+variable "github_repo" {
+  description = "URL del repositorio GitHub (https://github.com/owner/repo)"
+  type        = string
+}
+
+variable "github_branch" {
+  description = "Rama de GitHub a desplegar"
+  type        = string
+  default     = "main"
+}
+
+variable "github_token" {
+  description = "GitHub Personal Access Token con scope 'repo'"
+  type        = string
+  sensitive   = true
+}
+
+# ---------------------------------------------------------------------------
+# NextAuth
+# ---------------------------------------------------------------------------
+
+variable "nextauth_secret" {
+  description = "NEXTAUTH_SECRET — genera con: openssl rand -hex 32"
+  type        = string
+  sensitive   = true
+}
+
+variable "nextauth_url" {
+  description = "URL pública de la app. Vacío en el primer apply; rellena con el output amplify_app_url y vuelve a aplicar."
+  type        = string
+  default     = ""
+}
+
+# ---------------------------------------------------------------------------
+# Mapbox
+# ---------------------------------------------------------------------------
+
+variable "mapbox_token" {
+  description = "NEXT_PUBLIC_MAPBOX_TOKEN — account.mapbox.com"
+  type        = string
+  sensitive   = true
+}
