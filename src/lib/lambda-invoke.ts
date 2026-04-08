@@ -1,7 +1,9 @@
 import { LambdaClient, InvokeCommand, LogType } from '@aws-sdk/client-lambda'
+import { AWS_REGION, awsCredentials } from '@/lib/aws-config'
 
 const lambda = new LambdaClient({
-  region: process.env.AWS_REGION ?? 'us-east-1',
+  region:      AWS_REGION,
+  credentials: awsCredentials,
 })
 
 export async function invokeLambda<T>(
