@@ -487,7 +487,7 @@ export default function RegistroNegocioPage() {
             <div style={{ background: '#fff', borderRadius: 18, border: '1px solid #e8e6e0', overflow: 'hidden', marginBottom: 20 }}>
               {/* Cat badge */}
               <div style={{ background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 28 }}>{CATEGORIAS.find(c => c.slug === categoria)?.emoji}</span>
+                {(() => { const cat = CATEGORIAS.find(c => c.slug === categoria); return cat ? <cat.Icon size={28} color="#fff" /> : null })()}
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>{nombre}</div>
                   <div style={{ fontSize: 12, color: 'rgba(255,255,255,.75)' }}>{CATEGORIAS.find(c => c.slug === categoria)?.label}</div>
