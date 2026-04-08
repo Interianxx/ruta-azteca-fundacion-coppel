@@ -41,12 +41,11 @@ nextauth_url = ""
 # ---------------------------------------------------------------------------
 callback_urls = [
   "http://localhost:3000/api/auth/callback/cognito",
-  # Agrega aquí la URL de Amplify después del primer apply:
-  # "https://main.XXXXXXXX.amplifyapp.com/api/auth/callback/cognito",
+  "https://main.dq7orj9s3fr7v.amplifyapp.com/api/auth/callback/cognito",
 ]
 
 logout_urls = [
   "http://localhost:3000",
   "http://localhost:3000/login",
-  # "https://main.XXXXXXXX.amplifyapp.com",
+  "https://main.dq7orj9s3fr7v.amplifyapp.com",
 ]

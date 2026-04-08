@@ -103,10 +103,6 @@ module "amplify" {
   github_branch = var.github_branch
   github_token  = var.github_token
 
-  aws_region            = var.aws_region
-  aws_access_key_id     = module.ai_services.nextjs_bff_access_key_id
-  aws_secret_access_key = module.ai_services.nextjs_bff_secret_access_key
-
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_client_id     = module.cognito.client_id
   cognito_client_secret = module.cognito.client_secret
@@ -121,7 +117,8 @@ module "amplify" {
   lambda_traduccion_name = module.lambda.traduccion_name
   lambda_voz_name        = module.lambda.voz_name
 
-  nextauth_secret = var.nextauth_secret
-  nextauth_url    = var.nextauth_url
-  mapbox_token    = var.mapbox_token
+  nextauth_secret       = var.nextauth_secret
+  nextauth_url          = var.nextauth_url
+  mapbox_token          = var.mapbox_token
+  nextjs_bff_policy_arn = module.ai_services.nextjs_bff_policy_arn
 }
