@@ -46,8 +46,7 @@ export async function GET(req: NextRequest) {
         count:   result.Count ?? 0,
       },
     })
-  } catch (e) {
-    console.error(e)
+  } catch {
     return NextResponse.json({ error: 'Error al obtener negocios' }, { status: 500 })
   }
 }
