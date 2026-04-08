@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, RefreshCw, Phone, MessageCircle, MapPin, Map, CheckCircle, XCircle, Loader2, PartyPopper } from 'lucide-react'
+import { ArrowLeft, RefreshCw, Phone, MessageCircle, MapPin, Map, CheckCircle, XCircle, Loader2, PartyPopper, Palette, BedDouble, Bus, LayoutGrid } from 'lucide-react'
 
 interface NegocioPendiente {
   id: string
@@ -16,6 +16,15 @@ interface NegocioPendiente {
   propietarioId: string
   propietarioEmail?: string
   createdAt: string
+}
+
+const CATEGORIA_ICONS: Record<string, any> = {
+  comida: ({ size, color }: any) => <MapPin size={size} color={color} />, // Fallback or specific icons
+  artesanias: Palette,
+  hospedaje: BedDouble,
+  tours: Map,
+  transporte: Bus,
+  otro: LayoutGrid,
 }
 
 const CATEGORIA_LABELS: Record<string, string> = {
@@ -62,75 +71,95 @@ export default function PendientesPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f7f6f2', fontFamily: 'system-ui,-apple-system,sans-serif' }}>
-      {/* Header */}
-      <div style={{ background: '#fff', borderBottom: '1px solid #f0efeb', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
+    <div className="bg-jade-air" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+      {/* Header Premium Jade Air Dense */}
+      <div style={{ 
+        background: 'rgba(255, 255, 255, 0.8)', 
+        backdropFilter: 'var(--glass-blur)', 
+        borderBottom: '1px solid rgba(13,124,102,0.1)', 
+        padding: '16px 24px', 
+        display: 'flex', alignItems: 'center', gap: 16, 
+        position: 'sticky', top: 0, zIndex: 100,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.03)'
+      }}>
         <button onClick={() => router.push('/admin/dashboard')}
-          style={{ width: 36, height: 36, borderRadius: '50%', border: 'none', background: '#f7f6f2', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <ArrowLeft size={18} color="#4a5a52" />
+          className="btn-jade"
+          style={{ width: 40, height: 40, borderRadius: 14, padding: 0 }}>
+          <ArrowLeft size={20} />
         </button>
         <div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: '#1A2E26' }}>Negocios pendientes</div>
-          <div style={{ fontSize: 11, color: '#8a9690' }}>{loading ? 'Cargando...' : `${negocios.length} solicitud${negocios.length !== 1 ? 'es' : ''}`}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="text-jade-title" style={{ fontSize: 18 }}>Validaciones</span>
+            <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--color-jade-air-accent)' }} />
+            <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>{loading ? 'Cargando...' : `${negocios.length} trámites`}</span>
+          </div>
         </div>
-        <button onClick={cargar} style={{ marginLeft: 'auto', width: 36, height: 36, borderRadius: '50%', border: '1px solid #e8e6e0', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-          <RefreshCw size={16} color="#4a5a52" />
+        <button onClick={cargar} 
+          style={{ marginLeft: 'auto', width: 40, height: 40, borderRadius: 14, border: '1px solid rgba(13,124,102,0.1)', background: 'var(--color-jade-air-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+          <RefreshCw size={18} color="var(--color-jade-air-accent)" className={loading ? 'animate-spin' : ''} />
         </button>
       </div>
 
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '24px 16px' }}>
 
         {loading && (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: 48 }}>
-            <Loader2 size={32} color="#0D7C66" style={{ animation: 'spin 0.8s linear infinite' }} />
-            <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+          <div style={{ display: 'flex', justifyContent: 'center', padding: 64 }}>
+            <Loader2 size={32} color="var(--color-jade-air-accent)" className="animate-spin" />
           </div>
         )}
 
         {!loading && negocios.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '64px 24px' }}>
-            <PartyPopper size={48} color="#0D7C66" style={{ margin: '0 auto 16px' }} />
-            <div style={{ fontSize: 18, fontWeight: 700, color: '#1A2E26', marginBottom: 8 }}>Todo al día</div>
-            <div style={{ fontSize: 14, color: '#8a9690' }}>No hay negocios pendientes de aprobación.</div>
+          <div className="glass-card" style={{ textAlign: 'center', padding: '64px 24px' }}>
+            <PartyPopper size={48} color="var(--color-jade-air-accent)" style={{ margin: '0 auto 16px' }} />
+            <div className="text-jade-title" style={{ fontSize: 20, marginBottom: 8 }}>Todo al día</div>
+            <div className="text-jade-muted">No hay solicitudes pendientes de aprobación en este momento.</div>
           </div>
         )}
 
         {negocios.map(neg => (
-          <div key={neg.id} style={{ background: '#fff', borderRadius: 18, border: '1px solid #e8e6e0', padding: '22px 20px', marginBottom: 16, boxShadow: '0 2px 8px rgba(0,0,0,.04)' }}>
+          <div key={neg.id} className="glass-card" style={{ padding: '24px', marginBottom: 20 }}>
+            {/* Header Highlight */}
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, transparent, rgba(13,124,102,0.1), transparent)' }} />
+
             {/* Nombre + categoría */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
-              <div>
-                <div style={{ fontSize: 17, fontWeight: 800, color: '#1A2E26', marginBottom: 4 }}>{neg.nombre}</div>
-                <span style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#0D7C66', background: '#E0F7F1', borderRadius: 20, padding: '3px 10px' }}>
-                  {CATEGORIA_LABELS[neg.categoria] ?? neg.categoria}
-                </span>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 16 }}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: 'var(--color-jade-air-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                   {(() => {
+                     const Icon = (CATEGORIA_ICONS as any)[neg.categoria] || LayoutGrid
+                     return <Icon size={24} color="var(--color-jade-air-accent)" />
+                   })()}
+                </div>
+                <div>
+                  <div className="text-jade-title" style={{ fontSize: 18, marginBottom: 2 }}>{neg.nombre}</div>
+                  <span style={{ display: 'inline-flex', fontSize: 10, fontWeight: 800, color: 'var(--color-jade-air-accent)', background: 'var(--color-jade-air-light)', borderRadius: 8, padding: '3px 10px', textTransform: 'uppercase', letterSpacing: '.05em' }}>
+                    {CATEGORIA_LABELS[neg.categoria] ?? neg.categoria}
+                  </span>
+                </div>
               </div>
-              <div style={{ fontSize: 11, color: '#8a9690', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                {new Date(neg.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })}
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', whiteSpace: 'nowrap', flexShrink: 0, fontWeight: 700, background: 'rgba(0,0,0,0.03)', padding: '4px 10px', borderRadius: 8 }}>
+                {new Date(neg.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}
               </div>
             </div>
 
             {/* Descripción */}
-            <p style={{ fontSize: 13, color: '#4a5a52', lineHeight: 1.6, margin: '0 0 14px' }}>
+            <p className="text-jade-muted" style={{ fontSize: 14, lineHeight: 1.6, margin: '0 0 20px', fontWeight: 500 }}>
               {neg.descripcion}
             </p>
 
-            {/* Datos de contacto */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
-              <span style={{ fontSize: 12, color: '#4a5a52', background: '#f7f6f2', borderRadius: 8, padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <Phone size={13} color="#4a5a52" /> {neg.telefono}
-              </span>
+            {/* Datos de contacto Jade Air */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
+              <div style={{ fontSize: 12, color: 'var(--text-main)', background: 'var(--color-jade-air-light)', borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+                <Phone size={14} color="var(--color-jade-air-accent)" /> {neg.telefono}
+              </div>
               {neg.whatsapp && (
-                <span style={{ fontSize: 12, color: '#4a5a52', background: '#f7f6f2', borderRadius: 8, padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <MessageCircle size={13} color="#4a5a52" /> {neg.whatsapp}
-                </span>
+                <div style={{ fontSize: 12, color: 'var(--text-main)', background: 'var(--color-jade-air-light)', borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+                  <MessageCircle size={14} color="var(--color-jade-air-accent)" /> WhatsApp
+                </div>
               )}
-              <span style={{ fontSize: 12, color: '#4a5a52', background: '#f7f6f2', borderRadius: 8, padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <MapPin size={13} color="#4a5a52" /> {neg.direccion}
-              </span>
-              <span style={{ fontSize: 12, color: '#4a5a52', background: '#f7f6f2', borderRadius: 8, padding: '5px 10px', display: 'flex', alignItems: 'center', gap: 5 }}>
-                <Map size={13} color="#4a5a52" /> {neg.lat?.toFixed(4)}, {neg.lng?.toFixed(4)}
-              </span>
+              <div style={{ fontSize: 12, color: 'var(--text-main)', background: 'rgba(0,0,0,0.03)', borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 8, gridColumn: 'span 2', fontWeight: 500 }}>
+                <MapPin size={14} color="var(--color-jade-air-accent)" /> {neg.direccion.split(',')[0]}
+              </div>
             </div>
 
             {/* Feedback */}

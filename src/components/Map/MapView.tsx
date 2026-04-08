@@ -5,8 +5,7 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Utensils, Palette, BedDouble, Map as MapIcon, Bus, Store } from 'lucide-react'
 import { MAPBOX_TOKEN, MAPBOX_STYLE, CDMX_CENTER, DEFAULT_ZOOM } from '@/lib/mapbox'
-import type { Negocio, CategoriaSlug, NegocioCache } from '@/types/negocio'
-import { getDB } from '@/app/database/negocio_db'
+import type { Negocio, CategoriaSlug } from '@/types/negocio'
 
 export const CATEGORIA_COLOR: Record<CategoriaSlug, string> = {
   comida:     '#C5A044',
@@ -145,7 +144,6 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
     })
 
     mapRef.current = map
-    
     return () => {
       routeReadyRef.current = false
       entriesRef.current.forEach(({ marker }) => marker.remove())

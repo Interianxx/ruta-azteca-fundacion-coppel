@@ -6,7 +6,6 @@ import { MapView, CATEGORIA_COLOR, CATEGORIA_LUCIDE, type MapViewHandle } from '
 import type { Negocio, CategoriaSlug, Horario } from '@/types/negocio'
 import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User, Globe, Bot, Footprints, Car } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
-import { getDB } from '@/app/database/negocio_db'
 
 // ─── Config ────────────────────────────────────────────────────────────────
 
@@ -342,6 +341,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
       borderRadius: isDesktop ? 24 : '20px 20px 0 0',
       padding: '8px 20px 36px',
       zIndex: 30, maxHeight: '72vh', overflowY: 'auto',
+      borderTop: 'none',
     }}>
       <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 12px' }} />
 
@@ -1284,18 +1284,6 @@ export default function MapaPage() {
       const res  = await fetch(url)
       const json = await res.json()
       setNegocios(json.data?.items ?? [])
-      getDB().then(db => {
-      db.getAll('negocios').then(() => {
-        for(const negocio of json.data?.items ?? []) {
-          try{
-            db.put('negocios', { id: negocio.id, negocio: negocio, synced: true })
-          }
-          catch(e){
-            console.error('Error guardando negocio en IndexedDB', e)
-          }
-        }
-      })
-    })
     } finally {
       setLoading(false)
     }
@@ -1375,8 +1363,8 @@ export default function MapaPage() {
           display: 'flex', flexDirection: 'column', overflow: 'hidden',
           zIndex: 20, position: 'absolute', top: 16, left: 16, 
           borderRadius: 24, paddingBottom: 16,
-          boxShadow: '0 12px 48px rgba(0,0,0,0.15), 0 2px 14px rgba(0,0,0,0.05)',
-          border: '1px solid rgba(255, 255, 255, 0.4)'
+          boxShadow: 'var(--glass-shadow)',
+          border: 'none'
         }}>
           {/* Panel header */}
           <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid rgba(26, 46, 38, 0.12)', flexShrink: 0 }}>
@@ -1402,7 +1390,7 @@ export default function MapaPage() {
 
             {/* Search */}
             <div style={{ position: 'relative' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px 8px 14px', background: 'rgba(255, 255, 255, 0.5)', borderRadius: 12, border: '1px solid rgba(26, 46, 38, 0.12)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px 8px 14px', background: 'rgba(255, 255, 255, 0.95)', borderRadius: 12, border: '1px solid rgba(26, 46, 38, 0.12)', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                 <span style={{ color: '#8a9690', display: 'flex' }}><SearchIcon /></span>
                 <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={e => e.key === 'Escape' && setSearch('')}
                   placeholder={ui.search_ph}
@@ -1444,7 +1432,7 @@ export default function MapaPage() {
             <div style={{ display: 'flex', gap: 6, marginTop: 10, overflowX: 'auto', scrollbarWidth: 'none' }}>
               {CATS.map(cat => (
                 <button key={cat.slug} onClick={() => setCategoria(cat.slug as CategoriaSlug | '')}
-                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 20, flexShrink: 0, background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.5)', color: categoria === cat.slug ? '#fff' : '#8a9690', border: categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(255, 255, 255, 0.3)', cursor: 'pointer', fontSize: 12, fontWeight: categoria === cat.slug ? 600 : 400 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 12px', borderRadius: 20, flexShrink: 0, background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.8)', color: categoria === cat.slug ? '#fff' : '#8a9690', border: categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(255, 255, 255, 0.6)', cursor: 'pointer', fontSize: 12, fontWeight: categoria === cat.slug ? 600 : 400 }}>
                   {cat.icon} {catLabel(cat.slug)}
                 </button>
               ))}
@@ -1527,7 +1515,7 @@ export default function MapaPage() {
             display: 'flex', alignItems: 'center', gap: 0,
             padding: '6px 6px 6px 16px',
             borderRadius: search.trim() && filtered.length > 0 ? '20px 20px 0 0' : 28,
-            boxShadow: '0 2px 14px rgba(0,0,0,.3)', border: '1px solid rgba(26, 46, 38, 0.12)',
+            boxShadow: 'var(--glass-shadow)', border: 'none',
           }}>
             <span style={{ color: '#8a9690', display: 'flex', marginRight: 10 }}><SearchIcon /></span>
             <input
@@ -1644,18 +1632,7 @@ export default function MapaPage() {
           <button
             key={cat.slug}
             onClick={() => setCategoria(cat.slug as CategoriaSlug | '')}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 5,
-              padding: '7px 14px', borderRadius: 20, flexShrink: 0,
-              background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.5)',
-              color:      categoria === cat.slug ? '#fff'     : '#8a9690',
-              border:     categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(26, 46, 38, 0.12)',
-              cursor: 'pointer', whiteSpace: 'nowrap',
-              fontSize: 13, fontWeight: categoria === cat.slug ? 600 : 400,
-              boxShadow: categoria === cat.slug
-                ? '0 2px 8px rgba(13,124,102,.3)'
-                : '0 1px 4px rgba(0,0,0,.05)',
-            }}
+            className={categoria === cat.slug ? 'map-category-pill active' : 'map-category-pill'}
           >
             {cat.icon} {catLabel(cat.slug)}
           </button>
@@ -1668,9 +1645,9 @@ export default function MapaPage() {
           position: 'absolute', bottom: 60, left: 0, right: 0, zIndex: 25,
           height: sheetState === 'peek' ? 80 : sheetState === 'half' ? 340 : '85vh',
           transition: 'height .35s cubic-bezier(.4,0,.2,1)',
-          borderRadius: '20px 20px 0 0', border: 'none', borderTop: '1px solid rgba(26, 46, 38, 0.12)',
+          borderRadius: '20px 20px 0 0', borderTop: '1px solid rgba(26, 46, 38, 0.12)',
           display: 'flex', flexDirection: 'column',
-          boxShadow: '0 -8px 24px rgba(0,0,0,.15)',
+          boxShadow: 'var(--glass-shadow)',
         }}>
           {/* Drag handle + header */}
           <div
