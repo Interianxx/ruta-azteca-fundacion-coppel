@@ -51,6 +51,7 @@ const cookieOpts = (extra?: object) => ({
 })
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     // ── Google via Cognito Hosted UI ──────────────────────────────────────────
     // Custom provider con endpoints explícitos: evita la llamada de OIDC discovery
