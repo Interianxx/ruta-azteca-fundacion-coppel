@@ -69,10 +69,8 @@ export const authOptions: NextAuthOptions = {
       // (la validación requiere JWKS de cognito-idp.amazonaws.com, dominio inaccesible aquí).
       token: {
         url: `https://${COGNITO_DOMAIN}/oauth2/token`,
-        async request(context: {
-          params: Record<string, string>
-          checks: Record<string, string>
-        }) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        async request(context: any) {
           const body = new URLSearchParams({
             grant_type:   'authorization_code',
             code:         context.params.code,
