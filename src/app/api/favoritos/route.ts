@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
+import type { Session } from 'next-auth'
 import { PutCommand, DeleteCommand, QueryCommand } from '@aws-sdk/lib-dynamodb'
 import { dynamo, TABLE_NAME } from '@/lib/dynamo'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
-function getUid(session: Awaited<ReturnType<typeof getServerSession>>): string | null {
+function getUid(session: Session | null): string | null {
   if (!session?.user) return null
   return (session.user as { sub?: string }).sub ?? session.user.email ?? null
 }
