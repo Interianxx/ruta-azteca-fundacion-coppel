@@ -9,7 +9,10 @@ export function VoiceSearch({ onResult }: Props) {
 
   function iniciar() {
     // Intentar Web Speech API primero (sin costo)
-    const SpeechRecognition = window.SpeechRecognition ?? (window as unknown as { webkitSpeechRecognition: typeof SpeechRecognition }).webkitSpeechRecognition
+    type SpeechRecognitionCtor = new () => SpeechRecognition
+    const SpeechRecognition: SpeechRecognitionCtor | undefined =
+      (window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor }).SpeechRecognition ??
+      (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionCtor }).webkitSpeechRecognition
 
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition()
