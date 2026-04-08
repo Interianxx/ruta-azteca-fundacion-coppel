@@ -75,9 +75,28 @@ def lambda_handler(event, context):
         historial  = event.get("historial", [])
         idioma     = event.get("idioma", "")
 
+        negocios = event.get("negocios", [])
+
         system_prompt = BASE_SYSTEM_PROMPT
         if idioma and idioma != "es":
             system_prompt += f"\nThe user's browser language is '{idioma}'. Prioritize replying in that language."
+
+        if negocios:
+            lines = ["REGISTERED BUSINESSES IN RUTA AZTECA PLATFORM (use ONLY these for recommendations, never invent businesses):"]
+            for n in negocios:
+                line = f"- ID:{n.get('id')} | {n.get('nombre')} | categoria:{n.get('categoria')} | {n.get('direccion')}"
+                tags = n.get('tags')
+                if tags:
+                    line += f" | tags: {', '.join(tags)}"
+                cal = n.get('calificacion')
+                if cal:
+                    line += f" | rating: {cal}"
+                desc = n.get('descripcion')
+                if desc:
+                    line += f" | {desc}"
+                lines.append(line)
+            system_prompt += "\n\n" + "\n".join(lines)
+            system_prompt += "\n\nWhen returning JSON cards, use the exact ID from the list above for each business."
 
         if not mensaje:
             return {"statusCode": 400, "error": "mensaje requerido"}
@@ -109,7 +128,7 @@ def lambda_handler(event, context):
 
         payload = {
             "anthropic_version": "bedrock-2023-05-31",
-            "max_tokens":        512,
+            "max_tokens":        1500,
             "system":            system_prompt,
             "messages":          messages,
         }
