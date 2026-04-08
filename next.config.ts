@@ -8,19 +8,6 @@ const withSerwist = WithSerwistInit({
 })
 
 const nextConfig: NextConfig = {
-  // Prevent Next.js from bundling AWS SDK — keeps it as a Node.js external so
-  // the Lambda execution role credentials (AWS_ACCESS_KEY_ID etc.) are read
-  // from the real process.env at runtime, not replaced at build time.
-  serverExternalPackages: [
-    '@aws-sdk/client-dynamodb',
-    '@aws-sdk/lib-dynamodb',
-    '@aws-sdk/client-cognito-identity-provider',
-    '@aws-sdk/client-lambda',
-    '@aws-sdk/client-s3',
-    '@aws-sdk/s3-request-presigner',
-    '@aws-sdk/credential-providers',
-  ],
-
   // Amplify WEB_COMPUTE: env vars are available during `next build` (via SSM)
   // but are NOT injected into the Lambda runtime. Inlining them here bakes
   // them into the server bundle so API routes can read them at runtime.
@@ -34,6 +21,10 @@ const nextConfig: NextConfig = {
     LAMBDA_CHATBOT_NAME:        process.env.LAMBDA_CHATBOT_NAME,
     LAMBDA_TRADUCCION_NAME:     process.env.LAMBDA_TRADUCCION_NAME,
     LAMBDA_VOZ_NAME:            process.env.LAMBDA_VOZ_NAME,
+    // IAM user credentials for DynamoDB/S3/Cognito access from SSR Lambda
+    SSR_AWS_REGION:             process.env.SSR_AWS_REGION,
+    SSR_AWS_ACCESS_KEY_ID:      process.env.SSR_AWS_ACCESS_KEY_ID,
+    SSR_AWS_SECRET_ACCESS_KEY:  process.env.SSR_AWS_SECRET_ACCESS_KEY,
   },
   turbopack: {
     root: process.cwd(),
