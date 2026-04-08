@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary - Jade */
+  --color-jade-50: #E1F5EE;
+  --color-jade-100: #9FE1CB;
+  --color-jade-400: #1D9E75;
+  --color-jade-600: #0F6E56;
+  --color-jade-900: #04342C;
+  
+  /* Secondary - Gold */
+  --color-gold-50: #FAEEDA;
+  --color-gold-200: #EF9F27;
+  --color-gold-900: #412402;
+  
+  /* Neutrals - Obsidian */
+  --color-obs-50: #F1EFE8;
+  --color-obs-100: #D3D1C7;
+  --color-obs-800: #444441;
+  --color-obs-900: #2C2C2A;
+}
+
+@layer utilities {
+  .glass-panel {
+    /* Estado original oscuro (Obsidian) del Login */
+    background-color: rgba(4, 52, 44, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.30);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 
+                0 8px 32px rgba(4, 52, 44, 0.5);
+    
+    border-radius: 20px;
+  }
+
+  .glass-panel-map {
+    /* Estado transparente y fuertemente difuminado */
+    background-color: rgba(230, 248, 240, 0.85); /* Aumentado a 85% para mayor legibilidad */
+    backdrop-filter: blur(48px);
+    -webkit-backdrop-filter: blur(48px);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.40);
+    border-left: 1px solid rgba(255, 255, 255, 0.20);
+    border-right: 1px solid rgba(255, 255, 255, 0.20);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+    
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 
+                0 12px 40px rgba(13, 124, 102, 0.15); /* Sombras jade */
+    
+    border-radius: 20px; 
+  }
+}
+
+@layer base {
+  /* Fix: Evita que el autocompletado del navegador ponga los inputs en blanco */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s !important;
+    -webkit-text-fill-color: var(--color-jade-50) !important;
+  }
+}

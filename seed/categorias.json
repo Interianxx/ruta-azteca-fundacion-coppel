@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "comida",
+    "nombre": "Comida y Bebida",
+    "nombre_en": "Food & Drinks",
+    "emoji": "🌮",
+    "descripcion": "Taquerías, fondas, juguerías, cantinas y antojitos mexicanos"
+  },
+  {
+    "slug": "artesanias",
+    "nombre": "Artesanías y Souvenirs",
+    "nombre_en": "Crafts & Souvenirs",
+    "emoji": "🧶",
+    "descripcion": "Artesanías mexicanas, textiles, barro, talavera y recuerdos del mundial"
+  },
+  {
+    "slug": "hospedaje",
+    "nombre": "Hospedaje",
+    "nombre_en": "Lodging",
+    "emoji": "🏨",
+    "descripcion": "Posadas, hostales y pequeños hoteles boutique"
+  },
+  {
+    "slug": "tours",
+    "nombre": "Tours y Experiencias",
+    "nombre_en": "Tours & Experiences",
+    "emoji": "🗺️",
+    "descripcion": "Recorridos culturales, gastronómicos y deportivos por CDMX"
+  },
+  {
+    "slug": "transporte",
+    "nombre": "Transporte",
+    "nombre_en": "Transportation",
+    "emoji": "🚗",
+    "descripcion": "Traslados, renta de bicicletas y movilidad local"
+  },
+  {
+    "slug": "otro",
+    "nombre": "Otros Servicios",
+    "nombre_en": "Other Services",
+    "emoji": "🛍️",
+    "descripcion": "Farmacias, peluquerías, imprentas y más servicios para turistas"
+  }
+]

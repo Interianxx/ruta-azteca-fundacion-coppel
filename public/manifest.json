@@ -1,0 +1,11 @@
+{
+  "name": "Ruta Azteca",
+  "short_name": "RutaAzteca",
+  "description": "Conectando turistas del Mundial FIFA 2026 con negocios locales verificados",
+  "start_url": "/turista/mapa",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#C8102E",
+  "orientation": "portrait-primary",
+  "icons": []
+}
