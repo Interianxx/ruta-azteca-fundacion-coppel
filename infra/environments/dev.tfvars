@@ -30,7 +30,7 @@ github_branch = "main"
 # nextauth_url: vacío en el primer apply.
 #   Después del primer apply, copia el output amplify_app_url aquí y vuelve a aplicar.
 # ---------------------------------------------------------------------------
-nextauth_url = ""
+nextauth_url = "https://main.dq7orj9s3fr7v.amplifyapp.com"
 
 # ---------------------------------------------------------------------------
 # Mapbox — va en variable de entorno: export TF_VAR_mapbox_token="pk.eyJ1..."
