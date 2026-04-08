@@ -8,6 +8,19 @@ const withSerwist = WithSerwistInit({
 })
 
 const nextConfig: NextConfig = {
+  // Prevent Next.js from bundling AWS SDK — keeps it as a Node.js external so
+  // the Lambda execution role credentials (AWS_ACCESS_KEY_ID etc.) are read
+  // from the real process.env at runtime, not replaced at build time.
+  serverExternalPackages: [
+    '@aws-sdk/client-dynamodb',
+    '@aws-sdk/lib-dynamodb',
+    '@aws-sdk/client-cognito-identity-provider',
+    '@aws-sdk/client-lambda',
+    '@aws-sdk/client-s3',
+    '@aws-sdk/s3-request-presigner',
+    '@aws-sdk/credential-providers',
+  ],
+
   // Amplify WEB_COMPUTE: env vars are available during `next build` (via SSM)
   // but are NOT injected into the Lambda runtime. Inlining them here bakes
   // them into the server bundle so API routes can read them at runtime.
