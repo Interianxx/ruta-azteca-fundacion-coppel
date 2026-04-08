@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Utensils, Palette, BedDouble, Map as MapIcon, Bus, Store } from 'lucide-react'
@@ -57,9 +57,18 @@ interface Props {
   selected?: Negocio | null
 }
 
-export function MapView({ negocios, onSelect, selected }: Props) {
+export interface MapViewHandle {
+  drawRoute: (geometry: GeoJSON.LineString, bounds?: [[number, number], [number, number]]) => void
+  clearRoute: () => void
+}
+
+export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
+  { negocios, onSelect, selected },
+  ref,
+) {
   const containerRef   = useRef<HTMLDivElement>(null)
   const mapRef         = useRef<mapboxgl.Map | null>(null)
+  const routeReadyRef  = useRef(false)
   // Map estable id → { marker, pin } — nunca se limpia completo
   const entriesRef     = useRef<Map<string, MarkerEntry>>(new Map())
   // Ref para onSelect: evita stale closure sin recrear markers
@@ -69,6 +78,26 @@ export function MapView({ negocios, onSelect, selected }: Props) {
 
   // Mantener onSelectRef siempre fresco
   useEffect(() => { onSelectRef.current = onSelect }, [onSelect])
+
+  // Exponer drawRoute y clearRoute al padre
+  useImperativeHandle(ref, () => ({
+    drawRoute(geometry, bounds) {
+      const map = mapRef.current
+      if (!map || !routeReadyRef.current) return
+      const src = map.getSource('route') as mapboxgl.GeoJSONSource | undefined
+      if (!src) return
+      src.setData({ type: 'Feature', properties: {}, geometry })
+      if (bounds) {
+        map.fitBounds(bounds, { padding: { top: 80, bottom: 300, left: 40, right: 40 }, duration: 1000 })
+      }
+    },
+    clearRoute() {
+      const map = mapRef.current
+      if (!map || !routeReadyRef.current) return
+      const src = map.getSource('route') as mapboxgl.GeoJSONSource | undefined
+      if (src) src.setData({ type: 'FeatureCollection', features: [] })
+    },
+  }))
 
   // ── Efecto 1: inicializar mapa (una sola vez) ─────────────────────────────
   useEffect(() => {
@@ -89,8 +118,34 @@ export function MapView({ negocios, onSelect, selected }: Props) {
       'top-right',
     )
 
+    // Agregar source y layer de ruta cuando el mapa cargue
+    map.on('load', () => {
+      map.addSource('route', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      })
+      // Sombra de la línea
+      map.addLayer({
+        id: 'route-line-shadow',
+        type: 'line',
+        source: 'route',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: { 'line-color': '#000', 'line-width': 9, 'line-opacity': 0.12, 'line-blur': 3 },
+      })
+      // Línea principal
+      map.addLayer({
+        id: 'route-line',
+        type: 'line',
+        source: 'route',
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: { 'line-color': '#0D7C66', 'line-width': 5, 'line-opacity': 0.9 },
+      })
+      routeReadyRef.current = true
+    })
+
     mapRef.current = map
     return () => {
+      routeReadyRef.current = false
       entriesRef.current.forEach(({ marker }) => marker.remove())
       entriesRef.current.clear()
       map.remove()
@@ -196,4 +251,4 @@ export function MapView({ negocios, onSelect, selected }: Props) {
       <div ref={containerRef} className="w-full h-full" />
     </>
   )
-}
+})

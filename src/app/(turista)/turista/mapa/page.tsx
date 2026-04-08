@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
-import { MapView, CATEGORIA_COLOR, CATEGORIA_LUCIDE } from '@/components/Map/MapView'
+import { MapView, CATEGORIA_COLOR, CATEGORIA_LUCIDE, type MapViewHandle } from '@/components/Map/MapView'
 import type { Negocio, CategoriaSlug, Horario } from '@/types/negocio'
-import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User, Globe, Bot } from 'lucide-react'
+import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User, Globe, Bot, Footprints, Car } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
 
 // ─── Config ────────────────────────────────────────────────────────────────
@@ -37,6 +37,10 @@ const MAP_UI: Record<string, Record<string, string>> = {
     review_ph: 'Cuéntanos tu experiencia...', submitting: 'Enviando…', publish_review: 'Publicar reseña',
     no_reviews: 'Sin reseñas todavía. ¡Sé el primero!', thanks_review: '¡Gracias por tu reseña!',
     route_to: 'Ruta a', on_foot: 'A pie', by_car: 'Auto', by_metro: 'Metro',
+    locating: 'Obteniendo tu ubicación…', calculating: 'Calculando ruta…',
+    location_error: 'No se pudo obtener tu ubicación', route_error: 'No se pudo calcular la ruta',
+    distance: 'Distancia', duration_min: 'min', steps_label: 'Pasos', exit_nav: 'Salir',
+    mode_walk: 'A pie', mode_drive: 'En auto',
     chat_title: 'Asistente Ruta Azteca', chat_greeting: '¡Hola! Soy tu guía de Ruta Azteca. ¿Qué experiencia buscas hoy?',
     chat_typing: 'Escribiendo…', chat_ph: '¿Qué buscas hoy?',
     chat_error: 'Lo siento, intenta de nuevo.', chat_conn_error: 'Error de conexión. Intenta de nuevo.',
@@ -57,6 +61,10 @@ const MAP_UI: Record<string, Record<string, string>> = {
     review_ph: 'Tell us about your experience...', submitting: 'Sending…', publish_review: 'Post review',
     no_reviews: 'No reviews yet. Be the first!', thanks_review: 'Thanks for your review!',
     route_to: 'Route to', on_foot: 'Walking', by_car: 'Car', by_metro: 'Metro',
+    locating: 'Getting your location…', calculating: 'Calculating route…',
+    location_error: 'Could not get your location', route_error: 'Could not calculate route',
+    distance: 'Distance', duration_min: 'min', steps_label: 'Steps', exit_nav: 'Exit',
+    mode_walk: 'Walking', mode_drive: 'Driving',
     chat_title: 'Ruta Azteca Assistant', chat_greeting: "Hi! I'm your Ruta Azteca guide. What experience are you looking for today?",
     chat_typing: 'Typing…', chat_ph: 'What are you looking for?',
     chat_error: 'Sorry, please try again.', chat_conn_error: 'Connection error. Please try again.',
@@ -77,6 +85,10 @@ const MAP_UI: Record<string, Record<string, string>> = {
     review_ph: 'Parlez-nous de votre expérience...', submitting: 'Envoi…', publish_review: "Publier l'avis",
     no_reviews: "Pas encore d'avis. Soyez le premier!", thanks_review: 'Merci pour votre avis!',
     route_to: 'Itinéraire vers', on_foot: 'À pied', by_car: 'Voiture', by_metro: 'Métro',
+    locating: 'Obtention de votre position…', calculating: "Calcul de l'itinéraire…",
+    location_error: 'Impossible d\'obtenir votre position', route_error: "Impossible de calculer l'itinéraire",
+    distance: 'Distance', duration_min: 'min', steps_label: 'Étapes', exit_nav: 'Quitter',
+    mode_walk: 'À pied', mode_drive: 'En voiture',
     chat_title: 'Assistant Ruta Azteca', chat_greeting: 'Bonjour! Je suis votre guide Ruta Azteca. Quelle expérience cherchez-vous?',
     chat_typing: "En train d'écrire…", chat_ph: 'Que cherchez-vous?',
     chat_error: 'Désolé, veuillez réessayer.', chat_conn_error: 'Erreur de connexion. Veuillez réessayer.',
@@ -97,6 +109,10 @@ const MAP_UI: Record<string, Record<string, string>> = {
     review_ph: 'Conte-nos sobre sua experiência...', submitting: 'Enviando…', publish_review: 'Publicar avaliação',
     no_reviews: 'Sem avaliações ainda. Seja o primeiro!', thanks_review: 'Obrigado pela sua avaliação!',
     route_to: 'Rota para', on_foot: 'A pé', by_car: 'Carro', by_metro: 'Metrô',
+    locating: 'Obtendo sua localização…', calculating: 'Calculando rota…',
+    location_error: 'Não foi possível obter sua localização', route_error: 'Não foi possível calcular a rota',
+    distance: 'Distância', duration_min: 'min', steps_label: 'Passos', exit_nav: 'Sair',
+    mode_walk: 'A pé', mode_drive: 'De carro',
     chat_title: 'Assistente Ruta Azteca', chat_greeting: 'Olá! Sou seu guia Ruta Azteca. Que experiência você procura hoje?',
     chat_typing: 'Digitando…', chat_ph: 'O que você está procurando?',
     chat_error: 'Desculpe, tente novamente.', chat_conn_error: 'Erro de conexão. Tente novamente.',
@@ -117,6 +133,10 @@ const MAP_UI: Record<string, Record<string, string>> = {
     review_ph: 'Erzählen Sie uns von Ihrer Erfahrung...', submitting: 'Senden…', publish_review: 'Bewertung veröffentlichen',
     no_reviews: 'Noch keine Bewertungen. Seien Sie der Erste!', thanks_review: 'Vielen Dank für Ihre Bewertung!',
     route_to: 'Route nach', on_foot: 'Zu Fuß', by_car: 'Auto', by_metro: 'U-Bahn',
+    locating: 'Standort wird ermittelt…', calculating: 'Route wird berechnet…',
+    location_error: 'Standort konnte nicht ermittelt werden', route_error: 'Route konnte nicht berechnet werden',
+    distance: 'Entfernung', duration_min: 'Min', steps_label: 'Schritte', exit_nav: 'Beenden',
+    mode_walk: 'Zu Fuß', mode_drive: 'Mit dem Auto',
     chat_title: 'Ruta Azteca Assistent', chat_greeting: 'Hallo! Ich bin Ihr Ruta Azteca Guide. Was suchen Sie heute?',
     chat_typing: 'Schreiben…', chat_ph: 'Was suchen Sie?',
     chat_error: 'Entschuldigung, bitte versuchen Sie es erneut.', chat_conn_error: 'Verbindungsfehler. Bitte erneut versuchen.',
@@ -617,68 +637,382 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
   )
 }
 
-// ─── Routing overlay ────────────────────────────────────────────────────────
+// ─── Route panel ─────────────────────────────────────────────────────────────
 
-function RoutingOverlay({ negocio, onClose, isDesktop }: { negocio: Negocio; onClose: () => void; isDesktop?: boolean }) {
+import { MAPBOX_TOKEN } from '@/lib/mapbox'
+
+type RouteMode = 'walking' | 'driving'
+
+interface RouteStep {
+  instruction: string
+  distance: number
+  duration: number
+  type: string      // maneuver type: turn, arrive, depart, etc.
+  modifier?: string // left, right, straight, etc.
+}
+interface RouteResult { distance: number; duration: number; steps: RouteStep[]; geometry: GeoJSON.LineString }
+
+function formatDist(m: number) {
+  return m >= 1000 ? `${(m / 1000).toFixed(1)} km` : `${Math.round(m)} m`
+}
+function formatMin(s: number) {
+  const m = Math.round(s / 60)
+  return m < 60 ? `${m}` : `${Math.floor(m / 60)}h ${m % 60}`
+}
+
+// Flecha de maniobra según tipo y modificador
+function ManeuverArrow({ type, modifier, size = 32, color = '#fff' }: { type: string; modifier?: string; size?: number; color?: string }) {
+  const s = size
+  // arrive
+  if (type === 'arrive') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round">
+      <circle cx="12" cy="12" r="4" fill={color} stroke="none"/>
+      <circle cx="12" cy="12" r="9"/>
+    </svg>
+  )
+  // turn left
+  if (modifier === 'left' || modifier === 'sharp left' || modifier === 'slight left') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 18V9M9 9l-4 4M9 9l4 4"/><path d="M15 18v-3a4 4 0 00-4-4H9"/>
+    </svg>
+  )
+  // turn right
+  if (modifier === 'right' || modifier === 'sharp right' || modifier === 'slight right') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 18V9M15 9l4 4M15 9l-4 4"/><path d="M9 18v-3a4 4 0 014-4h2"/>
+    </svg>
+  )
+  // uturn
+  if (modifier === 'uturn') return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8 18V8a4 4 0 018 0v2"/><path d="M16 10l2-2-2-2"/>
+    </svg>
+  )
+  // straight / depart / default
+  return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 19V5M12 5l-4 4M12 5l4 4"/>
+    </svg>
+  )
+}
+
+function RoutePanel({
+  negocio, onClose, mapRef, isDesktop,
+}: {
+  negocio: Negocio
+  onClose: () => void
+  mapRef: React.RefObject<MapViewHandle | null>
+  isDesktop?: boolean
+}) {
   const { idioma } = useTranslation()
   const ui = MAP_UI[idioma] ?? MAP_UI.en
-  const googleUrl = `https://www.google.com/maps/dir/?api=1&destination=${negocio.lat},${negocio.lng}`
-  const wazeUrl   = `https://waze.com/ul?ll=${negocio.lat},${negocio.lng}&navigate=yes`
+  const lang = idioma === 'es' ? 'es' : idioma === 'fr' ? 'fr' : idioma === 'pt' ? 'pt' : idioma === 'de' ? 'de' : 'en'
+
+  const [mode, setMode]       = useState<RouteMode>('walking')
+  const [status, setStatus]   = useState<'locating' | 'calculating' | 'done' | 'error'>('locating')
+  const [errorMsg, setErrorMsg] = useState('')
+  const [route, setRoute]     = useState<RouteResult | null>(null)
+  const [userLoc, setUserLoc] = useState<[number, number] | null>(null)
+  const [stepIdx, setStepIdx] = useState(0)
+  const [showSteps, setShowSteps] = useState(false)
+
+  const fetchRoute = useCallback(async (origin: [number, number], m: RouteMode) => {
+    setStatus('calculating')
+    setRoute(null)
+    setStepIdx(0)
+    try {
+      const url = `https://api.mapbox.com/directions/v5/mapbox/${m}/` +
+        `${origin[0]},${origin[1]};${negocio.lng},${negocio.lat}` +
+        `?geometries=geojson&steps=true&language=${lang}&access_token=${MAPBOX_TOKEN}`
+      const res  = await fetch(url)
+      const data = await res.json()
+      if (!data.routes?.length) throw new Error('no routes')
+      const r = data.routes[0]
+      const result: RouteResult = {
+        distance: r.distance,
+        duration: r.duration,
+        geometry: r.geometry,
+        steps: r.legs[0].steps.map((s: { maneuver: { instruction: string; type: string; modifier?: string }; distance: number; duration: number }) => ({
+          instruction: s.maneuver.instruction,
+          distance: s.distance,
+          duration: s.duration,
+          type: s.maneuver.type,
+          modifier: s.maneuver.modifier,
+        })),
+      }
+      setRoute(result)
+      setStatus('done')
+      const coords = r.geometry.coordinates as [number, number][]
+      const lngs = coords.map((c: [number, number]) => c[0])
+      const lats = coords.map((c: [number, number]) => c[1])
+      mapRef.current?.drawRoute(r.geometry, [
+        [Math.min(...lngs), Math.min(...lats)],
+        [Math.max(...lngs), Math.max(...lats)],
+      ])
+    } catch {
+      setStatus('error')
+      setErrorMsg(ui.route_error)
+    }
+  }, [negocio, lang, ui.route_error, mapRef])
+
+  useEffect(() => {
+    if (!navigator.geolocation) { setStatus('error'); setErrorMsg(ui.location_error); return }
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const loc: [number, number] = [pos.coords.longitude, pos.coords.latitude]
+        setUserLoc(loc)
+        fetchRoute(loc, mode)
+      },
+      () => { setStatus('error'); setErrorMsg(ui.location_error) },
+      { enableHighAccuracy: true, timeout: 10000 },
+    )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (userLoc) fetchRoute(userLoc, mode)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode])
+
+  const handleClose = () => { mapRef.current?.clearRoute(); onClose() }
+
+  const reCenter = () => {
+    // Usar el GeolocateControl de Mapbox ya existente en el mapa
+    const btn = document.querySelector('.mapboxgl-ctrl-geolocate') as HTMLButtonElement | null
+    btn?.click()
+  }
+
+  const steps = route?.steps.filter(s => s.instruction) ?? []
+  const currentStep = steps[stepIdx]
+  const nextStep    = steps[stepIdx + 1]
+  // Altura estimada del bottom bar para posicionar el recentrar (incluye el margen inferior de 16px en mobile)
+  const bottomBarH = isDesktop ? 110 : showSteps ? 376 : 146
 
   return (
-    <div className="glass-panel-map" style={{
-      position: 'absolute', 
-      bottom: isDesktop ? 16 : 0, 
-      left: isDesktop ? 412 : 0, 
-      right: isDesktop ? 16 : 0,
-      borderRadius: isDesktop ? 24 : '20px 20px 0 0',
-      padding: '8px 20px 32px',
-      zIndex: 35,
-    }}>
-      <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 14px' }} />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
-        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: '#1A2E26' }}>{ui.route_to} {negocio.nombre}</h3>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8a9690' }}><CloseIcon /></button>
-      </div>
-
-      <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-        {[
-          { icon: '🚶', label: ui.on_foot, time: '~5 min' },
-          { icon: '🚗', label: ui.by_car, time: '~2 min' },
-          { icon: '🚇', label: ui.by_metro, time: '~8 min' },
-        ].map((m, i) => (
-          <div key={m.label} style={{
-            flex: 1, padding: '10px', borderRadius: 12, textAlign: 'center',
-            background: i === 0 ? '#0D7C66' : 'rgba(26, 46, 38, 0.08)',
-            border: i === 0 ? '1px solid #0D7C66' : '1px solid rgba(26, 46, 38, 0.12)',
+    <>
+      {/* ── LAYER 1: Top instruction card ──────────────────────────────── */}
+      <div style={{
+        position: 'absolute',
+        top: isDesktop ? 16 : 8,
+        left: isDesktop ? 428 : 8,
+        right: 8,
+        zIndex: 45,
+        borderRadius: 16,
+        overflow: 'hidden',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
+      }}>
+        {status === 'done' && currentStep && (
+          <div style={{
+            background: '#0D7C66',
+            padding: '12px 14px',
+            display: 'flex', alignItems: 'center', gap: 12,
           }}>
-            <div style={{ fontSize: 18 }}>{m.icon}</div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: '#1A2E26' }}>{m.time}</div>
-            <div style={{ fontSize: 11, color: '#8a9690' }}>{m.label}</div>
+            {/* Maneuver icon */}
+            <div style={{
+              width: 48, height: 48, flexShrink: 0,
+              background: 'rgba(0,0,0,0.2)', borderRadius: 12,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <ManeuverArrow type={currentStep.type} modifier={currentStep.modifier} size={28} />
+            </div>
+            {/* Instruction text — multiline, no ellipsis */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', lineHeight: 1.3 }}>
+                {currentStep.instruction}
+              </div>
+              {currentStep.distance > 0 && (
+                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 2, fontWeight: 600 }}>
+                  {formatDist(currentStep.distance)}
+                </div>
+              )}
+            </div>
+            {/* Next step mini preview */}
+            {nextStep && (
+              <div style={{
+                flexShrink: 0,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+                background: 'rgba(0,0,0,0.25)', borderRadius: 10, padding: '6px 8px',
+                minWidth: 44,
+              }}>
+                <ManeuverArrow type={nextStep.type} modifier={nextStep.modifier} size={18} color="rgba(255,255,255,0.8)" />
+                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)', fontWeight: 700 }}>
+                  {formatDist(nextStep.distance)}
+                </span>
+              </div>
+            )}
           </div>
-        ))}
+        )}
+
+        {/* Loading state */}
+        {(status === 'locating' || status === 'calculating') && (
+          <div style={{
+            background: '#0D7C66', padding: '14px 18px',
+            display: 'flex', alignItems: 'center', gap: 10,
+          }}>
+            <div style={{
+              width: 8, height: 8, borderRadius: '50%', background: '#fff', flexShrink: 0,
+              animation: 'bounce 1.2s ease-in-out infinite',
+            }} />
+            <span style={{ color: '#fff', fontSize: 15, fontWeight: 600 }}>
+              {status === 'locating' ? ui.locating : ui.calculating}
+            </span>
+          </div>
+        )}
+
+        {/* Error state */}
+        {status === 'error' && (
+          <div style={{
+            background: '#DC2626', padding: '14px 18px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+          }}>
+            <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>{errorMsg}</span>
+            <button onClick={handleClose} style={{
+              background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: 8,
+              padding: '4px 10px', color: '#fff', fontSize: 12, cursor: 'pointer',
+            }}>{ui.exit_nav}</button>
+          </div>
+        )}
       </div>
 
-      <div style={{ display: 'flex', gap: 10 }}>
-        <a href={googleUrl} target="_blank" rel="noopener noreferrer" style={{
-          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          padding: '14px', background: '#0D7C66',
-          border: '1px solid #0D7C66',
-          borderRadius: 14, color: '#fff', fontWeight: 600, fontSize: 15,
-          textDecoration: 'none',
-        }}>
-          🗺 Google Maps
-        </a>
-        <a href={wazeUrl} target="_blank" rel="noopener noreferrer" style={{
-          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          padding: '14px', background: '#33CCFF',
-          borderRadius: 14, color: '#fff', fontWeight: 600, fontSize: 15,
-          textDecoration: 'none',
-        }}>
-          🚗 Waze
-        </a>
+      {/* ── LAYER 2: Floating recenter button (above bottom bar) ──────── */}
+      <button
+        onClick={reCenter}
+        style={{
+          position: 'absolute',
+          bottom: bottomBarH + 12,
+          right: isDesktop ? 24 : 12,
+          zIndex: 45,
+          width: 48, height: 48,
+          borderRadius: '50%',
+          background: '#fff',
+          border: 'none',
+          boxShadow: '0 3px 14px rgba(0,0,0,0.22)',
+          cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'box-shadow .15s',
+        }}
+      >
+        <Navigation2 size={22} color="#0D7C66" />
+      </button>
+
+      {/* ── LAYER 3: Bottom navigation bar ──────────────────────────────── */}
+      <div style={{
+        position: 'absolute',
+        bottom: isDesktop ? 16 : 16,
+        left: isDesktop ? 412 : 12,
+        right: isDesktop ? 16 : 12,
+        zIndex: 44,
+        background: '#1A2E26',
+        borderRadius: 20,
+        boxShadow: '0 4px 32px rgba(0,0,0,0.45)',
+      }}>
+        {/* Steps list — fuera del padding del bar para no empujar los datos */}
+        {showSteps && route && (
+          <div style={{
+            maxHeight: 220, overflowY: 'auto',
+            borderBottom: '1px solid rgba(255,255,255,0.08)',
+            padding: '8px 12px',
+            display: 'flex', flexDirection: 'column', gap: 1,
+          }}>
+            {steps.map((step, i) => (
+              <button key={i} onClick={() => { setStepIdx(i); setShowSteps(false) }} style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '9px 8px', borderRadius: 10, cursor: 'pointer', border: 'none', textAlign: 'left',
+                background: stepIdx === i ? 'rgba(13,124,102,0.35)' : 'transparent',
+                width: '100%',
+              }}>
+                <div style={{
+                  flexShrink: 0, width: 28, height: 28, borderRadius: 8,
+                  background: stepIdx === i ? '#0D7C66' : 'rgba(255,255,255,0.08)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <ManeuverArrow type={step.type} modifier={step.modifier} size={15} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, color: '#fff', lineHeight: 1.3 }}>{step.instruction}</div>
+                  {step.distance > 0 && (
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 1 }}>{formatDist(step.distance)}</div>
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Main bar content */}
+        <div style={{ padding: '10px 16px 14px' }}>
+          {/* Mode selector row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+            <div style={{ display: 'flex', gap: 6 }}>
+              {([['walking', Footprints, ui.mode_walk], ['driving', Car, ui.mode_drive]] as const).map(([m, Icon, label]) => (
+                <button key={m} onClick={() => setMode(m as RouteMode)} style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  padding: '6px 14px', borderRadius: 20, cursor: 'pointer', fontSize: 12, fontWeight: 600,
+                  background: mode === m ? '#0D7C66' : 'rgba(255,255,255,0.08)',
+                  color: mode === m ? '#fff' : 'rgba(255,255,255,0.5)',
+                  border: 'none', transition: 'all .15s',
+                }}>
+                  <Icon size={15} />
+                  {mode === m && <span>{label}</span>}
+                </button>
+              ))}
+            </div>
+            {/* Step navigator: prev / counter / next */}
+            {route && steps.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <button onClick={() => setStepIdx(i => Math.max(0, i - 1))} disabled={stepIdx === 0} style={{
+                  width: 28, height: 28, borderRadius: 8, border: 'none', cursor: 'pointer',
+                  background: 'rgba(255,255,255,0.08)', color: stepIdx === 0 ? 'rgba(255,255,255,0.2)' : '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+                }}>‹</button>
+                <button onClick={() => setShowSteps(v => !v)} style={{
+                  padding: '3px 8px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                  background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', fontSize: 11,
+                }}>
+                  {stepIdx + 1}/{steps.length}
+                </button>
+                <button onClick={() => setStepIdx(i => Math.min(steps.length - 1, i + 1))} disabled={stepIdx === steps.length - 1} style={{
+                  width: 28, height: 28, borderRadius: 8, border: 'none', cursor: 'pointer',
+                  background: 'rgba(255,255,255,0.08)', color: stepIdx === steps.length - 1 ? 'rgba(255,255,255,0.2)' : '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14,
+                }}>›</button>
+              </div>
+            )}
+          </div>
+
+          {/* Time + distance + exit */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              {route ? (
+                <>
+                  <div style={{ fontSize: 34, fontWeight: 800, color: '#0D7C66', lineHeight: 1 }}>
+                    {formatMin(route.duration)}
+                    <span style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginLeft: 4 }}>
+                      {ui.duration_min}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 3 }}>
+                    {formatDist(route.distance)}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: 14, paddingTop: 4 }}>—</div>
+              )}
+            </div>
+            <button onClick={handleClose} style={{
+              padding: '13px 26px', borderRadius: 50,
+              background: '#DC2626', border: 'none',
+              color: '#fff', fontSize: 15, fontWeight: 700,
+              cursor: 'pointer', flexShrink: 0,
+              boxShadow: '0 3px 10px rgba(220,38,38,0.4)',
+              letterSpacing: '0.02em',
+            }}>
+              {ui.exit_nav}
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -932,6 +1266,7 @@ export default function MapaPage() {
   // bottom sheet state: 'peek' | 'half' | 'full'
   const [sheetState,     setSheetState]     = useState<'peek' | 'half' | 'full'>('peek')
   const [isDesktop,      setIsDesktop]      = useState(false)
+  const mapViewRef = useRef<MapViewHandle>(null)
   const [activeTab,      setActiveTab]      = useState<string>('explorar')
 
   useEffect(() => {
@@ -1147,7 +1482,7 @@ export default function MapaPage() {
 
       {/* ── Map area ── */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-        <MapView negocios={filtered} onSelect={handleSelect} selected={selected} />
+        <MapView ref={mapViewRef} negocios={filtered} onSelect={handleSelect} selected={selected} />
 
       {/* ── Overlay para cerrar al tocar el mapa ── */}
       {(showDetail || showChat || (!isDesktop && sheetState !== 'peek')) && (
@@ -1162,7 +1497,7 @@ export default function MapaPage() {
       )}
 
       {/* ── Top bar (mobile only) ── */}
-      <div style={{ position: 'absolute', top: 12, left: 12, right: 12, zIndex: 20, display: isDesktop ? 'none' : undefined }}>
+      <div style={{ position: 'absolute', top: 12, left: 12, right: 12, zIndex: 20, display: isDesktop || showRoute ? 'none' : undefined }}>
         {/* Branding */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
           <span style={{ fontSize: 15, fontWeight: 700, color: '#0D7C66', letterSpacing: '0.06em', textShadow: '0 1px 3px rgba(0,0,0,.5)' }}>
@@ -1289,7 +1624,7 @@ export default function MapaPage() {
       <div style={{
         position: 'absolute', top: 110, left: 0, right: 0,
         zIndex: 15, padding: '0 12px',
-        display: isDesktop ? 'none' : 'flex', gap: 6,
+        display: isDesktop || showRoute ? 'none' : 'flex', gap: 6,
         overflowX: 'auto',
         scrollbarWidth: 'none',
       }}>
@@ -1403,7 +1738,7 @@ export default function MapaPage() {
 
       {/* ── Routing overlay ── */}
       {showRoute && selected && (
-        <RoutingOverlay negocio={selected} onClose={handleBack} isDesktop={isDesktop} />
+        <RoutePanel negocio={selected} onClose={handleBack} mapRef={mapViewRef} isDesktop={isDesktop} />
       )}
 
       {/* ── Chat panel ── */}
@@ -1599,7 +1934,7 @@ export default function MapaPage() {
       )}
 
       {/* ── Bottom navigation bar (mobile only) ── */}
-      {!isDesktop && (
+      {!isDesktop && !showRoute && (
         <div className="glass-panel-map" style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
           borderTop: '1px solid rgba(26, 46, 38, 0.12)',

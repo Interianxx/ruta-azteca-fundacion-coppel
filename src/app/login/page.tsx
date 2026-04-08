@@ -305,8 +305,11 @@ export default function LoginPage() {
   const [lang, setLang] = useState<LangCode>('es')
   const ui = UI_LANGS[lang]
 
+  const skipSessionRedirectRef = useRef(false)
+
   useEffect(() => {
     if (!session) return
+    if (skipSessionRedirectRef.current) return
     const rol = (session as { rol?: string }).rol
     if (rol === 'admin') {
       router.replace('/admin/dashboard')
@@ -377,19 +380,24 @@ export default function LoginPage() {
       const res  = await fetch('/api/auth/email-verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code }),
+        body: JSON.stringify({ email, code, role: view === 'b-verify' ? 'negocio' : 'turista' }),
       })
       const data = await res.json()
-      if (data.error) { setError(data.error); setLoading(false); return }
+      if (data.error) { setError(data.error); return }
+      const dest = view === 'b-verify' ? '/negocio/registro' : '/turista/mapa'
+      skipSessionRedirectRef.current = true
       const login = await signIn('credentials', { redirect: false, email, password })
       if (login?.error) {
+        // Login falló (ej. Cognito aún no propagó) — mostrar éxito y pedir login manual
+        skipSessionRedirectRef.current = false
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
-        router.replace(view === 'b-verify' ? '/negocio/registro' : '/turista/mapa')
+        window.location.href = dest
       }
     } catch {
       setError(ui.err_network)
+    } finally {
       setLoading(false)
     }
   }
