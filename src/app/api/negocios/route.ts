@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { QueryCommand, PutCommand } from '@aws-sdk/lib-dynamodb'
-import { CognitoIdentityProviderClient, AdminAddUserToGroupCommand } from '@aws-sdk/client-cognito-identity-provider'
 import { dynamo, TABLE_NAME, GSI_STATUS, GSI_CATEGORIA } from '@/lib/dynamo'
+import { cognitoClient } from '@/lib/cognito'
+import { AdminAddUserToGroupCommand } from '@aws-sdk/client-cognito-identity-provider'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import type { NegocioInput } from '@/types/negocio'
 import { randomUUID } from 'crypto'
 
-const cognito = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION ?? 'us-east-1' })
-const USER_POOL_ID = process.env.COGNITO_USER_POOL_ID!
+const USER_POOL_ID = process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID!
 
 // GET /api/negocios?categoria=comida&lastKey=...
 export async function GET(req: NextRequest) {
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
 
   // 2. Meter al usuario en el grupo negocio_pendiente de Cognito
   if (email) {
-    await cognito.send(new AdminAddUserToGroupCommand({
+    await cognitoClient.send(new AdminAddUserToGroupCommand({
       UserPoolId: USER_POOL_ID,
       Username:   email,
       GroupName:  'negocio_pendiente',
