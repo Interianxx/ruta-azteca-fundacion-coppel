@@ -9,10 +9,8 @@ export function VoiceSearch({ onResult }: Props) {
 
   function iniciar() {
     // Intentar Web Speech API primero (sin costo)
-    type SpeechRecognitionCtor = new () => SpeechRecognition
-    const SpeechRecognition: SpeechRecognitionCtor | undefined =
-      (window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor }).SpeechRecognition ??
-      (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionCtor }).webkitSpeechRecognition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SpeechRecognition = (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
 
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition()
