@@ -1632,19 +1632,7 @@ export default function MapaPage() {
           <button
             key={cat.slug}
             onClick={() => setCategoria(cat.slug as CategoriaSlug | '')}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 5,
-              padding: '7px 14px', borderRadius: 20, flexShrink: 0,
-              background: categoria === cat.slug ? '#0D7C66' : 'rgba(255, 255, 255, 0.95)',
-              color:      categoria === cat.slug ? '#fff'     : '#1A2E26',
-              border:     categoria === cat.slug ? '1px solid #0D7C66' : '1px solid rgba(13, 102, 102, 0.15)',
-              cursor: 'pointer', whiteSpace: 'nowrap',
-              backdropFilter: 'blur(16px)',
-              fontSize: 13, fontWeight: categoria === cat.slug ? 700 : 500,
-              boxShadow: categoria === cat.slug
-                ? '0 4px 12px rgba(13,124,102,0.4)'
-                : '0 2px 10px rgba(0,0,0,0.08)',
-            }}
+            className={categoria === cat.slug ? 'map-category-pill active' : 'map-category-pill'}
           >
             {cat.icon} {catLabel(cat.slug)}
           </button>

@@ -494,11 +494,12 @@ export default function LoginPage() {
     : ''
 
   // ── Common Tailwind Style Tokens ───────────────────────────────────────────
-  const twInput = "w-full px-4 py-3 bg-white/20 border border-white/20 rounded-xl text-white placeholder-jade-100/50 text-[16px] outline-none focus:border-white focus:bg-white/30 transition-all backdrop-blur-sm shadow-inner"
-  const twPrimaryBtn = "w-full p-4 bg-gradient-to-r from-[#22C55E] to-[#16A34A] hover:from-[#4ade80] hover:to-[#15803d] text-white rounded-2xl text-[16px] font-black shadow-xl shadow-black/40 transition-all active:scale-[0.98] border-none flex items-center justify-center cursor-pointer"
-  const twOutlineBtn = "flex items-center justify-center gap-2.5 w-full p-3.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white text-[15px] font-semibold transition-all backdrop-blur-md"
-  const twLinkBtn = "bg-transparent border-none cursor-pointer text-[#1A9E78] hover:text-white text-[13px] py-1 underline transition-colors font-bold"
-  const twBackBtn = "bg-transparent border-none cursor-pointer text-jade-100/50 text-[13px] mt-1 p-2 hover:text-white transition-colors font-bold"
+  // ── Common Semantic Classes (moved to globals.css) ─────────────────────────
+  const twInput      = "input-jade-premium"
+  const twPrimaryBtn = "btn-jade-primary"
+  const twOutlineBtn = "btn-jade-outline"
+  const twLinkBtn    = "btn-jade-link"
+  const twBackBtn    = "bg-transparent border-none cursor-pointer text-jade-100/50 text-[13px] mt-1 p-2 hover:text-white transition-colors font-bold"
 
   const divider = (text: string) => (
     <div className="flex items-center gap-4 my-2 opacity-60">
