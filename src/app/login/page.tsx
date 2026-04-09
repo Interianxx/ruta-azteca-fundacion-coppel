@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { signIn, useSession, getSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
@@ -423,11 +423,10 @@ export default function LoginPage() {
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
-        // Verify session is in the React context before the useEffect redirects
-        const s = await getSession()
-        console.log('[verify] session after signIn — rol:', (s as { rol?: string } | null)?.rol, '| email:', s?.user?.email, '| exists:', !!s)
         console.log('[verify] auto-login OK — session useEffect will redirect to:', dest)
         // No manual navigation — useEffect handles it once session is in React context
+        // NOTE: do NOT call getSession() here — it triggers a second session fetch
+        // which fires the useEffect again after postVerifyDest is already consumed
       }
     } catch {
       setError(ui.err_network)
