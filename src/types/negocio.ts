@@ -58,3 +58,29 @@ export interface NegocioInput {
   tags?: string[]
   imagenUrl?: string
 }
+
+export interface MenuItem {
+  id: string
+  nombre: string
+  descripcion: string
+  precio: number
+  categoria: string // ej: "Entradas", "Bebidas"
+  imagenUrl?: string
+  popularidad?: number // contador de ventas simulado
+  disponible?: boolean
+}
+
+export interface Pedido {
+  id: string
+  negocioId: string
+  items: { 
+    id: string
+    nombre: string
+    cantidad: number
+    precio: number
+  }[]
+  total: number
+  estado: 'pendiente' | 'completado'
+  fecha: string
+  folio: string
+}

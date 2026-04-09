@@ -596,6 +596,48 @@ export default function RegistroNegocioPage() {
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .animate-spin { animation: spin 1s linear infinite; }
       `}</style>
+
+      {/* ── FOOTER INSTITUCIONAL ── */}
+      <footer style={{
+        margin: '24px 20px 20px',
+        background: 'linear-gradient(135deg, #04342C 0%, #0A5C48 100%)',
+        borderRadius: 24,
+        padding: '24px 20px 20px',
+        border: '1px solid rgba(255,255,255,0.06)',
+        maxWidth: 640,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: 'calc(100% - 40px)',
+      }}>
+        <p style={{ margin: '0 0 14px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', color: 'rgba(255,255,255,0.35)', textAlign: 'center' }}>
+          Con el respaldo de
+        </p>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 24, marginBottom: 16, flexWrap: 'wrap' }}>
+          <img src="/Fundacion Coppel-WhiteYellow@4x.png" alt="Fundación Coppel"
+            style={{ height: 26, width: 'auto', objectFit: 'contain', opacity: 0.92 }} />
+          <div style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.15)' }} />
+          <img src="/logo-olamexico-full-white@2x.png" alt="Ola México"
+            style={{ height: 26, width: 'auto', objectFit: 'contain', opacity: 0.85 }} />
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 4, flexWrap: 'wrap', marginBottom: 12 }}>
+          {['Conócenos', 'Contáctanos', 'Aviso de privacidad'].map((label, i) => (
+            <span key={label} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              {i > 0 && <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 10 }}>·</span>}
+              <a href="#" style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.8)')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}>
+                {label}
+              </a>
+            </span>
+          ))}
+        </div>
+
+        <p style={{ margin: 0, fontSize: 10, color: 'rgba(255,255,255,0.2)', textAlign: 'center', letterSpacing: '.04em' }}>
+          &copy; 2026 Fundación Coppel · Ruta Azteca · FIFA World Cup México
+        </p>
+      </footer>
     </div>
   )
 }
