@@ -1,6 +1,7 @@
 export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? ''
 
-export const MAPBOX_STYLE = 'mapbox://styles/mapbox/streets-v12'
+export const MAPBOX_STYLE     = 'mapbox://styles/mapbox/streets-v12'
+export const MAPBOX_SATELLITE = 'mapbox://styles/mapbox/satellite-streets-v12'
 
 // Centro de CDMX (donde viven la mayoría de los negocios Ola México)
 export const CDMX_CENTER: [number, number] = [-99.1332, 19.4326]
