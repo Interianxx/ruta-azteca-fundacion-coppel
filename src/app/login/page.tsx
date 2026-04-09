@@ -401,7 +401,9 @@ export default function LoginPage() {
       if (data.error) { setError(data.error); return }
       const dest = view === 'b-verify' ? '/negocio/registro' : '/turista/mapa'
       console.log('[verify] dest:', dest, '| attempting auto-login...')
-      skipSessionRedirectRef.current = true
+      // Store dest BEFORE signIn — session useEffect picks it up and redirects
+      // (more reliable than calling router.replace directly from async handler)
+      sessionStorage.setItem('postVerifyDest', dest)
       let login = await signIn('credentials', { redirect: false, email, password })
       console.log('[verify] login attempt 1:', login?.error ?? 'OK')
       if (login?.error) {
@@ -410,14 +412,13 @@ export default function LoginPage() {
         console.log('[verify] login attempt 2:', login?.error ?? 'OK')
       }
       if (login?.error) {
-        console.log('[verify] auto-login failed — saving postVerifyDest:', dest)
-        skipSessionRedirectRef.current = false
-        sessionStorage.setItem('postVerifyDest', dest)
+        console.log('[verify] auto-login failed — postVerifyDest saved, showing manual login')
+        // postVerifyDest stays for when user logs in manually
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
-        console.log('[verify] auto-login OK — redirecting to:', dest)
-        router.replace(dest)
+        console.log('[verify] auto-login OK — session useEffect will redirect to:', dest)
+        // No manual navigation — useEffect handles it once session is in React context
       }
     } catch {
       setError(ui.err_network)
