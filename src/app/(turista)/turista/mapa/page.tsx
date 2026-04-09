@@ -749,6 +749,7 @@ function RoutePanel({
         [Math.min(...lngs), Math.min(...lats)],
         [Math.max(...lngs), Math.max(...lats)],
       ])
+      setTimeout(() => { mapRef.current?.flyToUser(origin) }, 2500)
     } catch {
       setStatus('error')
       setErrorMsg(ui.route_error)
@@ -777,9 +778,8 @@ function RoutePanel({
   const handleClose = () => { mapRef.current?.clearRoute(); onClose() }
 
   const reCenter = () => {
-    // Usar el GeolocateControl de Mapbox ya existente en el mapa
-    const btn = document.querySelector('.mapboxgl-ctrl-geolocate') as HTMLButtonElement | null
-    btn?.click()
+    if (userLoc) mapRef.current?.flyToUser(userLoc)
+    else mapRef.current?.triggerGeolocate()
   }
 
   const steps = route?.steps.filter(s => s.instruction) ?? []
@@ -1241,6 +1241,105 @@ function ChatPanel({ onClose, isDesktop, onSelectNegocio }: { onClose: () => voi
   )
 }
 
+// ─── Hover card (mini tarjeta al pasar el cursor sobre un pin) ─────────────
+
+function MarkerHoverCard({ negocio, rect, idioma }: {
+  negocio: Negocio
+  rect: DOMRect
+  idioma: string
+}) {
+  const color    = CATEGORIA_COLOR[negocio.categoria] ?? '#1A9E78'
+  const CatIcon  = CATEGORIA_LUCIDE[negocio.categoria] ?? Store
+  const ui       = MAP_UI[idioma] ?? MAP_UI.es
+  const catLabel = (CAT_LABELS[idioma] ?? CAT_LABELS.es)[negocio.categoria] ?? negocio.categoria
+
+  const CARD_W = 248
+
+  // Centrar horizontalmente sobre el pin, aparecer arriba
+  let left = rect.left + rect.width / 2 - CARD_W / 2
+  let top  = rect.top - 120 - 10  // estimado de alto de tarjeta + gap
+
+  if (typeof window !== 'undefined') {
+    left = Math.max(8, Math.min(left, window.innerWidth - CARD_W - 8))
+    if (top < 8) top = rect.bottom + 8  // si no hay espacio arriba, mostrar abajo
+  }
+
+  // Estado abierto/cerrado
+  let isOpen      = false
+  let closingTime = ''
+  if (negocio.horario) {
+    isOpen = isOpenNow(negocio.horario)
+    if (isOpen) {
+      const key = HORARIO_DIAS[new Date().getDay()]
+      const dia = negocio.horario[key]
+      if (dia?.abierto) closingTime = dia.cierre
+    }
+  }
+
+  const stars = negocio.calificacion ?? 0
+
+  return (
+    <div style={{
+      position: 'fixed', left, top, width: CARD_W, zIndex: 9999,
+      pointerEvents: 'none',
+      background: '#fff',
+      borderRadius: 14,
+      boxShadow: '0 4px 24px rgba(0,0,0,.18), 0 1px 6px rgba(0,0,0,.08)',
+      overflow: 'hidden',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'stretch', minHeight: 88 }}>
+        {/* Info */}
+        <div style={{ flex: 1, padding: '10px 12px', minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}>
+          <p style={{ margin: 0, fontWeight: 700, fontSize: 13, color: '#1a1a1a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {negocio.nombre}
+          </p>
+
+          {stars > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <span style={{ color: '#C5A044', fontSize: 12, fontWeight: 700 }}>{stars.toFixed(1)}</span>
+              {[1,2,3,4,5].map(i => (
+                <svg key={i} width="10" height="10" viewBox="0 0 24 24" fill={i <= Math.round(stars) ? '#C5A044' : '#e5e7eb'} stroke="none">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+              ))}
+              {negocio.totalReviews ? <span style={{ color: '#999', fontSize: 10 }}>({negocio.totalReviews})</span> : null}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <CatIcon size={11} color={color} />
+            <span style={{ fontSize: 11, color: '#666' }}>{catLabel}</span>
+          </div>
+
+          {negocio.horario && (
+            <p style={{ margin: 0, fontSize: 11, fontWeight: 600, color: isOpen ? '#0D7C66' : '#dc2626' }}>
+              {isOpen
+                ? `${ui.open_now}${closingTime ? ` · ${closingTime}` : ''}`
+                : ui.closed_now}
+            </p>
+          )}
+        </div>
+
+        {/* Imagen o placeholder */}
+        {negocio.imagenUrl ? (
+          <div style={{ width: 80, flexShrink: 0, overflow: 'hidden' }}>
+            <img src={negocio.imagenUrl} alt={negocio.nombre} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+        ) : (
+          <div style={{ width: 80, flexShrink: 0, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CatIcon size={24} color={color} />
+          </div>
+        )}
+      </div>
+
+      {/* Flecha apuntando al pin */}
+      <div style={{ position: 'absolute', bottom: -7, left: '50%', transform: 'translateX(-50%)', width: 14, height: 7, overflow: 'hidden' }}>
+        <div style={{ width: 10, height: 10, background: '#fff', boxShadow: '1px 1px 4px rgba(0,0,0,.12)', transform: 'rotate(45deg)', margin: '-4px auto 0' }} />
+      </div>
+    </div>
+  )
+}
+
 // ─── Main page ──────────────────────────────────────────────────────────────
 
 export default function MapaPage() {
@@ -1269,6 +1368,8 @@ export default function MapaPage() {
   const mapViewRef = useRef<MapViewHandle>(null)
   const [activeTab,      setActiveTab]      = useState<string>('explorar')
   const [mapStyle,       setMapStyle]       = useState<string>(MAPBOX_STYLE)
+  const [hoveredNegocio, setHoveredNegocio] = useState<Negocio | null>(null)
+  const [hoverRect,      setHoverRect]      = useState<DOMRect | null>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -1322,6 +1423,13 @@ export default function MapaPage() {
     setShowDetail(true)
     setShowRoute(false)
     setShowChat(false)
+    setHoveredNegocio(null)
+    setHoverRect(null)
+  }, [])
+
+  const handleHover = useCallback((negocio: Negocio | null, rect: DOMRect | null) => {
+    setHoveredNegocio(negocio)
+    setHoverRect(rect)
   }, [])
 
   const handleBack = () => {
@@ -1483,7 +1591,12 @@ export default function MapaPage() {
 
       {/* ── Map area ── */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-        <MapView ref={mapViewRef} negocios={filtered} onSelect={handleSelect} selected={selected} mapStyle={mapStyle} />
+        <MapView ref={mapViewRef} negocios={filtered} onSelect={handleSelect} onHover={handleHover} selected={selected} mapStyle={mapStyle} />
+
+        {/* ── Hover card ── */}
+        {hoveredNegocio && hoverRect && !showDetail && (
+          <MarkerHoverCard negocio={hoveredNegocio} rect={hoverRect} idioma={idiomaGlobal} />
+        )}
 
         {/* ── Selector de tipo de mapa ── */}
         {!showRoute && (
