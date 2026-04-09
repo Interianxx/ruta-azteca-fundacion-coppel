@@ -115,6 +115,7 @@ export default function PerfilNegocioPage() {
       nombre: formData.get('nombre') as string,
       descripcion: formData.get('descripcion') as string,
       precio: parseFloat(formData.get('precio') as string),
+      categoria: editingItem?.categoria ?? 'General',
       disponible: true
     }
     

@@ -36,6 +36,8 @@ export interface Negocio {
   calificacion?: number
   totalReviews?: number
   horario?: Horario
+  menu?: MenuItem[]
+  imagenes?: string[]
   createdAt: string
   updatedAt: string
 }

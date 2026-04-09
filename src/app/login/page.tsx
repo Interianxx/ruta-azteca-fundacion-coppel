@@ -314,23 +314,20 @@ export default function LoginPage() {
   useEffect(() => {
     const rol = (session as { rol?: string } | null)?.rol
     const savedDest = typeof window !== 'undefined' ? sessionStorage.getItem('postVerifyDest') : null
-    console.log('[login/sessionEffect] session:', !!session, '| rol:', rol, '| skip:', skipSessionRedirectRef.current, '| nextParam:', nextParam, '| postVerifyDest:', savedDest)
     if (!session) return
     if (skipSessionRedirectRef.current) return
     // 1. ?next= param (from protected page redirects)
-    if (nextParam) { console.log('[login/sessionEffect] redirecting to nextParam:', nextParam); router.replace(nextParam); return }
+    if (nextParam) { router.replace(nextParam); return }
     // 2. Destination saved during email verification flow
     if (savedDest) {
       sessionStorage.removeItem('postVerifyDest')
-      console.log('[login/sessionEffect] redirecting to postVerifyDest:', savedDest)
       // window.location.href instead of router.replace: the session cookie is already
-      // set at this point (session: true confirmed above), so a full reload reads it
-      // fresh — router.replace silently fails when a competing async op is in-flight.
+      // set at this point, so a full reload reads it fresh — router.replace silently
+      // fails when a competing async op is in-flight.
       window.location.href = savedDest
       return
     }
     // 3. Default by role
-    console.log('[login/sessionEffect] role-based redirect — rol:', rol)
     if (rol === 'admin') {
       router.replace('/admin/dashboard')
     } else if (rol === 'negocio_activo' || rol === 'negocio_pendiente') {
@@ -403,27 +400,20 @@ export default function LoginPage() {
         body: JSON.stringify({ email, code, role: view === 'b-verify' ? 'negocio' : 'turista' }),
       })
       const data = await res.json()
-      console.log('[verify] API response:', data)
       if (data.error) { setError(data.error); return }
       const dest = view === 'b-verify' ? '/negocio/registro' : '/turista/mapa'
-      console.log('[verify] dest:', dest, '| attempting auto-login...')
-      skipSessionRedirectRef.current = true  // prevent session useEffect from interfering
+      skipSessionRedirectRef.current = true
       let login = await signIn('credentials', { redirect: false, email, password })
-      console.log('[verify] login attempt 1:', login?.error ?? 'OK', '| ok:', login?.ok, '| status:', login?.status)
       if (login?.error) {
         await new Promise(r => setTimeout(r, 2000))
         login = await signIn('credentials', { redirect: false, email, password })
-        console.log('[verify] login attempt 2:', login?.error ?? 'OK', '| ok:', login?.ok)
       }
       if (login?.error) {
-        console.log('[verify] auto-login failed — saving postVerifyDest for manual login')
         skipSessionRedirectRef.current = false
         sessionStorage.setItem('postVerifyDest', dest)
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
-        // 50ms: gives browser time to process Set-Cookie before the new request
-        console.log('[verify] auto-login OK — navigating to:', dest, 'in 50ms')
         setTimeout(() => { window.location.href = dest }, 50)
       }
     } catch {

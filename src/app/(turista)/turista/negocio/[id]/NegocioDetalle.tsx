@@ -5,17 +5,49 @@ import Link from 'next/link'
 import {
   ArrowLeft, MapPin, Phone, MessageCircle, Navigation, Globe,
   Utensils, Palette, BedDouble, Map as MapIcon, Bus, Store, Bot,
+  Clock, ChevronDown, ChevronUp,
 } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
-import type { Negocio } from '@/types/negocio'
+import type { Negocio, Horario, MenuItem } from '@/types/negocio'
 
 // ─── Static UI translations ───────────────────────────────────────────────────
 const UI: Record<string, Record<string, string>> = {
-  es: { back: 'Volver al mapa', verified: 'Verificado Ola México', location: 'Ubicación', directions: 'Cómo llegar', contact: 'Contacto', whatsapp: 'Escribir por WhatsApp', ai: 'Preguntarle al asistente IA' },
-  en: { back: 'Back to map',       verified: 'Verified Ola México',   location: 'Location',    directions: 'Get directions',       contact: 'Contact', whatsapp: 'Write on WhatsApp',       ai: 'Ask the AI assistant' },
-  fr: { back: 'Retour à la carte', verified: 'Vérifié Ola México',    location: 'Localisation', directions: 'Itinéraire',          contact: 'Contact', whatsapp: 'Écrire sur WhatsApp',     ai: "Demander à l'assistant IA" },
-  pt: { back: 'Voltar ao mapa',    verified: 'Verificado Ola México', location: 'Localização', directions: 'Como chegar',          contact: 'Contato', whatsapp: 'Escrever no WhatsApp',    ai: 'Perguntar ao assistente IA' },
-  de: { back: 'Zurück zur Karte',  verified: 'Verifiziert Ola México',location: 'Standort',    directions: 'Route',                contact: 'Kontakt', whatsapp: 'Per WhatsApp schreiben', ai: 'Den KI-Assistenten fragen' },
+  es: { back: 'Volver al mapa', verified: 'Verificado Ola México', location: 'Ubicación', directions: 'Cómo llegar', contact: 'Contacto', whatsapp: 'Escribir por WhatsApp', ai: 'Preguntarle al asistente IA', schedule: 'Horario', open: 'Abierto', closed: 'Cerrado', closes: 'Cierra', opens: 'Abre', menu: 'Menú', unavailable: 'No disponible' },
+  en: { back: 'Back to map',       verified: 'Verified Ola México',   location: 'Location',    directions: 'Get directions',  contact: 'Contact', whatsapp: 'Write on WhatsApp',       ai: 'Ask the AI assistant',        schedule: 'Hours',   open: 'Open',    closed: 'Closed', closes: 'Closes', opens: 'Opens', menu: 'Menu',  unavailable: 'Unavailable' },
+  fr: { back: 'Retour à la carte', verified: 'Vérifié Ola México',    location: 'Localisation', directions: 'Itinéraire',     contact: 'Contact', whatsapp: 'Écrire sur WhatsApp',     ai: "Demander à l'assistant IA",   schedule: 'Horaires',open: 'Ouvert',  closed: 'Fermé',  closes: 'Ferme', opens: 'Ouvre', menu: 'Menu',  unavailable: 'Indisponible' },
+  pt: { back: 'Voltar ao mapa',    verified: 'Verificado Ola México', location: 'Localização', directions: 'Como chegar',     contact: 'Contato', whatsapp: 'Escrever no WhatsApp',    ai: 'Perguntar ao assistente IA',  schedule: 'Horário', open: 'Aberto',  closed: 'Fechado',closes: 'Fecha', opens: 'Abre',  menu: 'Cardápio', unavailable: 'Indisponível' },
+  de: { back: 'Zurück zur Karte',  verified: 'Verifiziert Ola México',location: 'Standort',    directions: 'Route',           contact: 'Kontakt', whatsapp: 'Per WhatsApp schreiben', ai: 'Den KI-Assistenten fragen',   schedule: 'Öffnungszeiten', open: 'Geöffnet', closed: 'Geschlossen', closes: 'Schließt', opens: 'Öffnet', menu: 'Menü', unavailable: 'Nicht verfügbar' },
+}
+
+// ─── Horario helpers ──────────────────────────────────────────────────────────
+const DAY_KEYS: (keyof Horario)[] = ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom']
+const DAY_LABELS: Record<string, Record<keyof Horario, string>> = {
+  es: { lun: 'Lun', mar: 'Mar', mie: 'Mié', jue: 'Jue', vie: 'Vie', sab: 'Sáb', dom: 'Dom' },
+  en: { lun: 'Mon', mar: 'Tue', mie: 'Wed', jue: 'Thu', vie: 'Fri', sab: 'Sat', dom: 'Sun' },
+  fr: { lun: 'Lun', mar: 'Mar', mie: 'Mer', jue: 'Jeu', vie: 'Ven', sab: 'Sam', dom: 'Dim' },
+  pt: { lun: 'Seg', mar: 'Ter', mie: 'Qua', jue: 'Qui', vie: 'Sex', sab: 'Sáb', dom: 'Dom' },
+  de: { lun: 'Mo',  mar: 'Di',  mie: 'Mi',  jue: 'Do',  vie: 'Fr',  sab: 'Sa',  dom: 'So'  },
+}
+
+function getTodayKey(): keyof Horario {
+  return DAY_KEYS[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1]
+}
+
+function isOpenNow(horario: Horario): boolean {
+  const key = getTodayKey()
+  const dia = horario[key]
+  if (!dia.abierto) return false
+  const now = new Date()
+  const [ah, am] = dia.apertura.split(':').map(Number)
+  const [ch, cm] = dia.cierre.split(':').map(Number)
+  const mins = now.getHours() * 60 + now.getMinutes()
+  return mins >= ah * 60 + am && mins < ch * 60 + cm
+}
+
+// ─── Menu label by category ───────────────────────────────────────────────────
+const MENU_LABEL: Record<string, string> = {
+  comida: 'Menú', artesanias: 'Catálogo', hospedaje: 'Habitaciones y servicios',
+  tours: 'Paquetes disponibles', transporte: 'Servicios', otro: 'Servicios',
 }
 
 const CATEGORIA_LABEL: Record<string, string> = {
@@ -38,6 +70,7 @@ export function NegocioDetalle({ negocio }: Props) {
   const [tagsT,        setTagsT]        = useState(negocio.tags ?? [])
   const [catLabelT,    setCatLabelT]    = useState(CATEGORIA_LABEL[negocio.categoria] ?? negocio.categoria)
   const [traduciendo,  setTraduciendo]  = useState(false)
+  const [menuAbierto,  setMenuAbierto]  = useState(false)
 
   useEffect(() => {
     if (idioma === 'es') return
@@ -165,6 +198,122 @@ export function NegocioDetalle({ negocio }: Props) {
             </div>
           )}
         </div>
+
+        {/* Horario card */}
+        {negocio.horario && (() => {
+          const labels = DAY_LABELS[idioma] ?? DAY_LABELS.es
+          const todayKey = getTodayKey()
+          const abierto = isOpenNow(negocio.horario)
+          const todayDia = negocio.horario[todayKey]
+          return (
+            <div style={{ padding: 20, borderRadius: 24, background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 20px rgba(13,124,102,.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, color: '#1A2E26' }}>
+                  <Clock size={18} color="#0D7C66" /> {ui.schedule}
+                </div>
+                <span style={{
+                  padding: '4px 10px', borderRadius: 12, fontSize: 12, fontWeight: 700,
+                  background: abierto ? 'rgba(13,124,102,0.12)' : 'rgba(200,50,50,0.1)',
+                  color: abierto ? '#0D7C66' : '#c83232',
+                }}>
+                  {abierto ? ui.open : ui.closed}
+                  {todayDia.abierto && abierto && ` · ${ui.closes} ${todayDia.cierre}`}
+                  {todayDia.abierto && !abierto && ` · ${ui.opens} ${todayDia.apertura}`}
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {DAY_KEYS.map(key => {
+                  const dia = negocio.horario![key]
+                  const isToday = key === todayKey
+                  return (
+                    <div key={key} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '6px 10px', borderRadius: 10,
+                      background: isToday ? 'rgba(13,124,102,0.08)' : 'transparent',
+                      fontWeight: isToday ? 700 : 400,
+                    }}>
+                      <span style={{ fontSize: 13, color: isToday ? '#0D7C66' : '#4d5d55', minWidth: 32 }}>
+                        {labels[key]}
+                      </span>
+                      <span style={{ fontSize: 13, color: dia.abierto ? '#1A2E26' : '#aaa' }}>
+                        {dia.abierto ? `${dia.apertura} – ${dia.cierre}` : ui.closed}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })()}
+
+        {/* Menú / Catálogo card */}
+        {negocio.menu && negocio.menu.length > 0 && (() => {
+          const categorias = [...new Set(negocio.menu!.map(i => i.categoria))]
+          const titulo = MENU_LABEL[negocio.categoria] ?? ui.menu
+          return (
+            <div style={{ borderRadius: 24, background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 20px rgba(13,124,102,.08)', overflow: 'hidden' }}>
+              {/* Header colapsable */}
+              <button
+                onClick={() => setMenuAbierto(v => !v)}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: 20, background: 'none', border: 'none', cursor: 'pointer',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, color: '#1A2E26', fontSize: 15 }}>
+                  <Utensils size={18} color="#0D7C66" /> {titulo}
+                  <span style={{ fontSize: 12, fontWeight: 500, color: '#888', marginLeft: 4 }}>
+                    ({negocio.menu!.filter(i => i.disponible !== false).length} disponibles)
+                  </span>
+                </div>
+                {menuAbierto ? <ChevronUp size={18} color="#0D7C66" /> : <ChevronDown size={18} color="#0D7C66" />}
+              </button>
+
+              {/* Items */}
+              {menuAbierto && (
+                <div style={{ padding: '0 16px 16px' }}>
+                  {categorias.map(cat => {
+                    const items = negocio.menu!.filter(i => i.categoria === cat)
+                    return (
+                      <div key={cat} style={{ marginBottom: 16 }}>
+                        <div style={{
+                          fontSize: 11, fontWeight: 700, color: '#0D7C66', textTransform: 'uppercase',
+                          letterSpacing: '0.06em', marginBottom: 8, paddingBottom: 4,
+                          borderBottom: '1px solid rgba(13,124,102,0.15)',
+                        }}>
+                          {cat}
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                          {items.map(item => (
+                            <div key={item.id} style={{
+                              display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12,
+                              opacity: item.disponible === false ? 0.45 : 1,
+                            }}>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  <span style={{ fontSize: 14, fontWeight: 600, color: '#1A2E26' }}>{item.nombre}</span>
+                                  {item.disponible === false && (
+                                    <span style={{ fontSize: 10, color: '#aaa', fontWeight: 500 }}>{ui.unavailable}</span>
+                                  )}
+                                </div>
+                                <p style={{ fontSize: 12, color: '#6d7d75', margin: '2px 0 0', lineHeight: 1.4 }}>{item.descripcion}</p>
+                              </div>
+                              {item.precio > 0 && (
+                                <span style={{ fontSize: 14, fontWeight: 700, color: '#0D7C66', whiteSpace: 'nowrap' }}>
+                                  ${item.precio}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })()}
 
         {/* Location card */}
         <div style={{ padding: 20, borderRadius: 24, background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', boxShadow: '0 4px 20px rgba(13,124,102,.08)' }}>

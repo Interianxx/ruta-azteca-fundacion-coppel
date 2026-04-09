@@ -42,12 +42,6 @@ const COGNITO_ERRORS: Record<string, string> = {
 // En HTTPS (producción) se activan automáticamente.
 const useSecure = process.env.NEXTAUTH_URL?.startsWith('https://') ?? false
 
-// [DEBUG] Verificar vars críticas al inicializar el módulo (aparece en CloudWatch al cold-start)
-console.log('[nextauth/init] NEXTAUTH_URL:', process.env.NEXTAUTH_URL ?? 'MISSING')
-console.log('[nextauth/init] NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? `OK (${process.env.NEXTAUTH_SECRET.length} chars)` : 'MISSING')
-console.log('[nextauth/init] CLIENT_ID:', CLIENT_ID ? 'OK' : 'MISSING')
-console.log('[nextauth/init] SECRET:', SECRET ? 'OK' : 'MISSING')
-console.log('[nextauth/init] useSecure:', useSecure)
 const pfx = useSecure ? '__Secure-' : ''
 
 const cookieOpts = (extra?: object) => ({
@@ -128,8 +122,6 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null
         const { email, password } = credentials as { email: string; password: string }
 
-        console.log('[nextauth/authorize] attempting login for:', email)
-
         const res = await cognitoClient.send(new InitiateAuthCommand({
           AuthFlow:   'USER_PASSWORD_AUTH',
           ClientId:   CLIENT_ID,
@@ -139,19 +131,14 @@ export const authOptions: NextAuthOptions = {
             SECRET_HASH: secretHash(email),
           },
         })).catch((e: { name: string; message: string }) => {
-          console.log('[nextauth/authorize] Cognito error:', e.name, e.message)
           throw new Error(COGNITO_ERRORS[e.name] ?? e.message ?? 'Error al iniciar sesión.')
         })
 
-        if (!res.AuthenticationResult?.AccessToken) {
-          console.log('[nextauth/authorize] no AccessToken in response')
-          return null
-        }
+        if (!res.AuthenticationResult?.AccessToken) return null
 
         const payload = decodeJwtPayload(res.AuthenticationResult.AccessToken)
         const groups  = (payload['cognito:groups'] as string[] | undefined) ?? []
         const rol     = ROLES_PROPIOS.find(r => groups.includes(r)) ?? 'turista'
-        console.log('[nextauth/authorize] success — groups:', groups, '→ rol:', rol)
         return {
           id:    payload.sub as string,
           email,
@@ -199,19 +186,14 @@ export const authOptions: NextAuthOptions = {
         const payload   = account.access_token ? decodeJwtPayload(account.access_token) : {}
         const allGroups = (payload['cognito:groups'] as string[] | undefined) ?? []
         token.rol = ROLES_PROPIOS.find(r => allGroups.includes(r)) ?? 'turista'
-        console.log('[nextauth/jwt] oauth login — groups:', allGroups, '→ rol:', token.rol)
       } else if (user && (user as { rol?: string }).rol) {
-        // Credentials flow — rol fue asignado en authorize() — solo log en login nuevo
         token.rol = (user as { rol?: string }).rol
-        console.log('[nextauth/jwt] credentials login — rol:', token.rol)
       }
-      // token refresh: no log (muy frecuente, satura CloudWatch)
       return token
     },
     async session({ session, token }) {
       ;(session as { rol?: string }).rol      = token.rol as string
       ;(session.user as { sub?: string }).sub = token.sub
-      // no log aquí: se llama en cada useSession() — usar authorize/jwt para trazar
       return session
     },
   },

@@ -1,8 +1,9 @@
 [
   {
+    "id": "taqueria-huequito",
     "nombre": "Taquería El Huequito",
-    "descripcion": "Tacos al pastor desde 1959. Los más famosos del Centro Histórico. Carnitas, suadero y longaniza recién hecha.",
-    "descripcion_en": "Al pastor tacos since 1959. The most famous in Historic Downtown. Freshly made carnitas, suadero and longaniza.",
+    "descripcion": "Fundada en 1959, la Taquería El Huequito es una institución del Centro Histórico de la Ciudad de México. Sus tacos al pastor se marinan durante 24 horas con chiles guajillo, ancho y especias secretas de la familia, y se cortan directamente del trompo frente a tus ojos. Además del pastor, ofrecen carnitas de cerdo estilo Michoacán, suadero dorado y longaniza recién hecha cada mañana. El lugar es pequeño y siempre hay fila, pero la espera vale completamente la pena.",
+    "descripcion_en": "Founded in 1959, Taquería El Huequito is an institution in Mexico City's Historic Downtown. Their al pastor tacos are marinated for 24 hours with guajillo and ancho chilies and family-secret spices, then sliced directly from the trompo in front of you. Besides pastor, they offer Michoacán-style carnitas, golden suadero and freshly made longaniza every morning. The place is small and there's always a line, but the wait is completely worth it.",
     "categoria": "comida",
     "telefono": "+52 55 5521 2222",
     "whatsapp": "5215552122222",
@@ -11,13 +12,36 @@
     "lat": 19.4326,
     "lng": -99.1392,
     "tags": ["tacos", "al pastor", "carnitas", "centro", "tradicional", "barato"],
-    "horario": "Lun-Dom 9:00-23:00",
-    "precio_promedio": "MXN 60-120"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "09:00", "cierre": "23:00" },
+      "mar": { "abierto": true,  "apertura": "09:00", "cierre": "23:00" },
+      "mie": { "abierto": true,  "apertura": "09:00", "cierre": "23:00" },
+      "jue": { "abierto": true,  "apertura": "09:00", "cierre": "23:00" },
+      "vie": { "abierto": true,  "apertura": "09:00", "cierre": "23:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "23:00" },
+      "dom": { "abierto": true,  "apertura": "10:00", "cierre": "22:00" }
+    },
+    "precio_promedio": "MXN 60-120",
+    "imagenUrl": "https://picsum.photos/seed/tacos-pastor-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tacos-pastor-cdmx/640/480",
+      "https://picsum.photos/seed/trompo-pastor/640/480",
+      "https://picsum.photos/seed/carnitas-cdmx/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Taco al Pastor",      "descripcion": "Carne al pastor con piña, cilantro, cebolla y salsa verde o roja. Precio por pieza.", "precio": 25,  "categoria": "Tacos",    "popularidad": 850, "disponible": true },
+      { "id": "m2", "nombre": "Taco de Carnitas",    "descripcion": "Carnitas estilo Michoacán con surtido de maciza, cuerito y buche. Precio por pieza.",      "precio": 28,  "categoria": "Tacos",    "popularidad": 620, "disponible": true },
+      { "id": "m3", "nombre": "Taco de Suadero",     "descripcion": "Suadero dorado en comal con cilantro y cebolla. Precio por pieza.",                         "precio": 26,  "categoria": "Tacos",    "popularidad": 490, "disponible": true },
+      { "id": "m4", "nombre": "Orden de 3 Tacos",    "descripcion": "Elige 3 tacos de la variedad del día con salsa y limones.",                                  "precio": 75,  "categoria": "Órdenes",  "popularidad": 710, "disponible": true },
+      { "id": "m5", "nombre": "Agua de Jamaica",     "descripcion": "Agua fresca de flor de jamaica preparada al momento. Vaso grande.",                           "precio": 20,  "categoria": "Bebidas",  "popularidad": 300, "disponible": true },
+      { "id": "m6", "nombre": "Quesataco al Pastor", "descripcion": "Taco al pastor con queso Oaxaca derretido en comal. Precio por pieza.",                        "precio": 38,  "categoria": "Tacos",    "popularidad": 540, "disponible": true }
+    ]
   },
   {
+    "id": "pozoleria-coyoacan",
     "nombre": "Pozolería Tostadas Coyoacán",
-    "descripcion": "Pozole rojo y verde estilo Guerrero. Tostadas de pata y salpicón. Familia Gutiérrez desde 1987.",
-    "descripcion_en": "Red and green pozole Guerrero style. Tostadas with pata and salpicón. Gutiérrez family since 1987.",
+    "descripcion": "La familia Gutiérrez lleva desde 1987 sirviendo el pozole más auténtico del estilo guerrerense en Coyoacán. Su pozole rojo se prepara desde la madrugada con maíz cacahuazintle nixtamalizado, espinazo de cerdo y un caldo que se cuela durante cuatro horas. El verde tiene tomatillo, pepita y epazote que le dan un sabor fresco e intenso. Las tostadas de pata, salpicón y tinga son legendarias entre los vecinos, y los fines de semana la fila da vuelta a la esquina.",
+    "descripcion_en": "The Gutiérrez family has been serving the most authentic Guerrero-style pozole in Coyoacán since 1987. Their red pozole is prepared from early morning with nixtamalized cacahuazintle corn, pork backbone, and a broth strained for four hours. The green version has tomatillo, pepita and epazote that give it a fresh, intense flavor. The tostadas of pata, salpicón and tinga are legendary among locals, and on weekends the line wraps around the corner.",
     "categoria": "comida",
     "telefono": "+52 55 5658 3411",
     "whatsapp": "5215556583411",
@@ -26,13 +50,36 @@
     "lat": 19.3499,
     "lng": -99.1627,
     "tags": ["pozole", "tostadas", "coyoacán", "tradicional", "familiar"],
-    "horario": "Jue-Mar 8:00-18:00",
-    "precio_promedio": "MXN 120-200"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "08:00", "cierre": "18:00" },
+      "mar": { "abierto": true,  "apertura": "08:00", "cierre": "18:00" },
+      "mie": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "jue": { "abierto": true,  "apertura": "08:00", "cierre": "18:00" },
+      "vie": { "abierto": true,  "apertura": "08:00", "cierre": "18:00" },
+      "sab": { "abierto": true,  "apertura": "08:00", "cierre": "18:00" },
+      "dom": { "abierto": true,  "apertura": "08:00", "cierre": "17:00" }
+    },
+    "precio_promedio": "MXN 120-200",
+    "imagenUrl": "https://picsum.photos/seed/pozole-rojo-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/pozole-rojo-cdmx/640/480",
+      "https://picsum.photos/seed/tostadas-coyoacan/640/480",
+      "https://picsum.photos/seed/pozole-verde/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Pozole Rojo (chico)",  "descripcion": "Caldo de maíz y cerdo estilo Guerrero, con tostadas, orégano, chile y limón.",   "precio": 100, "categoria": "Pozoles",  "popularidad": 720, "disponible": true },
+      { "id": "m2", "nombre": "Pozole Rojo (grande)", "descripcion": "Porción grande para los más hambrientos, con guarniciones completas.",              "precio": 150, "categoria": "Pozoles",  "popularidad": 580, "disponible": true },
+      { "id": "m3", "nombre": "Pozole Verde",         "descripcion": "Caldo de tomatillo, pepita y epazote con pollo deshebrado.",                         "precio": 120, "categoria": "Pozoles",  "popularidad": 490, "disponible": true },
+      { "id": "m4", "nombre": "Tostada de Pata",      "descripcion": "Pata de cerdo marinada con verduras encurtidas sobre tostada crujiente.",            "precio": 45,  "categoria": "Tostadas", "popularidad": 640, "disponible": true },
+      { "id": "m5", "nombre": "Tostada de Salpicón",  "descripcion": "Carne de res desmenuzada con jitomate, cebolla, chile y aguacate.",                  "precio": 50,  "categoria": "Tostadas", "popularidad": 410, "disponible": true },
+      { "id": "m6", "nombre": "Agua de Horchata",     "descripcion": "Agua fresca de arroz con canela y vainilla. Vaso grande.",                           "precio": 25,  "categoria": "Bebidas",  "popularidad": 310, "disponible": true }
+    ]
   },
   {
+    "id": "jugos-la-palma",
     "nombre": "Jugos y Licuados La Palma",
-    "descripcion": "Jugos naturales, licuados proteicos y agua de frutas de temporada. Ingredientes del mercado de Jamaica.",
-    "descripcion_en": "Fresh juices, protein smoothies and seasonal fruit water. Ingredients from Jamaica Market.",
+    "descripcion": "Instalados frente al Mercado de Jamaica desde hace más de 20 años, en La Palma se trabaja con frutas de temporada seleccionadas cada mañana directamente en el mercado. Sus licuados proteicos combinan frutas tropicales con avena, amaranto y leche entera de vaca, sin colorantes ni conservadores. Las aguas frescas cambian diariamente según la cosecha: guanábana, tamarindo con chile, melón y pitahaya son algunos de los favoritos. El puesto abre antes que salga el sol para atender a cargadores y comerciantes del mercado.",
+    "descripcion_en": "Set up in front of the Jamaica Market for over 20 years, La Palma works with seasonal fruits selected every morning directly at the market. Their protein smoothies combine tropical fruits with oats, amaranth and whole cow's milk, with no colorings or preservatives. Fresh fruit waters change daily according to the harvest: soursop, tamarind with chile, melon and pitahaya are some of the favorites. The stall opens before sunrise to serve the market's porters and merchants.",
     "categoria": "comida",
     "telefono": "+52 55 5530 7845",
     "whatsapp": "5215555307845",
@@ -41,13 +88,36 @@
     "lat": 19.4042,
     "lng": -99.1200,
     "tags": ["jugos", "licuados", "saludable", "jamaica", "frutas"],
-    "horario": "Lun-Sáb 7:00-16:00",
-    "precio_promedio": "MXN 40-80"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "06:00", "cierre": "16:00" },
+      "mar": { "abierto": true,  "apertura": "06:00", "cierre": "16:00" },
+      "mie": { "abierto": true,  "apertura": "06:00", "cierre": "16:00" },
+      "jue": { "abierto": true,  "apertura": "06:00", "cierre": "16:00" },
+      "vie": { "abierto": true,  "apertura": "06:00", "cierre": "16:00" },
+      "sab": { "abierto": true,  "apertura": "06:00", "cierre": "16:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 40-80",
+    "imagenUrl": "https://picsum.photos/seed/jugos-jamaica-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/jugos-jamaica-cdmx/640/480",
+      "https://picsum.photos/seed/licuados-tropicales/640/480",
+      "https://picsum.photos/seed/frutas-mercado/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Jugo Verde Detox",       "descripcion": "Apio, pepino, nopal, limón y jengibre. Limpia el organismo y activa el metabolismo.", "precio": 55,  "categoria": "Jugos",    "popularidad": 480, "disponible": true },
+      { "id": "m2", "nombre": "Jugo de Naranja Natural", "descripcion": "Jugo de naranja recién exprimida. Vaso de 500 ml, sin azúcar añadida.",              "precio": 40,  "categoria": "Jugos",    "popularidad": 610, "disponible": true },
+      { "id": "m3", "nombre": "Licuado Proteico",        "descripcion": "Plátano, fresa, avena, amaranto, leche entera y miel de abeja.",                       "precio": 65,  "categoria": "Licuados", "popularidad": 390, "disponible": true },
+      { "id": "m4", "nombre": "Agua de Guanábana",       "descripcion": "Agua fresca de guanábana con un toque de limón. Vaso grande.",                         "precio": 35,  "categoria": "Aguas",    "popularidad": 520, "disponible": true },
+      { "id": "m5", "nombre": "Agua de Tamarindo Chile", "descripcion": "Tamarindo natural con chile piquín y limón. Refrescante y picante.",                    "precio": 35,  "categoria": "Aguas",    "popularidad": 450, "disponible": true },
+      { "id": "m6", "nombre": "Bowl de Frutas",          "descripcion": "Mezcla de frutas de temporada con granola, yogurt y miel.",                             "precio": 80,  "categoria": "Snacks",   "popularidad": 280, "disponible": true }
+    ]
   },
   {
+    "id": "tamales-dona-eloisa",
     "nombre": "Tamales Doña Eloísa",
-    "descripcion": "Tamales oaxaqueños, verdes, rojos y de rajas con queso. Atole de guayaba y champurrado casero.",
-    "descripcion_en": "Oaxacan, green, red and cheese-chili tamales. Guava atole and homemade champurrado.",
+    "descripcion": "Doña Eloísa aprendió a hacer tamales en la sierra de Oaxaca y los trajo a la Ciudad de México hace 35 años. La masa se prepara con maíz azul cacahuazintle molido en metate y manteca de cerdo de rancho, lo que le da una textura incomparable. Los tamales oaxaqueños van envueltos en hoja de plátano con mole negro y pollo, mientras que los de rajas con queso se funden al vapor durante casi dos horas. El atole de guayaba y el champurrado son hechos en cazuela de barro desde las 5 de la mañana.",
+    "descripcion_en": "Doña Eloísa learned to make tamales in the mountains of Oaxaca and brought them to Mexico City 35 years ago. The masa is prepared with blue cacahuazintle corn ground on a metate and ranch pork lard, giving it an incomparable texture. Oaxacan tamales are wrapped in banana leaf with black mole and chicken, while the rajas-with-cheese ones steam for nearly two hours. The guava atole and champurrado are made in clay pots from 5 in the morning.",
     "categoria": "comida",
     "telefono": "+52 55 5670 1234",
     "whatsapp": "5215556701234",
@@ -56,13 +126,36 @@
     "lat": 19.4490,
     "lng": -99.1278,
     "tags": ["tamales", "atole", "oaxaqueños", "desayuno", "tepito"],
-    "horario": "Lun-Dom 6:00-14:00",
-    "precio_promedio": "MXN 25-60"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "06:00", "cierre": "14:00" },
+      "mar": { "abierto": true,  "apertura": "06:00", "cierre": "14:00" },
+      "mie": { "abierto": true,  "apertura": "06:00", "cierre": "14:00" },
+      "jue": { "abierto": true,  "apertura": "06:00", "cierre": "14:00" },
+      "vie": { "abierto": true,  "apertura": "06:00", "cierre": "14:00" },
+      "sab": { "abierto": true,  "apertura": "06:00", "cierre": "14:00" },
+      "dom": { "abierto": true,  "apertura": "06:00", "cierre": "13:00" }
+    },
+    "precio_promedio": "MXN 25-60",
+    "imagenUrl": "https://picsum.photos/seed/tamales-oaxaca-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tamales-oaxaca-cdmx/640/480",
+      "https://picsum.photos/seed/tamal-hoja-platano/640/480",
+      "https://picsum.photos/seed/atole-champurrado/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tamal Oaxaqueño de Mole",     "descripcion": "Masa de maíz azul con mole negro y pollo, envuelto en hoja de plátano.",    "precio": 45,  "categoria": "Tamales", "popularidad": 700, "disponible": true },
+      { "id": "m2", "nombre": "Tamal de Rajas con Queso",    "descripcion": "Masa suave con rajas de chile poblano y queso Oaxaca derretido.",            "precio": 35,  "categoria": "Tamales", "popularidad": 650, "disponible": true },
+      { "id": "m3", "nombre": "Tamal Verde de Pollo",        "descripcion": "Masa con salsa verde, pollo deshebrado y chile serrano.",                      "precio": 35,  "categoria": "Tamales", "popularidad": 580, "disponible": true },
+      { "id": "m4", "nombre": "Tamal Rojo de Puerco",        "descripcion": "Cerdo en salsa de chile guajillo y ancho, masa firme al vapor.",              "precio": 35,  "categoria": "Tamales", "popularidad": 490, "disponible": true },
+      { "id": "m5", "nombre": "Atole de Guayaba",            "descripcion": "Atole cremoso de guayaba preparado en cazuela de barro. Vaso grande.",        "precio": 25,  "categoria": "Bebidas", "popularidad": 530, "disponible": true },
+      { "id": "m6", "nombre": "Champurrado",                 "descripcion": "Chocolate de metate disuelto en masa de maíz. Espeso y reconfortante.",       "precio": 28,  "categoria": "Bebidas", "popularidad": 610, "disponible": true }
+    ]
   },
   {
+    "id": "cantina-hija-apaches",
     "nombre": "Cantina La Hija de los Apaches",
-    "descripcion": "Cantina tradicional de 1903. Botanas incluidas con cada trago. Mezcales artesanales y pulque curado.",
-    "descripcion_en": "Traditional cantina since 1903. Botanas included with every drink. Artisan mezcals and cured pulque.",
+    "descripcion": "Abierta en 1903, La Hija de los Apaches es una de las cantinas con mayor historia del Centro Histórico, declarada Patrimonio Cultural Intangible del barrio. Sus paredes conservan fotografías de la época porfiriana y murales de artistas locales que retratan la vida del Centro en el siglo XX. La regla de la casa es que cada copa viene acompañada de una botana distinta: chicharrón en salsa verde, frijoles charros, chorizo con papas y enchiladas de mole van rotando durante la tarde. La carta de mezcales artesanales incluye etiquetas de Oaxaca, Guerrero y San Luis Potosí.",
+    "descripcion_en": "Open since 1903, La Hija de los Apaches is one of the most historic cantinas in the Historic Downtown, declared an Intangible Cultural Heritage of the neighborhood. Its walls preserve photographs from the Porfirian era and murals by local artists depicting 20th-century life in the Centro. The house rule is that every drink comes with a different botana: chicharrón in green salsa, frijoles charros, chorizo with potatoes and mole enchiladas rotate throughout the afternoon. The artisan mezcal list includes labels from Oaxaca, Guerrero and San Luis Potosí.",
     "categoria": "comida",
     "telefono": "+52 55 5526 8134",
     "whatsapp": "5215555268134",
@@ -71,13 +164,36 @@
     "lat": 19.4380,
     "lng": -99.1380,
     "tags": ["cantina", "mezcal", "pulque", "botanas", "tradición", "centro"],
-    "horario": "Lun-Sáb 11:00-22:00",
-    "precio_promedio": "MXN 100-300"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "11:00", "cierre": "22:00" },
+      "mar": { "abierto": true,  "apertura": "11:00", "cierre": "22:00" },
+      "mie": { "abierto": true,  "apertura": "11:00", "cierre": "22:00" },
+      "jue": { "abierto": true,  "apertura": "11:00", "cierre": "22:00" },
+      "vie": { "abierto": true,  "apertura": "11:00", "cierre": "23:00" },
+      "sab": { "abierto": true,  "apertura": "11:00", "cierre": "23:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 100-300",
+    "imagenUrl": "https://picsum.photos/seed/cantina-centro-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/cantina-centro-cdmx/640/480",
+      "https://picsum.photos/seed/mezcal-artesanal/640/480",
+      "https://picsum.photos/seed/botanas-cantina/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Mezcal Artesanal (copa)",    "descripcion": "Copa de mezcal de agave espadín, tobalá o cuishe, según disponibilidad. Incluye botana.",  "precio": 120, "categoria": "Mezcales", "popularidad": 820, "disponible": true },
+      { "id": "m2", "nombre": "Pulque Curado de Guayaba",   "descripcion": "Pulque natural curado con guayaba y piloncillo. Litro servido en vaso de barro.",           "precio": 80,  "categoria": "Pulques",  "popularidad": 690, "disponible": true },
+      { "id": "m3", "nombre": "Pulque Curado de Apio",      "descripcion": "Pulque curado con apio y limón. Considerado medicinal por los habitués.",                   "precio": 80,  "categoria": "Pulques",  "popularidad": 510, "disponible": true },
+      { "id": "m4", "nombre": "Botana de Chicharrón",       "descripcion": "Chicharrón en salsa verde tomatillo con chile serrano. Incluida con la copa.",              "precio": 0,   "categoria": "Botanas",  "popularidad": 750, "disponible": true },
+      { "id": "m5", "nombre": "Caguama de Cerveza",         "descripcion": "Cerveza mexicana fría en botella caguama de 940 ml. Elige tu marca favorita.",              "precio": 90,  "categoria": "Cervezas", "popularidad": 640, "disponible": true },
+      { "id": "m6", "nombre": "Enchiladas de Mole (botana)","descripcion": "Enchiladas de mole negro con pollo, sirven como botana de la tarde.",                       "precio": 0,   "categoria": "Botanas",  "popularidad": 420, "disponible": true }
+    ]
   },
   {
+    "id": "fonda-dona-rosa",
     "nombre": "Fonda Doña Rosa",
-    "descripcion": "Comida corrida mexicana: sopa, guisado, arroz y frijoles. 5 opciones diarias desde MXN 80. Ambiente familiar.",
-    "descripcion_en": "Mexican set lunch: soup, stew, rice and beans. 5 daily options from MXN 80. Family atmosphere.",
+    "descripcion": "La Fonda Doña Rosa lleva más de 25 años siendo el punto de referencia del mediodía en la colonia Doctores. Rosa María Salinas prepara cada día un menú de comida corrida que cambia completamente según el mercado y la temporada. La sopa siempre es de pasta o de verduras, el guisado rota entre siete opciones semanales como chile relleno, milanesa de res, pollo en mole amarillo y picadillo. El arroz a la mexicana y los frijoles de olla con hierba santa son incondicionales. El precio incluye postre y agua fresca del día.",
+    "descripcion_en": "Fonda Doña Rosa has been the go-to lunch spot in Colonia Doctores for over 25 years. Rosa María Salinas prepares a daily set-lunch menu that changes completely according to the market and season. The soup is always pasta or vegetables, the stew rotates among seven weekly options like stuffed chile, beef milanesa, chicken in yellow mole and picadillo. The Mexican rice and frijoles de olla with hierba santa are constants. The price includes dessert and the day's fresh fruit water.",
     "categoria": "comida",
     "telefono": "+52 55 5543 9900",
     "whatsapp": "5215555439900",
@@ -86,13 +202,36 @@
     "lat": 19.4004,
     "lng": -99.1490,
     "tags": ["comida corrida", "fonda", "económico", "doctores", "familiar"],
-    "horario": "Lun-Sáb 8:00-17:00",
-    "precio_promedio": "MXN 80-120"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "08:00", "cierre": "17:00" },
+      "mar": { "abierto": true,  "apertura": "08:00", "cierre": "17:00" },
+      "mie": { "abierto": true,  "apertura": "08:00", "cierre": "17:00" },
+      "jue": { "abierto": true,  "apertura": "08:00", "cierre": "17:00" },
+      "vie": { "abierto": true,  "apertura": "08:00", "cierre": "17:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "16:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 80-120",
+    "imagenUrl": "https://picsum.photos/seed/fonda-mexicana-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/fonda-mexicana-cdmx/640/480",
+      "https://picsum.photos/seed/comida-corrida/640/480",
+      "https://picsum.photos/seed/chile-relleno/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Comida Corrida Completa", "descripcion": "Sopa + guisado del día + arroz + frijoles + postre + agua fresca. Todo incluido.",   "precio": 95,  "categoria": "Menú del Día", "popularidad": 880, "disponible": true },
+      { "id": "m2", "nombre": "Solo Guisado",            "descripcion": "Porción del guisado del día con tortillas a voluntad.",                              "precio": 65,  "categoria": "Menú del Día", "popularidad": 540, "disponible": true },
+      { "id": "m3", "nombre": "Chile Relleno de Queso",  "descripcion": "Chile poblano relleno de queso manchego, capeado y en salsa de jitomate.",           "precio": 80,  "categoria": "Guisados",     "popularidad": 470, "disponible": true },
+      { "id": "m4", "nombre": "Milanesa de Res",         "descripcion": "Filete empanizado con arroz, frijoles y ensalada de col.",                           "precio": 90,  "categoria": "Guisados",     "popularidad": 410, "disponible": true },
+      { "id": "m5", "nombre": "Sopa Azteca",             "descripcion": "Caldo de jitomate con tiras de tortilla, crema y queso panela.",                     "precio": 45,  "categoria": "Sopas",        "popularidad": 350, "disponible": true },
+      { "id": "m6", "nombre": "Agua Fresca del Día",     "descripcion": "Agua de frutas naturales de temporada. Vaso grande.",                                "precio": 20,  "categoria": "Bebidas",      "popularidad": 600, "disponible": true }
+    ]
   },
   {
+    "id": "quesadillas-el-volcan",
     "nombre": "Quesadillas El Volcán",
-    "descripcion": "Quesadillas de comal con masa azul. Hongos, huitlacoche, flor de calabaza y tinga. Todo preparado al momento.",
-    "descripcion_en": "Comal quesadillas with blue masa. Mushrooms, huitlacoche, squash flower and tinga. All prepared fresh.",
+    "descripcion": "El Volcán opera en el mercado de Medellín desde que el local abrió sus puertas hace 30 años y se ha convertido en el punto de reunión obligado del barrio Roma. La masa azul se muele cada mañana en el local y se prepara sin conservadores ni harina de trigo. Los rellenos cambian con la temporada: en otoño aparecen los hongos silvestres de Tlaxcala, en verano la flor de calabaza fresca del mercado de Xochimilco, y el huitlacoche se consigue cuando llueve. Todo se prepara al momento sobre comal de barro negro.",
+    "descripcion_en": "El Volcán has operated in the Medellín market since it opened 30 years ago, becoming the obligatory meeting point of the Roma neighborhood. The blue masa is ground fresh every morning on-site, without preservatives or wheat flour. Fillings change with the season: in autumn wild mushrooms from Tlaxcala appear, in summer fresh squash blossom from the Xochimilco market, and huitlacoche is sourced when it rains. Everything is prepared fresh on a black clay comal.",
     "categoria": "comida",
     "telefono": "+52 55 5512 3344",
     "whatsapp": "5215555123344",
@@ -101,13 +240,36 @@
     "lat": 19.4098,
     "lng": -99.1640,
     "tags": ["quesadillas", "masa azul", "huitlacoche", "mercado", "roma"],
-    "horario": "Lun-Dom 8:00-15:00",
-    "precio_promedio": "MXN 50-100"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "mar": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "mie": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "jue": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "vie": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "sab": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "dom": { "abierto": true,  "apertura": "09:00", "cierre": "14:00" }
+    },
+    "precio_promedio": "MXN 50-100",
+    "imagenUrl": "https://picsum.photos/seed/quesadillas-masa-azul/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/quesadillas-masa-azul/640/480",
+      "https://picsum.photos/seed/huitlacoche-quesadilla/640/480",
+      "https://picsum.photos/seed/mercado-medellin/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Quesadilla de Huitlacoche",   "descripcion": "Masa azul con huitlacoche fresco, queso Oaxaca y epazote. Solo temporada de lluvias.",  "precio": 75,  "categoria": "Quesadillas", "popularidad": 860, "disponible": false },
+      { "id": "m2", "nombre": "Quesadilla de Flor de Calabaza","descripcion": "Masa azul con flor de calabaza, quesillo y crema.",                                   "precio": 65,  "categoria": "Quesadillas", "popularidad": 740, "disponible": true },
+      { "id": "m3", "nombre": "Quesadilla de Hongos",         "descripcion": "Hongos silvestres de temporada salteados con ajo y epazote, masa azul.",                "precio": 70,  "categoria": "Quesadillas", "popularidad": 690, "disponible": true },
+      { "id": "m4", "nombre": "Quesadilla de Tinga",          "descripcion": "Tinga de pollo con chipotle, sobre masa azul con crema y salsa.",                        "precio": 60,  "categoria": "Quesadillas", "popularidad": 580, "disponible": true },
+      { "id": "m5", "nombre": "Tlayuda Mini",                 "descripcion": "Tortilla grande de masa azul con frijoles negros, tasajo y queso.",                      "precio": 95,  "categoria": "Especiales",  "popularidad": 420, "disponible": true },
+      { "id": "m6", "nombre": "Agua de Chía con Limón",       "descripcion": "Agua fresca con semillas de chía y limón natural. Vaso grande.",                         "precio": 30,  "categoria": "Bebidas",     "popularidad": 310, "disponible": true }
+    ]
   },
   {
+    "id": "tlayudas-oaxaca-cdmx",
     "nombre": "Tlayudas y Más Oaxaca en CDMX",
-    "descripcion": "Tlayudas, tasajo, mole negro y chocolate caliente. Ingredientes traídos directamente de Oaxaca cada semana.",
-    "descripcion_en": "Tlayudas, tasajo, black mole and hot chocolate. Ingredients brought directly from Oaxaca weekly.",
+    "descripcion": "Cada miércoles un camión parte de Oaxaca de Juárez hacia la Ciudad de México cargado con tasajo, quesillo, mole negro en pasta, chocolate de metate, mezcal y chiles secos que abastecen el restaurante durante la semana. La tlayuda grande lleva una capa de frijoles negros refritos, asiento de manteca, tasajo o cecina, quesillo, lechuga y tomate. El mole negro se prepara con más de 30 ingredientes incluyendo chiles mulato, negro, pasilla y chocolate amargo. Una experiencia oaxaqueña auténtica sin salir de la Roma Norte.",
+    "descripcion_en": "Every Wednesday a truck leaves from Oaxaca de Juárez for Mexico City loaded with tasajo, quesillo, black mole paste, stone-ground chocolate, mezcal and dried chiles that supply the restaurant for the week. The large tlayuda features a layer of refried black beans, lard drippings, tasajo or cecina, quesillo, lettuce and tomato. The black mole is prepared with over 30 ingredients including mulato, negro, pasilla chilies and bitter chocolate. An authentic Oaxacan experience without leaving Roma Norte.",
     "categoria": "comida",
     "telefono": "+52 55 5610 4455",
     "whatsapp": "5215556104455",
@@ -116,13 +278,36 @@
     "lat": 19.4163,
     "lng": -99.1620,
     "tags": ["oaxaca", "tlayudas", "mole", "tasajo", "roma"],
-    "horario": "Mar-Dom 13:00-21:00",
-    "precio_promedio": "MXN 150-280"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "13:00", "cierre": "21:00" },
+      "mie": { "abierto": true,  "apertura": "13:00", "cierre": "21:00" },
+      "jue": { "abierto": true,  "apertura": "13:00", "cierre": "21:00" },
+      "vie": { "abierto": true,  "apertura": "13:00", "cierre": "22:00" },
+      "sab": { "abierto": true,  "apertura": "12:00", "cierre": "22:00" },
+      "dom": { "abierto": true,  "apertura": "12:00", "cierre": "20:00" }
+    },
+    "precio_promedio": "MXN 150-280",
+    "imagenUrl": "https://picsum.photos/seed/tlayuda-oaxaca/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tlayuda-oaxaca/640/480",
+      "https://picsum.photos/seed/mole-negro/640/480",
+      "https://picsum.photos/seed/tasajo-oaxaca/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tlayuda Grande de Tasajo",  "descripcion": "Tortilla oaxaqueña con frijoles, asiento, tasajo, quesillo y ensalada.",            "precio": 200, "categoria": "Tlayudas",  "popularidad": 810, "disponible": true },
+      { "id": "m2", "nombre": "Tlayuda de Cecina",         "descripcion": "Cecina enchilada sobre cama de frijoles negros y quesillo fundido.",                 "precio": 220, "categoria": "Tlayudas",  "popularidad": 690, "disponible": true },
+      { "id": "m3", "nombre": "Mole Negro con Pollo",      "descripcion": "Pollo de rancho en mole negro con 30+ ingredientes. Incluye arroz y tortillas.",     "precio": 250, "categoria": "Guisados",  "popularidad": 750, "disponible": true },
+      { "id": "m4", "nombre": "Enfrijoladas de Quesillo",  "descripcion": "Tortillas bañadas en crema de frijol negro con quesillo y crema fresca.",           "precio": 130, "categoria": "Entradas",  "popularidad": 520, "disponible": true },
+      { "id": "m5", "nombre": "Chocolate Caliente",        "descripcion": "Chocolate de metate oaxaqueño con leche entera. Canela y vainilla natural.",          "precio": 65,  "categoria": "Bebidas",   "popularidad": 480, "disponible": true },
+      { "id": "m6", "nombre": "Mezcal de la Casa (copa)",  "descripcion": "Mezcal artesanal de agave espadín traído directamente de Oaxaca. Copa individual.",  "precio": 95,  "categoria": "Bebidas",   "popularidad": 640, "disponible": true }
+    ]
   },
   {
+    "id": "artesanias-la-mixteca",
     "nombre": "Artesanías La Mixteca",
-    "descripcion": "Textiles oaxaqueños tejidos a mano: tapetes, blusas bordadas, cestería y barro negro. Directo del artesano.",
-    "descripcion_en": "Hand-woven Oaxacan textiles: rugs, embroidered blouses, basketry and black clay. Direct from the artisan.",
+    "descripcion": "La Mixteca es una cooperativa de más de 40 artesanas oaxaqueñas de la región Mixteca Alta que llegaron a la Ciudad de México hace 15 años y encontraron en el Centro Histórico un canal directo hacia turistas nacionales e internacionales. Los tapetes de lana son tejidos en telar de pedal con lana teñida con cochinilla, índigo y cempasúchil. Las blusas bordadas a mano pueden tardar hasta tres semanas en completarse. El barro negro de San Bartolo Coyotepec llega cada mes directamente de los talleres familiares de la comunidad.",
+    "descripcion_en": "La Mixteca is a cooperative of over 40 Oaxacan artisans from the Alta Mixteca region who came to Mexico City 15 years ago and found in the Historic Downtown a direct channel to national and international tourists. Wool rugs are woven on pedal looms with wool dyed with cochineal, indigo and marigold. Hand-embroidered blouses can take up to three weeks to complete. Black clay from San Bartolo Coyotepec arrives monthly directly from the community's family workshops.",
     "categoria": "artesanias",
     "telefono": "+52 55 5521 7766",
     "whatsapp": "5215555217766",
@@ -131,13 +316,36 @@
     "lat": 19.4348,
     "lng": -99.1335,
     "tags": ["oaxaca", "textiles", "bordado", "barro negro", "artesanal"],
-    "horario": "Lun-Sáb 10:00-19:00",
-    "precio_promedio": "MXN 200-2000"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "mar": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "mie": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "jue": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "vie": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "sab": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 200-2000",
+    "imagenUrl": "https://picsum.photos/seed/artesanias-oaxaca/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/artesanias-oaxaca/640/480",
+      "https://picsum.photos/seed/tapete-lana-oaxaca/640/480",
+      "https://picsum.photos/seed/barro-negro/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tapete de Lana Pequeño",    "descripcion": "Tapete tejido en telar de pedal con lana teñida naturalmente. 30x50 cm.",          "precio": 450,  "categoria": "Textiles",    "popularidad": 380, "disponible": true },
+      { "id": "m2", "nombre": "Tapete de Lana Grande",     "descripcion": "Tapete decorativo de lana virgen con diseños geométricos mixtecas. 60x90 cm.",     "precio": 1200, "categoria": "Textiles",    "popularidad": 260, "disponible": true },
+      { "id": "m3", "nombre": "Blusa Bordada a Mano",      "descripcion": "Blusa de manta con bordado floral a mano alzada. Varias tallas disponibles.",      "precio": 650,  "categoria": "Vestimenta", "popularidad": 520, "disponible": true },
+      { "id": "m4", "nombre": "Pieza de Barro Negro",      "descripcion": "Vasija, plato o figurita de barro negro pulido de San Bartolo Coyotepec.",         "precio": 350,  "categoria": "Barro",       "popularidad": 440, "disponible": true },
+      { "id": "m5", "nombre": "Canasta de Palma",          "descripcion": "Canasta tejida a mano en palma de la Mixteca. Varios tamaños.",                     "precio": 280,  "categoria": "Cestería",    "popularidad": 310, "disponible": true },
+      { "id": "m6", "nombre": "Bolsa Tejida de Yute",      "descripcion": "Bolsa de mercado tejida en yute natural con asas de cuero. Diseño único.",          "precio": 400,  "categoria": "Bolsas",      "popularidad": 490, "disponible": true }
+    ]
   },
   {
+    "id": "talavera-don-aurelio",
     "nombre": "Barro Talavera Don Aurelio",
-    "descripcion": "Cerámica de Talavera poblana pintada a mano. Platos, tazas, azulejos y piezas decorativas certificadas.",
-    "descripcion_en": "Hand-painted Talavera pottery from Puebla. Plates, mugs, tiles and certified decorative pieces.",
+    "descripcion": "Don Aurelio Ramírez aprendió el oficio de la Talavera en los talleres artesanales de Puebla y decidió traer su trabajo al Mercado de Artesanías de la Ciudadela, donde lleva más de 28 años. La Talavera Poblana es una de las pocas artesanías mexicanas con Denominación de Origen, y todas las piezas de Don Aurelio cuentan con el certificado de autenticidad del Consejo Regulador. El proceso de elaboración tarda entre 45 y 90 días, desde el moldeado con arcilla local hasta la doble cochura a alta temperatura con esmaltes de estaño.",
+    "descripcion_en": "Don Aurelio Ramírez learned the Talavera craft in artisan workshops in Puebla and decided to bring his work to the Ciudadela Crafts Market, where he has been for over 28 years. Talavera Poblana is one of the few Mexican crafts with a Denomination of Origin, and all of Don Aurelio's pieces come with an authenticity certificate from the Regulatory Council. The production process takes between 45 and 90 days, from molding with local clay to double firing at high temperature with tin glazes.",
     "categoria": "artesanias",
     "telefono": "+52 55 5554 3322",
     "whatsapp": "5215555543322",
@@ -146,13 +354,36 @@
     "lat": 19.4258,
     "lng": -99.1452,
     "tags": ["talavera", "cerámica", "puebla", "ciudadela", "artesanal"],
-    "horario": "Lun-Dom 9:00-18:00",
-    "precio_promedio": "MXN 150-3000"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "09:00", "cierre": "18:00" },
+      "mar": { "abierto": true, "apertura": "09:00", "cierre": "18:00" },
+      "mie": { "abierto": true, "apertura": "09:00", "cierre": "18:00" },
+      "jue": { "abierto": true, "apertura": "09:00", "cierre": "18:00" },
+      "vie": { "abierto": true, "apertura": "09:00", "cierre": "18:00" },
+      "sab": { "abierto": true, "apertura": "09:00", "cierre": "18:00" },
+      "dom": { "abierto": true, "apertura": "10:00", "cierre": "17:00" }
+    },
+    "precio_promedio": "MXN 150-3000",
+    "imagenUrl": "https://picsum.photos/seed/talavera-puebla/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/talavera-puebla/640/480",
+      "https://picsum.photos/seed/ceramica-talavera/640/480",
+      "https://picsum.photos/seed/azulejos-talavera/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Plato Talavera Chico",     "descripcion": "Plato de 20 cm con diseño floral azul y blanco. Certificado con Denominación de Origen.", "precio": 350,  "categoria": "Vajilla",    "popularidad": 540, "disponible": true },
+      { "id": "m2", "nombre": "Plato Talavera Grande",    "descripcion": "Plato decorativo de 30 cm con diseños prehispánicos pintados a mano.",                    "precio": 650,  "categoria": "Vajilla",    "popularidad": 380, "disponible": true },
+      { "id": "m3", "nombre": "Taza con Plato",           "descripcion": "Taza de 300 ml con plato a juego. Diseño tradicional de Puebla.",                           "precio": 450,  "categoria": "Vajilla",    "popularidad": 620, "disponible": true },
+      { "id": "m4", "nombre": "Azulejo 15x15 cm",         "descripcion": "Azulejo de Talavera para decoración. Diseño único pintado a mano. Por pieza.",             "precio": 180,  "categoria": "Decoración", "popularidad": 490, "disponible": true },
+      { "id": "m5", "nombre": "Figura Decorativa",        "descripcion": "Ángel, catrina o animal de Talavera pintado a mano. Alto aprox. 25 cm.",                    "precio": 800,  "categoria": "Decoración", "popularidad": 310, "disponible": true },
+      { "id": "m6", "nombre": "Set de Vajilla (6 piezas)","descripcion": "6 platos soperos de Talavera con diseño unificado. Con certificado de autenticidad.",       "precio": 2800, "categoria": "Sets",       "popularidad": 210, "disponible": true }
+    ]
   },
   {
+    "id": "plata-taxco-joyeria",
     "nombre": "Plata Taxco Joyería",
-    "descripcion": "Joyería de plata 925 de Taxco. Diseños prehispánicos y contemporáneos. Grabado personalizado en el momento.",
-    "descripcion_en": "925 silver jewelry from Taxco. Pre-Hispanic and contemporary designs. Custom engraving on the spot.",
+    "descripcion": "La tradición joyera de Taxco lleva más de 400 años y la familia Hernández es parte de ella desde la tercera generación. Sus diseños combinan la iconografía prehispánica —serpientes emplumadas, dioses mayas, glifos aztecas— con formas contemporáneas que gustan tanto a coleccionistas como a turistas. Toda la plata es de ley 925 y se trabaja a mano en el taller familiar de Taxco, Guerrero. El grabado personalizado de nombres, fechas o frases se realiza en el momento con buril y tarda aproximadamente 30 minutos.",
+    "descripcion_en": "The jewelry tradition of Taxco spans over 400 years and the Hernández family has been part of it for three generations. Their designs combine pre-Hispanic iconography — feathered serpents, Mayan gods, Aztec glyphs — with contemporary shapes that appeal to both collectors and tourists. All silver is 925 sterling, handcrafted in the family workshop in Taxco, Guerrero. Custom engraving of names, dates or phrases is done on the spot with a burin and takes approximately 30 minutes.",
     "categoria": "artesanias",
     "telefono": "+52 55 5512 8899",
     "whatsapp": "5215555128899",
@@ -161,13 +392,36 @@
     "lat": 19.4335,
     "lng": -99.1362,
     "tags": ["plata", "taxco", "joyería", "925", "prehispánico"],
-    "horario": "Lun-Sáb 10:00-20:00",
-    "precio_promedio": "MXN 300-5000"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "10:00", "cierre": "20:00" },
+      "mar": { "abierto": true,  "apertura": "10:00", "cierre": "20:00" },
+      "mie": { "abierto": true,  "apertura": "10:00", "cierre": "20:00" },
+      "jue": { "abierto": true,  "apertura": "10:00", "cierre": "20:00" },
+      "vie": { "abierto": true,  "apertura": "10:00", "cierre": "20:00" },
+      "sab": { "abierto": true,  "apertura": "10:00", "cierre": "20:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 300-5000",
+    "imagenUrl": "https://picsum.photos/seed/plata-taxco-joyeria/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/plata-taxco-joyeria/640/480",
+      "https://picsum.photos/seed/anillos-plata-925/640/480",
+      "https://picsum.photos/seed/artesania-prehispanica/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Anillo de Plata 925",       "descripcion": "Anillo con diseño prehispánico tallado a mano. Grabado personalizado incluido.",    "precio": 550,  "categoria": "Anillos",    "popularidad": 680, "disponible": true },
+      { "id": "m2", "nombre": "Aretes de Serpiente",       "descripcion": "Aretes de plata con diseño de serpiente emplumada. Par con sello de ley 925.",      "precio": 480,  "categoria": "Aretes",     "popularidad": 720, "disponible": true },
+      { "id": "m3", "nombre": "Collar Calendario Azteca",  "descripcion": "Colgante del calendario azteca en plata 925 con cadena de 45 cm.",                   "precio": 900,  "categoria": "Collares",   "popularidad": 850, "disponible": true },
+      { "id": "m4", "nombre": "Pulsera Trenzada",          "descripcion": "Pulsera de plata trenzada a mano, ajustable, con cierre de mosquetón.",             "precio": 650,  "categoria": "Pulseras",   "popularidad": 590, "disponible": true },
+      { "id": "m5", "nombre": "Dije de Quetzalcóatl",     "descripcion": "Dije de Quetzalcóatl en plata 925. Alto 3.5 cm. Con argolla para cualquier cadena.", "precio": 420,  "categoria": "Dijes",      "popularidad": 470, "disponible": true },
+      { "id": "m6", "nombre": "Servicio de Grabado",       "descripcion": "Grabado personalizado de nombre, fecha o frase en cualquier pieza. Tiempo: 30 min.",  "precio": 150,  "categoria": "Servicios",  "popularidad": 390, "disponible": true }
+    ]
   },
   {
+    "id": "alebrijes-xochimilco",
     "nombre": "Máscaras y Alebrijes Xochimilco",
-    "descripcion": "Alebrijes pintados a mano por la familia Linares. Máscaras de carnaval y figuras de papel maché originales.",
-    "descripcion_en": "Hand-painted alebrijes by the Linares family. Carnival masks and original papier-mâché figures.",
+    "descripcion": "La familia Linares es reconocida mundialmente por haber creado el alebrije en la Ciudad de México en la década de 1930 cuando el señor Pedro Linares tuvo una fiebre y soñó con criaturas multicolores. Hoy sus nietos y bisnietos continúan la tradición elaborando figuras de papel maché con periódico reciclado, engrudo de harina y pinturas naturales. Cada alebrije tarda entre tres días y tres semanas dependiendo de su tamaño. Las máscaras de carnaval reproducen las de las danzas tradicionales de Guerrero, Oaxaca y Veracruz.",
+    "descripcion_en": "The Linares family is world-renowned for having created the alebrije in Mexico City in the 1930s when Mr. Pedro Linares had a fever and dreamed of multicolored creatures. Today his grandchildren and great-grandchildren continue the tradition crafting papier-mâché figures with recycled newspaper, flour paste and natural paints. Each alebrije takes between three days and three weeks depending on its size. The carnival masks reproduce those from traditional dances in Guerrero, Oaxaca and Veracruz.",
     "categoria": "artesanias",
     "telefono": "+52 55 5676 2233",
     "whatsapp": "5215556762233",
@@ -176,13 +430,36 @@
     "lat": 19.2574,
     "lng": -99.1036,
     "tags": ["alebrijes", "papel maché", "máscaras", "xochimilco", "linares"],
-    "horario": "Lun-Dom 9:00-17:00",
-    "precio_promedio": "MXN 150-8000"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "09:00", "cierre": "17:00" },
+      "mar": { "abierto": true, "apertura": "09:00", "cierre": "17:00" },
+      "mie": { "abierto": true, "apertura": "09:00", "cierre": "17:00" },
+      "jue": { "abierto": true, "apertura": "09:00", "cierre": "17:00" },
+      "vie": { "abierto": true, "apertura": "09:00", "cierre": "17:00" },
+      "sab": { "abierto": true, "apertura": "09:00", "cierre": "17:00" },
+      "dom": { "abierto": true, "apertura": "10:00", "cierre": "16:00" }
+    },
+    "precio_promedio": "MXN 150-8000",
+    "imagenUrl": "https://picsum.photos/seed/alebrijes-linares/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/alebrijes-linares/640/480",
+      "https://picsum.photos/seed/papel-mache-colorido/640/480",
+      "https://picsum.photos/seed/mascaras-carnaval-mexico/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Alebrije Pequeño",         "descripcion": "Figura de papel maché de 10-15 cm pintada a mano. Diseño de animal fantástico.",     "precio": 180,  "categoria": "Alebrijes", "popularidad": 720, "disponible": true },
+      { "id": "m2", "nombre": "Alebrije Mediano",         "descripcion": "Figura de 25-35 cm con detalles finos pintados con pincel de pelo de ardilla.",       "precio": 650,  "categoria": "Alebrijes", "popularidad": 540, "disponible": true },
+      { "id": "m3", "nombre": "Alebrije Grande",          "descripcion": "Pieza de colección de 50+ cm, proceso de 2-3 semanas. Firmado por la familia.",       "precio": 3500, "categoria": "Alebrijes", "popularidad": 210, "disponible": true },
+      { "id": "m4", "nombre": "Máscara de Carnaval",      "descripcion": "Máscara tradicional de papel maché reproduciendo danzas indígenas. 30x25 cm.",       "precio": 450,  "categoria": "Máscaras",  "popularidad": 490, "disponible": true },
+      { "id": "m5", "nombre": "Máscara Decorativa Chica", "descripcion": "Miniatura de máscara para decorar paredes. Varias representaciones regionales.",     "precio": 150,  "categoria": "Máscaras",  "popularidad": 380, "disponible": true },
+      { "id": "m6", "nombre": "Taller Familiar (visita)",  "descripcion": "Visita al taller para ver el proceso completo de elaboración. Grupos de hasta 8.",    "precio": 100,  "categoria": "Experiencias","popularidad": 310, "disponible": true }
+    ]
   },
   {
+    "id": "sarapes-la-piedad",
     "nombre": "Sarapes y Rebozos de La Piedad",
-    "descripcion": "Sarapes de Saltillo y rebozos de Santa María del Río tejidos en telar. Más de 300 diseños en stock.",
-    "descripcion_en": "Saltillo sarapes and Santa María del Río rebozos woven on loom. Over 300 designs in stock.",
+    "descripcion": "La Piedad es el apellido del fundador, no el lugar, aunque muchos de sus sarapes vienen efectivamente de Saltillo, Coahuila, donde se teje el sarape más famoso de México desde el siglo XVII. El local en el Centro Histórico acumula más de 300 diseños distintos en stock permanente, desde los geométricos bicolores hasta los multicolores con escenas de charro. Los rebozos de Santa María del Río, San Luis Potosí, son de seda e hilo de oro con los flecos anudados a mano, tradición que lleva 400 años. Envíos internacionales disponibles.",
+    "descripcion_en": "La Piedad is the founder's surname, not the place, although many of their sarapes do come from Saltillo, Coahuila, where Mexico's most famous sarape has been woven since the 17th century. The downtown store permanently stocks over 300 distinct designs, from bicolor geometric patterns to multicolor charro scenes. The rebozos from Santa María del Río, San Luis Potosí, are made of silk and gold thread with hand-knotted fringes, a 400-year-old tradition. International shipping available.",
     "categoria": "artesanias",
     "telefono": "+52 55 5530 5566",
     "whatsapp": "5215555305566",
@@ -191,13 +468,36 @@
     "lat": 19.4340,
     "lng": -99.1320,
     "tags": ["sarapes", "rebozos", "saltillo", "tejidos", "tradicional"],
-    "horario": "Lun-Sáb 9:00-20:00",
-    "precio_promedio": "MXN 400-4000"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "09:00", "cierre": "20:00" },
+      "mar": { "abierto": true,  "apertura": "09:00", "cierre": "20:00" },
+      "mie": { "abierto": true,  "apertura": "09:00", "cierre": "20:00" },
+      "jue": { "abierto": true,  "apertura": "09:00", "cierre": "20:00" },
+      "vie": { "abierto": true,  "apertura": "09:00", "cierre": "20:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "20:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 400-4000",
+    "imagenUrl": "https://picsum.photos/seed/sarapes-saltillo/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/sarapes-saltillo/640/480",
+      "https://picsum.photos/seed/rebozo-seda/640/480",
+      "https://picsum.photos/seed/textil-mexicano/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Sarape Bicolor Saltillo",    "descripcion": "Sarape clásico de Saltillo en dos colores tejido en telar. 120x200 cm.",             "precio": 650,  "categoria": "Sarapes",  "popularidad": 580, "disponible": true },
+      { "id": "m2", "nombre": "Sarape Multicolor Charro",   "descripcion": "Sarape con diseño tradicional de charro mexicano. Colores vivos. 120x200 cm.",        "precio": 950,  "categoria": "Sarapes",  "popularidad": 470, "disponible": true },
+      { "id": "m3", "nombre": "Sarape para Decoración",     "descripcion": "Sarape de pared de doble ancho con flecos. Ideal como tapiz decorativo.",             "precio": 1200, "categoria": "Sarapes",  "popularidad": 320, "disponible": true },
+      { "id": "m4", "nombre": "Rebozo de Algodón",          "descripcion": "Rebozo de algodón fino con flecos anudados. Ideal para clima templado.",              "precio": 400,  "categoria": "Rebozos",  "popularidad": 640, "disponible": true },
+      { "id": "m5", "nombre": "Rebozo de Seda Santa María", "descripcion": "Rebozo auténtico de Santa María del Río en seda natural con hilos de oro.",           "precio": 3500, "categoria": "Rebozos",  "popularidad": 180, "disponible": true },
+      { "id": "m6", "nombre": "Camino de Mesa Bordado",     "descripcion": "Camino de mesa de 40x150 cm con bordado floral en punto de cruz. Algodón.",           "precio": 380,  "categoria": "Hogar",    "popularidad": 410, "disponible": true }
+    ]
   },
   {
+    "id": "posada-centro-boutique",
     "nombre": "Posada del Centro Boutique",
-    "descripcion": "Posada con 12 habitaciones en edificio porfiriano restaurado. Desayuno mexicano incluido. WiFi y AC.",
-    "descripcion_en": "Posada with 12 rooms in restored Porfirian building. Mexican breakfast included. WiFi and AC.",
+    "descripcion": "La Posada del Centro ocupa un edificio de estilo porfiriano restaurado en 2012 con materiales originales: vigas de madera de cedro, azulejos de Talavera y techos de boveda catalana que crean una atmósfera única en el corazón histórico. Sus 12 habitaciones tienen nombres de personajes históricos mexicanos y cada una está decorada con piezas artesanales únicas seleccionadas en mercados de Oaxaca, Chiapas y Michoacán. El desayuno mexicano incluye tamales, enfrijoladas, jugo de naranja y café de olla, servido en el patio central con fuente de cantera rosa.",
+    "descripcion_en": "La Posada del Centro occupies a Porfirian-style building restored in 2012 with original materials: cedar wood beams, Talavera tiles and Catalan vault ceilings that create a unique atmosphere in the historic heart of the city. Its 12 rooms are named after Mexican historical figures and each is decorated with unique artisan pieces selected in markets from Oaxaca, Chiapas and Michoacán. The Mexican breakfast includes tamales, enfrijoladas, fresh orange juice and clay pot coffee, served in the central courtyard with a pink quarry stone fountain.",
     "categoria": "hospedaje",
     "telefono": "+52 55 5521 0011",
     "whatsapp": "5215555210011",
@@ -206,13 +506,36 @@
     "lat": 19.4305,
     "lng": -99.1378,
     "tags": ["posada", "boutique", "centro", "desayuno", "histórico"],
-    "horario": "24 horas",
-    "precio_promedio": "MXN 700-1200 por noche"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mar": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "jue": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "vie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "sab": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "dom": { "abierto": true, "apertura": "00:00", "cierre": "23:59" }
+    },
+    "precio_promedio": "MXN 700-1200 por noche",
+    "imagenUrl": "https://picsum.photos/seed/posada-centro-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/posada-centro-cdmx/640/480",
+      "https://picsum.photos/seed/patio-colonial/640/480",
+      "https://picsum.photos/seed/habitacion-boutique/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Habitación Sencilla",        "descripcion": "1 cama matrimonial, baño privado, WiFi, AC y desayuno mexicano incluido.",           "precio": 750,  "categoria": "Habitaciones", "popularidad": 580, "disponible": true },
+      { "id": "m2", "nombre": "Habitación Doble",           "descripcion": "2 camas individuales o 1 king, baño privado, WiFi, AC y desayuno incluido.",         "precio": 950,  "categoria": "Habitaciones", "popularidad": 490, "disponible": true },
+      { "id": "m3", "nombre": "Suite Histórica",            "descripcion": "Suite con sala, escritorio y bañera. Vista al patio central. Desayuno incluido.",     "precio": 1200, "categoria": "Habitaciones", "popularidad": 310, "disponible": true },
+      { "id": "m4", "nombre": "Desayuno Mexicano (extra)",  "descripcion": "Para huéspedes adicionales: tamales, enfrijoladas, jugo y café de olla.",            "precio": 150,  "categoria": "Servicios",    "popularidad": 240, "disponible": true },
+      { "id": "m5", "nombre": "Tour a Pie por el Centro",   "descripcion": "Caminata guiada de 2h por el Centro Histórico. Solo para huéspedes.",               "precio": 200,  "categoria": "Servicios",    "popularidad": 360, "disponible": true },
+      { "id": "m6", "nombre": "Estacionamiento Cercano",    "descripcion": "Convenio con estacionamiento a 50m. Tarifa preferencial para huéspedes.",           "precio": 180,  "categoria": "Servicios",    "popularidad": 190, "disponible": true }
+    ]
   },
   {
+    "id": "hostal-la-condesa",
     "nombre": "Hostal La Condesa",
-    "descripcion": "Hostal familiar con jardín en la Condesa. Habitaciones privadas y dormitorios. Tours de barrio incluidos.",
-    "descripcion_en": "Family hostel with garden in La Condesa. Private rooms and dorms. Neighborhood tours included.",
+    "descripcion": "El Hostal La Condesa ocupa una casa art déco de los años 40 con jardín interior en una de las calles más tranquilas de la colonia. El jardín funciona como punto de encuentro entre viajeros de todo el mundo y los martes se organizan asados con música de vinilo. Las habitaciones privadas tienen ventanas al jardín y baño propio; los dormitorios compartidos tienen lockers y cortinas individuales para cada litera. Los tours gratuitos del barrio que ofrecen los martes y sábados incluyen Parque México, los mercados de la colonia y los mejores cafés de especialidad.",
+    "descripcion_en": "Hostal La Condesa occupies an Art Deco house from the 1940s with an interior garden on one of the quietest streets in the neighborhood. The garden serves as a meeting point for travelers from around the world, and on Tuesdays barbecues are organized with vinyl music. Private rooms have windows to the garden and private bathrooms; shared dorms have lockers and individual curtains for each bunk. The free neighborhood tours offered on Tuesdays and Saturdays include Parque México, the neighborhood markets and the best specialty coffee shops.",
     "categoria": "hospedaje",
     "telefono": "+52 55 5286 3344",
     "whatsapp": "5215552863344",
@@ -221,13 +544,36 @@
     "lat": 19.4115,
     "lng": -99.1748,
     "tags": ["hostal", "condesa", "jardín", "mochileros", "familiar"],
-    "horario": "Check-in 14:00 / Check-out 11:00",
-    "precio_promedio": "MXN 350-900 por noche"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mar": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "jue": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "vie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "sab": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "dom": { "abierto": true, "apertura": "00:00", "cierre": "23:59" }
+    },
+    "precio_promedio": "MXN 350-900 por noche",
+    "imagenUrl": "https://picsum.photos/seed/hostal-condesa-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/hostal-condesa-cdmx/640/480",
+      "https://picsum.photos/seed/jardin-hostal/640/480",
+      "https://picsum.photos/seed/dormitorio-mochilero/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Cama en Dormitorio (6 camas)", "descripcion": "Litera en cuarto compartido con locker, WiFi y baño comunitario.",                 "precio": 350,  "categoria": "Alojamiento", "popularidad": 680, "disponible": true },
+      { "id": "m2", "nombre": "Cama en Dormitorio (4 camas)", "descripcion": "Cuarto más privado con locker personal, WiFi y baño compartido.",                  "precio": 420,  "categoria": "Alojamiento", "popularidad": 540, "disponible": true },
+      { "id": "m3", "nombre": "Habitación Privada Doble",      "descripcion": "Cama doble, baño privado, ventana al jardín y WiFi. Ideal para parejas.",          "precio": 850,  "categoria": "Alojamiento", "popularidad": 490, "disponible": true },
+      { "id": "m4", "nombre": "Tour del Barrio (gratuito)",    "descripcion": "Caminata guiada por la Condesa con paradas en Parque México y cafés locales.",     "precio": 0,    "categoria": "Actividades", "popularidad": 720, "disponible": true },
+      { "id": "m5", "nombre": "Asado del Martes",              "descripcion": "Asado en el jardín con carne, ensaladas y música de vinilo. Reservar lugar.",      "precio": 120,  "categoria": "Actividades", "popularidad": 390, "disponible": true },
+      { "id": "m6", "nombre": "Renta de Bicicleta",            "descripcion": "Bicicleta urbana por día completo para explorar la Condesa y la Roma.",            "precio": 150,  "categoria": "Servicios",   "popularidad": 460, "disponible": true }
+    ]
   },
   {
+    "id": "hotel-san-angel",
     "nombre": "Hotel Familiar San Ángel",
-    "descripcion": "Hotel de 20 habitaciones en San Ángel. A dos cuadras del Bazar del Sábado. Estacionamiento gratuito.",
-    "descripcion_en": "20-room hotel in San Ángel. Two blocks from the Saturday Bazaar. Free parking.",
+    "descripcion": "El Hotel Familiar San Ángel es un establecimiento de carácter independiente que lleva dos décadas atendiendo a viajeros que quieren estar cerca del corazón colonial y artístico del sur de la ciudad. Sus 20 habitaciones fueron remodeladas en 2020 con materiales de la región: madera de parota, cantera gris de Zacatecas y azulejos artesanales de Guanajuato. La ubicación a dos cuadras del Bazar del Sábado permite a los huéspedes caminar por las callejuelas empedradas del pueblo mágico. El estacionamiento gratuito es un lujo en esta zona de la ciudad.",
+    "descripcion_en": "Hotel Familiar San Ángel is an independent establishment that has been welcoming travelers for two decades, ideally positioned near the colonial and artistic heart of the city's south. Its 20 rooms were remodeled in 2020 with regional materials: parota wood, gray quarry stone from Zacatecas and artisan tiles from Guanajuato. The location two blocks from the Saturday Bazaar lets guests walk the cobblestone streets of this magic town. Free parking is a luxury in this part of the city.",
     "categoria": "hospedaje",
     "telefono": "+52 55 5616 7788",
     "whatsapp": "5215556167788",
@@ -236,13 +582,36 @@
     "lat": 19.3489,
     "lng": -99.1935,
     "tags": ["hotel", "san ángel", "estacionamiento", "familiar", "bazar"],
-    "horario": "24 horas",
-    "precio_promedio": "MXN 900-1400 por noche"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mar": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "jue": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "vie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "sab": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "dom": { "abierto": true, "apertura": "00:00", "cierre": "23:59" }
+    },
+    "precio_promedio": "MXN 900-1400 por noche",
+    "imagenUrl": "https://picsum.photos/seed/hotel-san-angel-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/hotel-san-angel-cdmx/640/480",
+      "https://picsum.photos/seed/habitacion-hotel-colonial/640/480",
+      "https://picsum.photos/seed/bazar-sabado-san-angel/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Habitación Estándar",       "descripcion": "Cama queen, baño privado, WiFi, TV y estacionamiento gratuito.",                     "precio": 950,  "categoria": "Habitaciones", "popularidad": 620, "disponible": true },
+      { "id": "m2", "nombre": "Habitación Superior",       "descripcion": "Cama king, baño con tina, WiFi, TV, AC y estacionamiento gratuito.",                  "precio": 1200, "categoria": "Habitaciones", "popularidad": 480, "disponible": true },
+      { "id": "m3", "nombre": "Habitación Familiar",       "descripcion": "2 camas queen para hasta 4 personas. Perfecta para familias con niños.",              "precio": 1400, "categoria": "Habitaciones", "popularidad": 350, "disponible": true },
+      { "id": "m4", "nombre": "Desayuno Continental",      "descripcion": "Pan dulce, frutas, yogurt, jugo y café. Servido en terraza.",                         "precio": 120,  "categoria": "Servicios",    "popularidad": 290, "disponible": true },
+      { "id": "m5", "nombre": "Servicio de Lavandería",    "descripcion": "Lavado y planchado de ropa. Entrega en 24 horas.",                                    "precio": 150,  "categoria": "Servicios",    "popularidad": 180, "disponible": true },
+      { "id": "m6", "nombre": "Tour al Bazar del Sábado",  "descripcion": "Acompañamiento guiado al Bazar del Sábado. Solo sábados por la mañana.",              "precio": 0,    "categoria": "Servicios",    "popularidad": 410, "disponible": true }
+    ]
   },
   {
+    "id": "cuartos-coyoacan-cultural",
     "nombre": "Cuartos Coyoacán Cultural",
-    "descripcion": "Casa con 6 habitaciones a 300m del Museo Frida Kahlo. Ambiente artístico, biblioteca y terraza comunitaria.",
-    "descripcion_en": "House with 6 rooms 300m from Frida Kahlo Museum. Artistic atmosphere, library and communal terrace.",
+    "descripcion": "A solo 300 metros de la Casa Azul —el Museo Frida Kahlo—, esta casa de huéspedes con 6 habitaciones fue decorada por artistas de la colonia en un proyecto colaborativo que duró dos años. Cada cuarto tiene una paleta de colores y temática distinta: el cuarto Kahlo con azules y flores, el cuarto Rivera con muralismo en la pared, el cuarto Trotsky con libros y rojos revolucionarios. La terraza comunitaria tiene plantas de cactus, hamacas y una biblioteca de más de 800 libros de arte, historia y literatura mexicana.",
+    "descripcion_en": "Just 300 meters from the Casa Azul — the Frida Kahlo Museum — this guesthouse with 6 rooms was decorated by neighborhood artists in a collaborative project that lasted two years. Each room has a different color palette and theme: the Kahlo room with blues and flowers, the Rivera room with muralism on the wall, the Trotsky room with books and revolutionary reds. The communal terrace has cactus plants, hammocks and a library of over 800 books on Mexican art, history and literature.",
     "categoria": "hospedaje",
     "telefono": "+52 55 5659 2200",
     "whatsapp": "5215556592200",
@@ -251,13 +620,36 @@
     "lat": 19.3514,
     "lng": -99.1622,
     "tags": ["coyoacán", "cultural", "frida", "artístico", "terraza"],
-    "horario": "Check-in 15:00 / Check-out 12:00",
-    "precio_promedio": "MXN 600-1100 por noche"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mar": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "jue": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "vie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "sab": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "dom": { "abierto": true, "apertura": "00:00", "cierre": "23:59" }
+    },
+    "precio_promedio": "MXN 600-1100 por noche",
+    "imagenUrl": "https://picsum.photos/seed/coyoacan-cultural/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/coyoacan-cultural/640/480",
+      "https://picsum.photos/seed/terraza-artistica/640/480",
+      "https://picsum.photos/seed/cuarto-frida-kahlo/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Cuarto Kahlo",    "descripcion": "Temática Frida Kahlo: azules vibrantes, flores de papel y litografías originales. Cama doble.", "precio": 700,  "categoria": "Habitaciones", "popularidad": 780, "disponible": true },
+      { "id": "m2", "nombre": "Cuarto Rivera",   "descripcion": "Mural pintado a mano por artista local. Cama queen y escritorio de madera tallada.",           "precio": 750,  "categoria": "Habitaciones", "popularidad": 650, "disponible": true },
+      { "id": "m3", "nombre": "Cuarto Trotsky",  "descripcion": "Librería integrada de 200 libros, colores rojos y fotografía de época. Cama individual.",      "precio": 600,  "categoria": "Habitaciones", "popularidad": 490, "disponible": true },
+      { "id": "m4", "nombre": "Terraza Comunitaria", "descripcion": "Acceso a la terraza con hamacas, biblioteca y vista a los tejados de Coyoacán.",           "precio": 0,    "categoria": "Servicios",    "popularidad": 860, "disponible": true },
+      { "id": "m5", "nombre": "Tour a la Casa Azul", "descripcion": "Acompañamiento al Museo Frida Kahlo con entrada incluida (cupo limitado).",                "precio": 280,  "categoria": "Actividades",  "popularidad": 540, "disponible": true },
+      { "id": "m6", "nombre": "Clase de Acuarela",   "descripcion": "Taller de acuarela en la terraza con artista local. Sábados por la mañana.",               "precio": 350,  "categoria": "Actividades",  "popularidad": 420, "disponible": true }
+    ]
   },
   {
+    "id": "tour-bici-pedalea-mexico",
     "nombre": "Tour CDMX en Bici — Pedalea México",
-    "descripcion": "Recorrido guiado de 3 horas en bicicleta por el Centro Histórico, Alameda y Bellas Artes. Grupos máx. 12 personas.",
-    "descripcion_en": "3-hour guided bike tour through Historic Downtown, Alameda and Bellas Artes. Max 12 people per group.",
+    "descripcion": "Pedalea México es la empresa de tours en bicicleta con mayor historial de reseñas positivas en el Centro Histórico, presente desde 2014 con más de 15,000 turistas atendidos. El recorrido estándar de 3 horas cubre el Zócalo, la Catedral Metropolitana, el Palacio Nacional, la Alameda Central, el Palacio de Bellas Artes y la Torre Latinoamericana, con paradas y explicaciones en cada punto. Los guías son historiadores o estudiantes de historia que hablan español e inglés. Las bicicletas son de aluminio de 21 velocidades con frenos de disco, revisadas técnicamente antes de cada salida.",
+    "descripcion_en": "Pedalea México is the bicycle tour company with the best review history in the Historic Downtown, operating since 2014 with over 15,000 tourists served. The 3-hour standard tour covers the Zócalo, Metropolitan Cathedral, National Palace, Alameda Central, Palace of Fine Arts and the Latin American Tower, with stops and explanations at each point. Guides are historians or history students who speak Spanish and English. The bikes are 21-speed aluminum with disc brakes, technically inspected before each departure.",
     "categoria": "tours",
     "telefono": "+52 55 5512 4400",
     "whatsapp": "5215555124400",
@@ -266,13 +658,36 @@
     "lat": 19.4326,
     "lng": -99.1332,
     "tags": ["bicicleta", "tour", "centro", "zócalo", "grupal", "activo"],
-    "horario": "Mar-Dom 9:00 y 15:00",
-    "precio_promedio": "MXN 350 por persona"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "mie": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "jue": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "vie": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "dom": { "abierto": true,  "apertura": "09:00", "cierre": "17:00" }
+    },
+    "precio_promedio": "MXN 350 por persona",
+    "imagenUrl": "https://picsum.photos/seed/tour-bici-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tour-bici-cdmx/640/480",
+      "https://picsum.photos/seed/zocalo-bicicleta/640/480",
+      "https://picsum.photos/seed/bellas-artes-ciclistas/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tour Centro Histórico (3h)",       "descripcion": "Zócalo, Catedral, Palacio Nacional, Alameda y Bellas Artes. Guía bilingüe.",      "precio": 350,  "categoria": "Tours", "popularidad": 920, "disponible": true },
+      { "id": "m2", "nombre": "Tour Nocturno Luces del Centro",   "descripcion": "Recorrido de 2.5h por el Centro iluminado de noche. Sale a las 19:00. Vie-Dom.",   "precio": 380,  "categoria": "Tours", "popularidad": 740, "disponible": true },
+      { "id": "m3", "nombre": "Tour Colonia Roma-Condesa (2.5h)", "descripcion": "Art déco, murales y parques de las colonias más hipster. Viernes y sábado.",       "precio": 320,  "categoria": "Tours", "popularidad": 660, "disponible": true },
+      { "id": "m4", "nombre": "Bici privada (4h)",                "descripcion": "Tour completamente personalizable para parejas o grupos de hasta 4 personas.",      "precio": 800,  "categoria": "Tours", "popularidad": 430, "disponible": true },
+      { "id": "m5", "nombre": "Renta de Bicicleta (sin guía)",   "descripcion": "Bicicleta por hora con mapa de rutas sugeridas. Depósito reembolsable.",            "precio": 80,   "categoria": "Renta", "popularidad": 380, "disponible": true },
+      { "id": "m6", "nombre": "Seguro de Bicicleta",              "descripcion": "Seguro opcional por daños accidentales durante la renta. Por sesión.",              "precio": 50,   "categoria": "Extras","popularidad": 210, "disponible": true }
+    ]
   },
   {
+    "id": "trajinera-don-chema",
     "nombre": "Xochimilco en Trajinera — Don Chema",
-    "descripcion": "Trajinera privada por los canales de Xochimilco. Incluye mariachi, comida y 2 horas de recorrido. Grupos de hasta 20.",
-    "descripcion_en": "Private trajinera through Xochimilco canals. Includes mariachi, food and 2-hour tour. Groups up to 20.",
+    "descripcion": "Don Chema Galindo tiene 35 años llevando grupos por los canales de Xochimilco en sus tres trajineras de colores, declaradas Patrimonio Cultural Inmaterial por la UNESCO. El paquete completo incluye dos horas de recorrido por los canales más pintorescos, mariachi de tres músicos a bordo, comida servida en el agua con tacos de canasta y antojitos, y fotografías al final del recorrido. Las trajineras tienen nombres de mujeres de la familia y llevan flores frescas cada fin de semana. El embarcadero es el más cercano a la zona de chinampas activas.",
+    "descripcion_en": "Don Chema Galindo has been taking groups through Xochimilco's canals in his three colorful trajineras for 35 years, declared Intangible Cultural Heritage by UNESCO. The complete package includes two hours through the most picturesque canals, a three-musician mariachi band on board, food served on the water with basket tacos and antojitos, and photographs at the end of the tour. The trajineras are named after family women and carry fresh flowers every weekend. The dock is the closest to the active chinampa area.",
     "categoria": "tours",
     "telefono": "+52 55 5676 0099",
     "whatsapp": "5215556760099",
@@ -281,13 +696,36 @@
     "lat": 19.2553,
     "lng": -99.0998,
     "tags": ["xochimilco", "trajinera", "mariachi", "canales", "patrimonio"],
-    "horario": "Lun-Dom 8:00-18:00",
-    "precio_promedio": "MXN 1200-2500 por trajinera"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "08:00", "cierre": "18:00" },
+      "mar": { "abierto": true, "apertura": "08:00", "cierre": "18:00" },
+      "mie": { "abierto": true, "apertura": "08:00", "cierre": "18:00" },
+      "jue": { "abierto": true, "apertura": "08:00", "cierre": "18:00" },
+      "vie": { "abierto": true, "apertura": "08:00", "cierre": "19:00" },
+      "sab": { "abierto": true, "apertura": "07:00", "cierre": "19:00" },
+      "dom": { "abierto": true, "apertura": "07:00", "cierre": "18:00" }
+    },
+    "precio_promedio": "MXN 1200-2500 por trajinera",
+    "imagenUrl": "https://picsum.photos/seed/xochimilco-trajinera/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/xochimilco-trajinera/640/480",
+      "https://picsum.photos/seed/canales-xochimilco/640/480",
+      "https://picsum.photos/seed/mariachi-trajinera/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Trajinera Completa 2h (hasta 10)",  "descripcion": "Recorrido 2h + mariachi + comida + foto grupal. Hasta 10 personas.",          "precio": 1800, "categoria": "Paquetes", "popularidad": 860, "disponible": true },
+      { "id": "m2", "nombre": "Trajinera Grande 2h (hasta 20)",    "descripcion": "Trajinera doble para grupos grandes. Mariachi + comida + foto grupal.",        "precio": 2500, "categoria": "Paquetes", "popularidad": 530, "disponible": true },
+      { "id": "m3", "nombre": "Solo Recorrido (sin extras) 1h",    "descripcion": "Una hora de recorrido por los canales sin mariachi ni comida.",               "precio": 600,  "categoria": "Paquetes", "popularidad": 420, "disponible": true },
+      { "id": "m4", "nombre": "Mariachi Extra (hora adicional)",    "descripcion": "Contratación de mariachi por una hora adicional durante el recorrido.",      "precio": 500,  "categoria": "Extras",   "popularidad": 310, "disponible": true },
+      { "id": "m5", "nombre": "Paquete Comida Tradicional",        "descripcion": "Tacos de canasta, guacamole, quesadillas y agua fresca para el grupo.",       "precio": 400,  "categoria": "Comida",   "popularidad": 590, "disponible": true },
+      { "id": "m6", "nombre": "Foto Grupal Impresa",               "descripcion": "Fotografía grupal profesional impresa en 20x30 cm como recuerdo.",            "precio": 180,  "categoria": "Extras",   "popularidad": 460, "disponible": true }
+    ]
   },
   {
+    "id": "tour-gastronomico-mercados",
     "nombre": "Tour Gastronómico Mercados de CDMX",
-    "descripcion": "Recorrido de 4 horas por Mercado de la Merced y Mercado Medellín. Degustación de 8 platillos típicos con guía bilingüe.",
-    "descripcion_en": "4-hour tour through La Merced and Medellín Markets. Tasting of 8 typical dishes with bilingual guide.",
+    "descripcion": "Este recorrido de cuatro horas es considerado por varias publicaciones de viajes el mejor tour gastronómico de México. Empieza en el metro La Merced y recorre los pasillos del mercado más grande del país, donde los guías explican la historia de cada ingrediente y producto. La degustación incluye ocho platillos seleccionados: pozole, tlayuda, mole en molcajete, chiles en nogada en temporada, chapulines con guacamole, gorditas de nata, aguas frescas exóticas y gelatinas artesanales. El recorrido termina en el Mercado de Medellín para el contraste entre los dos mundos.",
+    "descripcion_en": "This four-hour tour is considered by several travel publications the best gastronomic tour in Mexico. It begins at Metro La Merced and winds through the aisles of the country's largest market, where guides explain the history of each ingredient and product. The tasting includes eight selected dishes: pozole, tlayuda, mole in molcajete, chiles en nogada in season, chapulines with guacamole, gorditas de nata, exotic fruit waters and artisan gelatins. The tour ends at Medellín Market for the contrast between both worlds.",
     "categoria": "tours",
     "telefono": "+52 55 5533 1122",
     "whatsapp": "5215555331122",
@@ -296,13 +734,36 @@
     "lat": 19.4235,
     "lng": -99.1220,
     "tags": ["gastronomía", "mercados", "la merced", "degustación", "bilingüe"],
-    "horario": "Miér-Dom 9:30",
-    "precio_promedio": "MXN 550 por persona"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mie": { "abierto": true,  "apertura": "09:00", "cierre": "15:00" },
+      "jue": { "abierto": true,  "apertura": "09:00", "cierre": "15:00" },
+      "vie": { "abierto": true,  "apertura": "09:00", "cierre": "15:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "15:00" },
+      "dom": { "abierto": true,  "apertura": "09:00", "cierre": "14:00" }
+    },
+    "precio_promedio": "MXN 550 por persona",
+    "imagenUrl": "https://picsum.photos/seed/tour-gastronomico-merced/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tour-gastronomico-merced/640/480",
+      "https://picsum.photos/seed/mercado-la-merced/640/480",
+      "https://picsum.photos/seed/degustacion-platillos/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tour Estándar (4h)",          "descripcion": "8 degustaciones + guía bilingüe + visita La Merced y Medellín. Grupo máx. 12.",    "precio": 550,  "categoria": "Tours",       "popularidad": 840, "disponible": true },
+      { "id": "m2", "nombre": "Tour Privado (4h)",           "descripcion": "Mismo recorrido en formato privado para parejas o grupos de hasta 4 personas.",    "precio": 1200, "categoria": "Tours",       "popularidad": 510, "disponible": true },
+      { "id": "m3", "nombre": "Tour Niños (7-12 años)",      "descripcion": "Versión adaptada para familias con niños. Degustaciones amigables y juegos.",      "precio": 280,  "categoria": "Tours",       "popularidad": 370, "disponible": true },
+      { "id": "m4", "nombre": "Degustación de Insectos",     "descripcion": "Add-on: chapulines, escamoles y gusanos de maguey en guacamole de molejete.",      "precio": 150,  "categoria": "Extras",      "popularidad": 630, "disponible": true },
+      { "id": "m5", "nombre": "Maridaje de Mezcales",        "descripcion": "Add-on: 3 mezcales artesanales maridados con botanas del mercado.",                "precio": 200,  "categoria": "Extras",      "popularidad": 490, "disponible": true },
+      { "id": "m6", "nombre": "Libro Recetario del Mercado", "descripcion": "Recetario impreso con 30 recetas de los mercados visitados. Souvenir del tour.",    "precio": 180,  "categoria": "Souvenirs",   "popularidad": 280, "disponible": true }
+    ]
   },
   {
+    "id": "tour-lucha-libre-arena",
     "nombre": "Lucha Libre Arena — Tour + Función",
-    "descripcion": "Entrada a función de Lucha Libre con visita previa al camerino y foto con luchadores. Experiencia única en CDMX.",
-    "descripcion_en": "Lucha Libre show entry with backstage visit and photo with wrestlers. Unique CDMX experience.",
+    "descripcion": "La Arena México es la catedral de la lucha libre y este tour te lleva detrás del telón para ver lo que los aficionados normales nunca ven. Antes de la función oficial, el grupo visita el camerino de los luchadores, conoce las máscaras y vestuarios originales, y tiene oportunidad de fotografiarse con uno de los luchadores de la empresa. Las sillas en primera fila —donde la emoción es máxima— están reservadas para el grupo, y un guía bilingüe explica el origen, los personajes y las reglas de la lucha libre durante toda la noche.",
+    "descripcion_en": "Arena México is the cathedral of lucha libre and this tour takes you behind the curtain to see what regular fans never get to see. Before the official show, the group visits the wrestlers' locker room, sees original masks and costumes, and has the chance to photograph themselves with one of the company's wrestlers. Front-row seats — where the excitement is maximum — are reserved for the group, and a bilingual guide explains the origin, characters and rules of lucha libre throughout the night.",
     "categoria": "tours",
     "telefono": "+52 55 5583 0933",
     "whatsapp": "5215555830933",
@@ -311,13 +772,36 @@
     "lat": 19.4017,
     "lng": -99.1460,
     "tags": ["lucha libre", "arena méxico", "deporte", "espectáculo", "cultura"],
-    "horario": "Vie 20:30, Dom 17:00",
-    "precio_promedio": "MXN 450-900 por persona"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mie": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "jue": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "vie": { "abierto": true,  "apertura": "18:00", "cierre": "23:00" },
+      "sab": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "dom": { "abierto": true,  "apertura": "15:00", "cierre": "20:00" }
+    },
+    "precio_promedio": "MXN 450-900 por persona",
+    "imagenUrl": "https://picsum.photos/seed/lucha-libre-arena/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/lucha-libre-arena/640/480",
+      "https://picsum.photos/seed/mascaras-luchadores/640/480",
+      "https://picsum.photos/seed/arena-mexico-cdmx/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tour + Función (primera fila)",   "descripcion": "Visita al camerino + foto con luchador + asiento en primera fila. Vie o Dom.",  "precio": 900,  "categoria": "Paquetes", "popularidad": 870, "disponible": true },
+      { "id": "m2", "nombre": "Tour + Función (zona general)",   "descripcion": "Visita al camerino + foto con luchador + asiento en zona general.",             "precio": 550,  "categoria": "Paquetes", "popularidad": 720, "disponible": true },
+      { "id": "m3", "nombre": "Solo Función (sin tour)",         "descripcion": "Entrada general a la función sin visita al camerino. Sujeto a disponibilidad.",   "precio": 300,  "categoria": "Entradas", "popularidad": 490, "disponible": true },
+      { "id": "m4", "nombre": "Máscara Oficial de Luchador",     "descripcion": "Máscara oficial firmada por el luchador fotografiado. Edición limitada.",        "precio": 350,  "categoria": "Souvenirs","popularidad": 640, "disponible": true },
+      { "id": "m5", "nombre": "Foto Profesional con Luchador",   "descripcion": "Sesión fotográfica profesional impresa en 20x30 cm. Incluida en paquete.",       "precio": 200,  "categoria": "Extras",   "popularidad": 560, "disponible": true },
+      { "id": "m6", "nombre": "Tour Infantil Lucha Libre",       "descripcion": "Versión familiar para niños. Historia, máscaras y movimientos seguros.",          "precio": 250,  "categoria": "Paquetes", "popularidad": 380, "disponible": true }
+    ]
   },
   {
+    "id": "tour-leyendas-nocturno",
     "nombre": "Recorrido Nocturno Leyendas del Centro",
-    "descripcion": "Tour de leyendas y misterios por el Centro Histórico en la noche. 2 horas a pie, grupos máx. 15 personas.",
-    "descripcion_en": "Legends and mysteries tour through Historic Downtown at night. 2 hours on foot, max 15 people.",
+    "descripcion": "El Centro Histórico de noche es otro mundo: las calles coloniales se llenan de sombras y ecos que el guía Rafael Sandoval —historiador con doctorado en estudios coloniales— transforma en relatos documentados de aparecidos, crímenes sin resolver del siglo XIX, torturas inquisitoriales y amores imposibles de la élite porfiriana. El recorrido de dos horas pasa por la Catedral Metropolitana, el Callejón del Amor, las ruinas del Templo Mayor y el edificio de la antigua Inquisición. Los grupos son de máximo 15 personas para garantizar una experiencia íntima.",
+    "descripcion_en": "The Historic Downtown at night is another world: the colonial streets fill with shadows and echoes that guide Rafael Sandoval — a historian with a doctorate in colonial studies — transforms into documented stories of apparitions, unsolved 19th-century crimes, inquisitorial torture and impossible loves of the Porfirian elite. The two-hour tour passes through the Metropolitan Cathedral, Callejón del Amor, the ruins of Templo Mayor and the old Inquisition building. Groups are maximum 15 people to guarantee an intimate experience.",
     "categoria": "tours",
     "telefono": "+52 55 5521 6677",
     "whatsapp": "5215555216677",
@@ -326,13 +810,36 @@
     "lat": 19.4352,
     "lng": -99.1330,
     "tags": ["nocturno", "leyendas", "misterios", "catedral", "historia"],
-    "horario": "Jue-Sáb 20:00",
-    "precio_promedio": "MXN 280 por persona"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mie": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "jue": { "abierto": true,  "apertura": "19:30", "cierre": "22:30" },
+      "vie": { "abierto": true,  "apertura": "19:30", "cierre": "22:30" },
+      "sab": { "abierto": true,  "apertura": "19:30", "cierre": "22:30" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 280 por persona",
+    "imagenUrl": "https://picsum.photos/seed/tour-nocturno-centro/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tour-nocturno-centro/640/480",
+      "https://picsum.photos/seed/catedral-noche/640/480",
+      "https://picsum.photos/seed/leyendas-mexico/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tour Leyendas (2h)",          "descripcion": "Recorrido guiado nocturno + 7 paradas históricas + relatos documentados. Máx 15.",  "precio": 280,  "categoria": "Tours",       "popularidad": 810, "disponible": true },
+      { "id": "m2", "nombre": "Tour Privado (hasta 8)",      "descripcion": "Mismo recorrido en grupo privado. Horario flexible con reserva anticipada.",         "precio": 1500, "categoria": "Tours",       "popularidad": 420, "disponible": true },
+      { "id": "m3", "nombre": "Tour + Cena en Cantina",      "descripcion": "El tour termina con cena en cantina histórica y copa de mezcal incluida.",           "precio": 480,  "categoria": "Paquetes",    "popularidad": 650, "disponible": true },
+      { "id": "m4", "nombre": "Tour Halloween (edición especial)", "descripcion": "Versión extendida con actores, música y escenas recreadas. Solo octubre.",      "precio": 450,  "categoria": "Especiales",  "popularidad": 770, "disponible": false },
+      { "id": "m5", "nombre": "Libro Leyendas del Centro",   "descripcion": "Libro ilustrado con las 30 leyendas del recorrido. Firmado por el guía.",            "precio": 220,  "categoria": "Souvenirs",   "popularidad": 340, "disponible": true },
+      { "id": "m6", "nombre": "Fotografía Artística del Tour","descripcion": "Set de 10 fotos artísticas del recorrido en blanco y negro. Descarga digital.",     "precio": 150,  "categoria": "Souvenirs",   "popularidad": 290, "disponible": true }
+    ]
   },
   {
+    "id": "tour-frida-trotsky",
     "nombre": "Tour Frida Kahlo y Trotsky — Arte y Política",
-    "descripcion": "Visita guiada a Casa Azul (Museo Frida Kahlo) y Museo León Trotsky en Coyoacán. Guía historiador. Inglés disponible.",
-    "descripcion_en": "Guided visit to Casa Azul (Frida Kahlo Museum) and León Trotsky Museum in Coyoacán. Historian guide. English available.",
+    "descripcion": "Este tour temático de tres horas conecta dos de los personajes históricos más fascinantes que vivieron en Coyoacán: Frida Kahlo, la pintora más conocida de México, y León Trotsky, el revolucionario ruso que vivió sus últimos años exiliado en la ciudad. El guía historiador —egresado de la UNAM con especialidad en arte del siglo XX— contextualiza la época, la relación entre ambos personajes y el ambiente político e intelectual de los años 30 y 40. El precio no incluye las entradas a los museos, que se adquieren directamente, pero el guía gestiona las filas y las visitas de forma eficiente.",
+    "descripcion_en": "This thematic three-hour tour connects two of the most fascinating historical figures who lived in Coyoacán: Frida Kahlo, Mexico's most famous painter, and León Trotsky, the Russian revolutionary who spent his last years in exile in the city. The historian guide — a UNAM graduate specializing in 20th-century art — contextualizes the era, the relationship between both figures and the political and intellectual atmosphere of the 1930s and 40s. The price does not include museum entries, purchased directly, but the guide manages queues and visits efficiently.",
     "categoria": "tours",
     "telefono": "+52 55 5658 5544",
     "whatsapp": "5215556585544",
@@ -341,13 +848,36 @@
     "lat": 19.3487,
     "lng": -99.1615,
     "tags": ["frida kahlo", "trotsky", "coyoacán", "arte", "historia", "inglés"],
-    "horario": "Mar-Dom 10:00",
-    "precio_promedio": "MXN 600 por persona (sin entrada a museos)"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "09:30", "cierre": "15:00" },
+      "mie": { "abierto": true,  "apertura": "09:30", "cierre": "15:00" },
+      "jue": { "abierto": true,  "apertura": "09:30", "cierre": "15:00" },
+      "vie": { "abierto": true,  "apertura": "09:30", "cierre": "15:00" },
+      "sab": { "abierto": true,  "apertura": "09:30", "cierre": "15:00" },
+      "dom": { "abierto": true,  "apertura": "09:30", "cierre": "14:00" }
+    },
+    "precio_promedio": "MXN 600 por persona (sin entrada a museos)",
+    "imagenUrl": "https://picsum.photos/seed/frida-trotsky-coyoacan/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/frida-trotsky-coyoacan/640/480",
+      "https://picsum.photos/seed/casa-azul-coyoacan/640/480",
+      "https://picsum.photos/seed/museo-trotsky/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tour Estándar (3h)",            "descripcion": "Casa Azul + Museo Trotsky + contexto histórico. Guía español/inglés. Máx. 10.",    "precio": 600,  "categoria": "Tours",       "popularidad": 780, "disponible": true },
+      { "id": "m2", "nombre": "Tour Solo Frida Kahlo (2h)",    "descripcion": "Visita enfocada en la vida y obra de Frida. Contexto artístico profundo.",          "precio": 400,  "categoria": "Tours",       "popularidad": 650, "disponible": true },
+      { "id": "m3", "nombre": "Tour Privado Parejas",          "descripcion": "Tour romántico para 2 personas con parada en café histórico de Coyoacán.",          "precio": 1000, "categoria": "Paquetes",    "popularidad": 490, "disponible": true },
+      { "id": "m4", "nombre": "Entrada Casa Azul (gestión)",   "descripcion": "El guía adquiere y gestiona la entrada al museo Frida Kahlo por ti.",              "precio": 270,  "categoria": "Entradas",    "popularidad": 560, "disponible": true },
+      { "id": "m5", "nombre": "Entrada Museo Trotsky",         "descripcion": "El guía adquiere y gestiona la entrada al museo León Trotsky por ti.",             "precio": 80,   "categoria": "Entradas",    "popularidad": 430, "disponible": true },
+      { "id": "m6", "nombre": "Libro Arte de Frida Kahlo",     "descripcion": "Catálogo ilustrado de la obra completa de Frida. Edición bilingüe.",               "precio": 350,  "categoria": "Souvenirs",   "popularidad": 320, "disponible": true }
+    ]
   },
   {
+    "id": "bicis-scooters-chapultepec",
     "nombre": "Bicicletas y Scooters Chapultepec",
-    "descripcion": "Renta de bicicletas de montaña, eléctricas y scooters eléctricos. Por hora o día completo. Casco y seguro incluidos.",
-    "descripcion_en": "Mountain bike, e-bike and e-scooter rental. By the hour or full day. Helmet and insurance included.",
+    "descripcion": "Ubicados en la entrada principal del Bosque de Chapultepec, el parque urbano más grande de América Latina, ofrecen la forma más divertida y económica de recorrer las más de 700 hectáreas de bosque, lagos y museos. La flota incluye bicicletas de montaña de aluminio de 21 velocidades, bicicletas eléctricas con asistencia al pedaleo hasta 25 km/h y scooters eléctricos silenciosos. El precio incluye casco, candado, mapa del bosque y seguro básico. Tienen personal de mantenimiento en el bosque para asistir en caso de algún problema técnico.",
+    "descripcion_en": "Located at the main entrance of Bosque de Chapultepec, the largest urban park in Latin America, they offer the most fun and economical way to explore over 700 hectares of forest, lakes and museums. The fleet includes 21-speed aluminum mountain bikes, electric bikes with pedal assist up to 25 km/h and silent electric scooters. The price includes helmet, lock, forest map and basic insurance. They have maintenance staff in the forest to assist with any technical issues.",
     "categoria": "transporte",
     "telefono": "+52 55 5286 4455",
     "whatsapp": "5215552864455",
@@ -356,13 +886,36 @@
     "lat": 19.4239,
     "lng": -99.1918,
     "tags": ["bicicleta", "scooter", "eléctrico", "chapultepec", "renta"],
-    "horario": "Lun-Dom 7:00-20:00",
-    "precio_promedio": "MXN 80-200 por hora"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "07:00", "cierre": "20:00" },
+      "mar": { "abierto": true, "apertura": "07:00", "cierre": "20:00" },
+      "mie": { "abierto": true, "apertura": "07:00", "cierre": "20:00" },
+      "jue": { "abierto": true, "apertura": "07:00", "cierre": "20:00" },
+      "vie": { "abierto": true, "apertura": "07:00", "cierre": "20:00" },
+      "sab": { "abierto": true, "apertura": "07:00", "cierre": "20:00" },
+      "dom": { "abierto": true, "apertura": "07:00", "cierre": "20:00" }
+    },
+    "precio_promedio": "MXN 80-200 por hora",
+    "imagenUrl": "https://picsum.photos/seed/bicicletas-chapultepec/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/bicicletas-chapultepec/640/480",
+      "https://picsum.photos/seed/bosque-chapultepec/640/480",
+      "https://picsum.photos/seed/scooter-electrico/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Bicicleta de Montaña (1 hora)",  "descripcion": "Bici de 21 velocidades con casco, candado y mapa. Por hora.",                    "precio": 80,   "categoria": "Bicicletas", "popularidad": 820, "disponible": true },
+      { "id": "m2", "nombre": "Bicicleta de Montaña (día)",     "descripcion": "Bici de 21 velocidades con casco, candado y mapa. Día completo (7-20h).",         "precio": 350,  "categoria": "Bicicletas", "popularidad": 640, "disponible": true },
+      { "id": "m3", "nombre": "Bicicleta Eléctrica (1 hora)",   "descripcion": "E-bike con asistencia eléctrica hasta 25 km/h. Casco y seguro incluidos.",        "precio": 150,  "categoria": "E-Bikes",    "popularidad": 710, "disponible": true },
+      { "id": "m4", "nombre": "Bicicleta Eléctrica (día)",      "descripcion": "E-bike día completo. Cargadores disponibles en el local.",                         "precio": 550,  "categoria": "E-Bikes",    "popularidad": 530, "disponible": true },
+      { "id": "m5", "nombre": "Scooter Eléctrico (1 hora)",     "descripcion": "Scooter silencioso hasta 20 km/h. Requiere licencia de manejo. Casco incluido.",   "precio": 200,  "categoria": "Scooters",   "popularidad": 480, "disponible": true },
+      { "id": "m6", "nombre": "Seguro Premium",                 "descripcion": "Cobertura total por daños o robo durante la renta. Recomendado para turistas.",    "precio": 100,  "categoria": "Extras",     "popularidad": 290, "disponible": true }
+    ]
   },
   {
+    "id": "traslados-chava-transportes",
     "nombre": "Traslados Aeropuerto CDMX — Chava Transportes",
-    "descripcion": "Traslados seguros del AICM y AIFA a cualquier colonia de CDMX. Vehículos certificados. Reserva por WhatsApp 24/7.",
-    "descripcion_en": "Safe transfers from AICM and AIFA to any CDMX neighborhood. Certified vehicles. Book via WhatsApp 24/7.",
+    "descripcion": "Chava Transportes opera desde 2008 con una flota de 12 vehículos certificados ante la SCT que cubren los dos aeropuertos de la Ciudad de México: el AICM (Terminal 1 y 2) y el AIFA en Santa Lucía. Los conductores hablan español e inglés básico y cuentan con aplicación de seguimiento en tiempo real para los pasajeros. El precio es fijo sin importar el tráfico, y se acepta pago en efectivo, tarjeta o transferencia. Las reservas se confirman por WhatsApp con hora exacta de llegada, y el conductor espera hasta 45 minutos si el vuelo se retrasa.",
+    "descripcion_en": "Chava Transportes has operated since 2008 with a fleet of 12 SCT-certified vehicles covering Mexico City's two airports: AICM (Terminals 1 and 2) and AIFA in Santa Lucía. Drivers speak Spanish and basic English, and have a real-time tracking app for passengers. The price is fixed regardless of traffic, and payment is accepted in cash, card or transfer. Reservations are confirmed via WhatsApp with exact arrival time, and the driver waits up to 45 minutes if the flight is delayed.",
     "categoria": "transporte",
     "telefono": "+52 55 5600 7788",
     "whatsapp": "5215556007788",
@@ -371,13 +924,36 @@
     "lat": 19.4260,
     "lng": -99.1050,
     "tags": ["aeropuerto", "traslado", "AICM", "AIFA", "seguro", "24/7"],
-    "horario": "24 horas",
-    "precio_promedio": "MXN 350-600 por viaje"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mar": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "jue": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "vie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "sab": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "dom": { "abierto": true, "apertura": "00:00", "cierre": "23:59" }
+    },
+    "precio_promedio": "MXN 350-600 por viaje",
+    "imagenUrl": "https://picsum.photos/seed/traslado-aeropuerto-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/traslado-aeropuerto-cdmx/640/480",
+      "https://picsum.photos/seed/aicm-terminal/640/480",
+      "https://picsum.photos/seed/sedan-ejecutivo/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Sedán AICM → Centro/Roma/Condesa", "descripcion": "Sedán hasta 3 pasajeros. AICM T1 o T2 a las colonias centrales.",             "precio": 380,  "categoria": "Traslados", "popularidad": 880, "disponible": true },
+      { "id": "m2", "nombre": "SUV AICM → Cualquier colonia",      "descripcion": "SUV hasta 6 pasajeros con equipaje. Cobertura a toda la CDMX.",              "precio": 500,  "categoria": "Traslados", "popularidad": 720, "disponible": true },
+      { "id": "m3", "nombre": "Traslado AIFA (Santa Lucía)",       "descripcion": "Sedán desde/hacia el AIFA. Tarifa fija sin importar tráfico.",               "precio": 600,  "categoria": "Traslados", "popularidad": 540, "disponible": true },
+      { "id": "m4", "nombre": "Traslado CDMX → Puebla/Toluca",    "descripcion": "Traslado interurbano. Precio por vehículo, hasta 4 pasajeros.",               "precio": 1200, "categoria": "Foráneo",   "popularidad": 310, "disponible": true },
+      { "id": "m5", "nombre": "Servicio Ejecutivo (premium)",       "descripcion": "Vehículo de lujo con agua, cargadores y WiFi. Pago por tarjeta.",            "precio": 750,  "categoria": "Premium",   "popularidad": 390, "disponible": true },
+      { "id": "m6", "nombre": "Reserva Anticipada (descuento)",     "descripcion": "10% de descuento reservando con 24h de anticipación por WhatsApp.",          "precio": 342,  "categoria": "Traslados", "popularidad": 450, "disponible": true }
+    ]
   },
   {
+    "id": "mototaxi-tepito-centro",
     "nombre": "Mototaxi Express Tepito-Centro",
-    "descripcion": "Mototaxis seguros entre Tepito, La Merced y el Centro. Conocedores de las calles. Económico y rápido.",
-    "descripcion_en": "Safe mototaxis between Tepito, La Merced and Downtown. Street experts. Economical and fast.",
+    "descripcion": "Los mototaxis de Don Marcos Villanueva conocen cada callejón, atajo y acceso de Tepito, La Merced y el Centro Histórico como nadie más. En horas pico, mientras los autos avanzan centímetros, los mototaxis esquivan el tráfico y llegan al destino en una fracción del tiempo. La base opera con 8 conductores certificados con licencia tipo A y cascos proporcionados para el pasajero. Además del servicio de traslado, ofrecen entrega rápida de documentos y paquetes pequeños dentro de la zona de cobertura.",
+    "descripcion_en": "Don Marcos Villanueva's mototaxis know every alley, shortcut and access route in Tepito, La Merced and the Historic Downtown like no one else. During peak hours, while cars inch forward, the mototaxis weave through traffic and arrive at the destination in a fraction of the time. The base operates with 8 licensed drivers with type-A licenses and helmets provided for the passenger. Besides transportation, they offer fast delivery of documents and small packages within the coverage area.",
     "categoria": "transporte",
     "telefono": "+52 55 5522 1133",
     "whatsapp": "5215555221133",
@@ -386,13 +962,36 @@
     "lat": 19.4485,
     "lng": -99.1265,
     "tags": ["mototaxi", "tepito", "centro", "económico", "rápido"],
-    "horario": "Lun-Dom 6:00-22:00",
-    "precio_promedio": "MXN 20-50 por viaje"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "06:00", "cierre": "22:00" },
+      "mar": { "abierto": true, "apertura": "06:00", "cierre": "22:00" },
+      "mie": { "abierto": true, "apertura": "06:00", "cierre": "22:00" },
+      "jue": { "abierto": true, "apertura": "06:00", "cierre": "22:00" },
+      "vie": { "abierto": true, "apertura": "06:00", "cierre": "23:00" },
+      "sab": { "abierto": true, "apertura": "06:00", "cierre": "23:00" },
+      "dom": { "abierto": true, "apertura": "08:00", "cierre": "20:00" }
+    },
+    "precio_promedio": "MXN 20-50 por viaje",
+    "imagenUrl": "https://picsum.photos/seed/mototaxi-tepito/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/mototaxi-tepito/640/480",
+      "https://picsum.photos/seed/calles-tepito/640/480",
+      "https://picsum.photos/seed/mototaxi-cdmx/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Viaje Zona 1 (0-3 km)",        "descripcion": "Traslado dentro de Tepito, La Merced o el Centro. Tiempo estimado 5-10 min.",    "precio": 25,  "categoria": "Traslados",  "popularidad": 840, "disponible": true },
+      { "id": "m2", "nombre": "Viaje Zona 2 (3-6 km)",        "descripcion": "Traslado entre zonas o a colonias aledañas. Tiempo estimado 10-20 min.",         "precio": 40,  "categoria": "Traslados",  "popularidad": 620, "disponible": true },
+      { "id": "m3", "nombre": "Mensajería Exprés (zona 1)",   "descripcion": "Entrega de documentos o paquete pequeño dentro de la zona 1. Mismo día.",        "precio": 30,  "categoria": "Mensajería", "popularidad": 480, "disponible": true },
+      { "id": "m4", "nombre": "Mensajería Exprés (zona 2)",   "descripcion": "Entrega de documentos o paquete pequeño en zona 2. Mismo día.",                   "precio": 50,  "categoria": "Mensajería", "popularidad": 360, "disponible": true },
+      { "id": "m5", "nombre": "Servicio por Hora",             "descripcion": "Mototaxi disponible exclusivamente para ti durante una hora.",                    "precio": 120, "categoria": "Especiales", "popularidad": 250, "disponible": true },
+      { "id": "m6", "nombre": "Viaje Nocturno (+22:00)",       "descripcion": "Tarifa nocturna para viajes después de las 22:00. Disponibilidad limitada.",     "precio": 60,  "categoria": "Especiales", "popularidad": 190, "disponible": true }
+    ]
   },
   {
+    "id": "van-turistica-cdmx",
     "nombre": "Van Turística CDMX — Explora en Grupo",
-    "descripcion": "Van de 8 pasajeros con conductor bilingüe para grupos. Ruta personalizable por CDMX. Disponible para el día completo.",
-    "descripcion_en": "8-passenger van with bilingual driver for groups. Customizable CDMX route. Available for full day.",
+    "descripcion": "La Van Turística CDMX opera con conductores que tienen más de 10 años de experiencia en el sector turístico y hablan español e inglés con fluidez. Sus Sprinter de 8 pasajeros están equipadas con WiFi, pantallas individuales, cargadores USB-C y asientos reclinables de cuero para garantizar el mayor confort en los traslados entre los puntos de interés. El servicio es completamente a la medida: el cliente elige el itinerario, los horarios y los puntos de parada. Perfecta para grupos de familias con niños, viajeros de negocios o grupos de amigos que no quieren depender del transporte público.",
+    "descripcion_en": "Van Turística CDMX operates with drivers who have over 10 years of experience in the tourism sector and speak Spanish and English fluently. Their 8-passenger Sprinters are equipped with WiFi, individual screens, USB-C chargers and reclining leather seats to ensure maximum comfort between points of interest. The service is completely customized: the client chooses the itinerary, schedules and stops. Perfect for families with children, business travelers or groups of friends who don't want to depend on public transportation.",
     "categoria": "transporte",
     "telefono": "+52 55 5243 9900",
     "whatsapp": "5215552439900",
@@ -401,13 +1000,36 @@
     "lat": 19.4192,
     "lng": -99.1638,
     "tags": ["van", "grupo", "bilingüe", "privado", "roma", "día completo"],
-    "horario": "Lun-Dom 7:00-21:00",
-    "precio_promedio": "MXN 2500-4000 día completo"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "07:00", "cierre": "21:00" },
+      "mar": { "abierto": true, "apertura": "07:00", "cierre": "21:00" },
+      "mie": { "abierto": true, "apertura": "07:00", "cierre": "21:00" },
+      "jue": { "abierto": true, "apertura": "07:00", "cierre": "21:00" },
+      "vie": { "abierto": true, "apertura": "07:00", "cierre": "21:00" },
+      "sab": { "abierto": true, "apertura": "07:00", "cierre": "21:00" },
+      "dom": { "abierto": true, "apertura": "08:00", "cierre": "20:00" }
+    },
+    "precio_promedio": "MXN 2500-4000 día completo",
+    "imagenUrl": "https://picsum.photos/seed/van-turistica-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/van-turistica-cdmx/640/480",
+      "https://picsum.photos/seed/sprinter-turismo/640/480",
+      "https://picsum.photos/seed/grupo-turistas-cdmx/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Medio Día (4 horas)",          "descripcion": "Van + conductor bilingüe por 4 horas. Itinerario personalizable. Hasta 8 pax.",   "precio": 1800, "categoria": "Paquetes", "popularidad": 680, "disponible": true },
+      { "id": "m2", "nombre": "Día Completo (8 horas)",       "descripcion": "Van + conductor por 8 horas. WiFi + agua + cargadores. Hasta 8 pasajeros.",        "precio": 3200, "categoria": "Paquetes", "popularidad": 750, "disponible": true },
+      { "id": "m3", "nombre": "Ruta FIFA 2026 (especial)",    "descripcion": "Tour por estadios, fan zones y puntos de interés del Mundial. 6 horas.",           "precio": 2800, "categoria": "Especiales","popularidad": 910, "disponible": true },
+      { "id": "m4", "nombre": "Transfer Hotel-Estadio (ida)", "descripcion": "Traslado puntual de hotel a estadio Azteca o fan zone. Hasta 8 personas.",         "precio": 800,  "categoria": "Traslados","popularidad": 540, "disponible": true },
+      { "id": "m5", "nombre": "Ruta Puebla o Toluca",         "descripcion": "Excursión de día completo a Puebla, Teotihuacán o Valle de Bravo.",                "precio": 4500, "categoria": "Foráneos", "popularidad": 420, "disponible": true },
+      { "id": "m6", "nombre": "Servicio Nocturno",            "descripcion": "Van disponible de 21:00 a 02:00. Ideal para traslados a zonas de antros.",          "precio": 2000, "categoria": "Especiales","popularidad": 350, "disponible": true }
+    ]
   },
   {
+    "id": "farmacia-san-angel",
     "nombre": "Farmacia del Barrio San Ángel",
-    "descripcion": "Farmacia con médico a bajo costo. Medicamentos genéricos y de marca. Consulta médica desde MXN 80. Atiende en inglés.",
-    "descripcion_en": "Pharmacy with low-cost doctor. Generic and brand medicines. Medical consultation from MXN 80. English spoken.",
+    "descripcion": "La Farmacia del Barrio lleva 18 años siendo el punto de atención médica más accesible del sur de la ciudad, con médico general presente de lunes a sábado de 8 a 20 horas. El médico recibe sin cita previa y la consulta cuesta solo MXN 80, incluyendo receta oficial. El stock de medicamentos incluye más de 2,000 referencias genéricas intercambiables y las marcas comerciales más solicitadas. El personal atiende en inglés y el médico tiene diploma de lengua extranjera, lo que la convierte en el primer punto de atención para turistas que se sienten mal durante su visita.",
+    "descripcion_en": "Farmacia del Barrio has been the most accessible medical care point in the city's south for 18 years, with a general practitioner present Monday through Saturday from 8am to 8pm. The doctor sees patients without prior appointment and the consultation costs only MXN 80, including the official prescription. The medicine stock includes over 2,000 interchangeable generic references and the most requested commercial brands. Staff attend in English and the doctor holds a foreign language diploma, making it the first point of care for tourists who feel ill during their visit.",
     "categoria": "otro",
     "telefono": "+52 55 5616 3344",
     "whatsapp": "5215556163344",
@@ -416,13 +1038,36 @@
     "lat": 19.3502,
     "lng": -99.1928,
     "tags": ["farmacia", "médico", "consulta", "genéricos", "inglés"],
-    "horario": "Lun-Dom 7:00-22:00",
-    "precio_promedio": "MXN 80-500"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "07:00", "cierre": "22:00" },
+      "mar": { "abierto": true, "apertura": "07:00", "cierre": "22:00" },
+      "mie": { "abierto": true, "apertura": "07:00", "cierre": "22:00" },
+      "jue": { "abierto": true, "apertura": "07:00", "cierre": "22:00" },
+      "vie": { "abierto": true, "apertura": "07:00", "cierre": "22:00" },
+      "sab": { "abierto": true, "apertura": "07:00", "cierre": "22:00" },
+      "dom": { "abierto": true, "apertura": "08:00", "cierre": "20:00" }
+    },
+    "precio_promedio": "MXN 80-500",
+    "imagenUrl": "https://picsum.photos/seed/farmacia-san-angel/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/farmacia-san-angel/640/480",
+      "https://picsum.photos/seed/consulta-medica/640/480",
+      "https://picsum.photos/seed/medicamentos-genericos/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Consulta Médica General",   "descripcion": "Consulta con médico certificado sin cita. Incluye receta oficial. Lun-Sáb 8-20h.",  "precio": 80,   "categoria": "Servicios",     "popularidad": 780, "disponible": true },
+      { "id": "m2", "nombre": "Medicamentos Genéricos",    "descripcion": "Más de 2,000 referencias genéricas. Precio hasta 70% menor que marca comercial.",   "precio": 0,    "categoria": "Medicamentos",  "popularidad": 860, "disponible": true },
+      { "id": "m3", "nombre": "Medicamentos de Marca",     "descripcion": "Stock completo de marcas comerciales más solicitadas. Precio de lista.",            "precio": 0,    "categoria": "Medicamentos",  "popularidad": 640, "disponible": true },
+      { "id": "m4", "nombre": "Botiquín Turista",          "descripcion": "Kit de primeros auxilios: analgésico, antiácido, antidiarreico, curita y desinfectante.", "precio": 150, "categoria": "Kits",         "popularidad": 540, "disponible": true },
+      { "id": "m5", "nombre": "Prueba de Antígenos COVID", "descripcion": "Prueba rápida de antígenos con resultado en 15 minutos. Sin cita.",                   "precio": 180,  "categoria": "Diagnóstico",   "popularidad": 290, "disponible": true },
+      { "id": "m6", "nombre": "Medición de Presión",       "descripcion": "Medición de presión arterial y saturación de oxígeno. Servicio gratuito.",           "precio": 0,    "categoria": "Diagnóstico",   "popularidad": 490, "disponible": true }
+    ]
   },
   {
+    "id": "lavanderia-el-centavo",
     "nombre": "Lavandería Rápida El Centavo",
-    "descripcion": "Lavado y secado en 2 horas. Self-service o con servicio completo. Planchado incluido en servicio completo.",
-    "descripcion_en": "Wash and dry in 2 hours. Self-service or full service. Ironing included in full service.",
+    "descripcion": "El Centavo es la lavandería de referencia en la Roma Sur gracias a su servicio exprés de 2 horas que permite a los viajeros dejar su ropa al llegar al vecindario y recogerla lista antes de la cena. El servicio completo incluye lavado en máquinas de alta eficiencia con detergente hipoalergénico, secado en caliente y planchado profesional de prendas delicadas. El servicio self-service tiene 8 máquinas disponibles y venden el detergente en el lugar. Hay estaciones de trabajo con WiFi y cargadores para que los clientes puedan trabajar mientras esperan.",
+    "descripcion_en": "El Centavo is the go-to laundry in Roma Sur thanks to its 2-hour express service that lets travelers drop off their clothes upon arriving in the neighborhood and pick them up ready before dinner. The full service includes washing in high-efficiency machines with hypoallergenic detergent, heat drying and professional ironing of delicate garments. The self-service has 8 available machines and detergent is sold on site. There are workstations with WiFi and chargers so customers can work while they wait.",
     "categoria": "otro",
     "telefono": "+52 55 5553 7700",
     "whatsapp": "5215555537700",
@@ -431,13 +1076,36 @@
     "lat": 19.4076,
     "lng": -99.1615,
     "tags": ["lavandería", "self-service", "planchado", "rápido", "roma"],
-    "horario": "Lun-Sáb 8:00-20:00",
-    "precio_promedio": "MXN 80-150 por kilo"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "mar": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "mie": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "jue": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "vie": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "sab": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 80-150 por kilo",
+    "imagenUrl": "https://picsum.photos/seed/lavanderia-roma/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/lavanderia-roma/640/480",
+      "https://picsum.photos/seed/lavado-ropa/640/480",
+      "https://picsum.photos/seed/planchado-ropa/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Servicio Completo (por kilo)",  "descripcion": "Lavado + secado + planchado. Entrega en 2 horas. Mínimo 2 kg.",                  "precio": 150,  "categoria": "Servicio Completo", "popularidad": 780, "disponible": true },
+      { "id": "m2", "nombre": "Lavado + Secado (por kilo)",    "descripcion": "Sin planchado. Entrega en 1.5 horas. Ideal para ropa casual.",                   "precio": 100,  "categoria": "Básico",            "popularidad": 640, "disponible": true },
+      { "id": "m3", "nombre": "Self-Service (por carga)",      "descripcion": "Máquina automática + secadora. Detergente incluido. Tiempo: 45 min.",             "precio": 80,   "categoria": "Self-Service",      "popularidad": 520, "disponible": true },
+      { "id": "m4", "nombre": "Planchado de Traje",            "descripcion": "Planchado profesional de traje completo (saco + pantalón). Entrega: 3 horas.",    "precio": 180,  "categoria": "Especiales",        "popularidad": 350, "disponible": true },
+      { "id": "m5", "nombre": "Lavado de Ropa Delicada",       "descripcion": "Prendas de seda, lana o sintéticos con ciclo especial hipoalergénico.",           "precio": 200,  "categoria": "Especiales",        "popularidad": 280, "disponible": true },
+      { "id": "m6", "nombre": "Recolección a Domicilio",       "descripcion": "Recolección y entrega a domicilio en radio de 1 km. Cargo adicional.",            "precio": 60,   "categoria": "Delivery",          "popularidad": 410, "disponible": true }
+    ]
   },
   {
+    "id": "estudio-memorias-mexico",
     "nombre": "Estudio Fotográfico Memorias de México",
-    "descripcion": "Fotos con trajes típicos mexicanos. Sets de Frida Kahlo, Charro y Adelita. Impresión en el momento. Muy popular entre turistas.",
-    "descripcion_en": "Photos in traditional Mexican costumes. Frida Kahlo, Charro and Adelita sets. Instant printing. Very popular with tourists.",
+    "descripcion": "Memorias de México es el estudio fotográfico más popular del Centro Histórico para turistas que quieren llevarse un recuerdo único de su visita. Cuentan con cuatro sets temáticos permanentes: el de Frida Kahlo con flores, moños y la paleta de colores de La Casa Azul; el de Charro con traje auténtico de Jalisco prestado, silla de montar y sarape de Saltillo; el de Adelita revolucionaria con vestido de algodón y rifle de época; y el de Catrinas con maquillaje de Día de Muertos aplicado en el momento por una maquillista profesional.",
+    "descripcion_en": "Memorias de México is the most popular photo studio in the Historic Downtown for tourists who want to take home a unique memento of their visit. They have four permanent themed sets: the Frida Kahlo set with flowers, ribbons and the color palette of La Casa Azul; the Charro set with an authentic borrowed Jalisco suit, saddle and Saltillo sarape; the Adelita revolutionary set with cotton dress and period rifle; and the Catrina set with Día de Muertos makeup applied on the spot by a professional makeup artist.",
     "categoria": "otro",
     "telefono": "+52 55 5521 5566",
     "whatsapp": "5215555215566",
@@ -446,13 +1114,36 @@
     "lat": 19.4332,
     "lng": -99.1359,
     "tags": ["fotos", "traje típico", "frida", "charro", "turistas", "recuerdo"],
-    "horario": "Lun-Dom 10:00-20:00",
-    "precio_promedio": "MXN 150-400"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "10:00", "cierre": "20:00" },
+      "mar": { "abierto": true, "apertura": "10:00", "cierre": "20:00" },
+      "mie": { "abierto": true, "apertura": "10:00", "cierre": "20:00" },
+      "jue": { "abierto": true, "apertura": "10:00", "cierre": "20:00" },
+      "vie": { "abierto": true, "apertura": "10:00", "cierre": "20:00" },
+      "sab": { "abierto": true, "apertura": "10:00", "cierre": "20:00" },
+      "dom": { "abierto": true, "apertura": "10:00", "cierre": "19:00" }
+    },
+    "precio_promedio": "MXN 150-400",
+    "imagenUrl": "https://picsum.photos/seed/estudio-fotos-mexico/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/estudio-fotos-mexico/640/480",
+      "https://picsum.photos/seed/sesion-frida-kahlo/640/480",
+      "https://picsum.photos/seed/catrina-makeup/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Sesión Frida Kahlo",         "descripcion": "Vestuario, flores y set Kahlo. 10 fotos digitales + 2 impresas 15x20 cm.",          "precio": 250,  "categoria": "Sesiones",    "popularidad": 890, "disponible": true },
+      { "id": "m2", "nombre": "Sesión Charro",              "descripcion": "Traje de charro auténtico + silla + sarape. 10 fotos + 2 impresas.",                  "precio": 280,  "categoria": "Sesiones",    "popularidad": 720, "disponible": true },
+      { "id": "m3", "nombre": "Sesión Catrina (con makeup)", "descripcion": "Maquillaje profesional Día de Muertos + set catrina. 15 fotos + 2 impresas.",       "precio": 400,  "categoria": "Sesiones",    "popularidad": 810, "disponible": true },
+      { "id": "m4", "nombre": "Sesión Adelita",             "descripcion": "Vestido revolucionario + rifle de época + set sepia. 10 fotos + 2 impresas.",          "precio": 230,  "categoria": "Sesiones",    "popularidad": 550, "disponible": true },
+      { "id": "m5", "nombre": "Sesión Familiar (4+ pax)",   "descripcion": "Toda la familia en el mismo set. 20 fotos digitales + 4 impresas 20x25 cm.",          "precio": 600,  "categoria": "Sesiones",    "popularidad": 480, "disponible": true },
+      { "id": "m6", "nombre": "Album Digital (USB)",        "descripcion": "Todas las fotos de la sesión en alta resolución en memoria USB.",                     "precio": 150,  "categoria": "Extras",      "popularidad": 390, "disponible": true }
+    ]
   },
   {
+    "id": "cambio-divisas-garibaldi",
     "nombre": "Cambio de Divisas Plaza Garibaldi",
-    "descripcion": "Casa de cambio autorizada SAT. Mejor tipo de cambio de la zona. Dólares, euros, libras y yenes. Sin comisión.",
-    "descripcion_en": "SAT-authorized currency exchange. Best exchange rate in the area. Dollars, euros, pounds and yen. No commission.",
+    "descripcion": "Casa de cambio autorizada y supervisada por el SAT y la CNBV, operando en el emblemático perímetro de la Plaza Garibaldi desde 2005. Ofrecen el mejor tipo de cambio de la zona para más de 20 divisas diferentes, con cotizaciones actualizadas en pantalla digital cada 15 minutos durante el horario de operación. No cobran comisión ni cuota de servicio en ninguna transacción. Además del cambio de billetes físicos, tramitan transferencias internacionales Western Union y remesas desde Estados Unidos, Canadá y Europa con entrega inmediata en efectivo.",
+    "descripcion_en": "SAT and CNBV-authorized and supervised currency exchange house, operating in the emblematic perimeter of Plaza Garibaldi since 2005. They offer the best exchange rate in the area for over 20 different currencies, with rates updated on a digital screen every 15 minutes during operating hours. No commission or service fee is charged on any transaction. In addition to physical bill exchange, they process Western Union international transfers and remittances from the United States, Canada and Europe with immediate cash delivery.",
     "categoria": "otro",
     "telefono": "+52 55 5526 1234",
     "whatsapp": "5215555261234",
@@ -461,13 +1152,36 @@
     "lat": 19.4430,
     "lng": -99.1402,
     "tags": ["cambio", "divisas", "dólares", "euros", "garibaldi", "sin comisión"],
-    "horario": "Lun-Dom 9:00-21:00",
-    "precio_promedio": "Sin comisión"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "09:00", "cierre": "21:00" },
+      "mar": { "abierto": true, "apertura": "09:00", "cierre": "21:00" },
+      "mie": { "abierto": true, "apertura": "09:00", "cierre": "21:00" },
+      "jue": { "abierto": true, "apertura": "09:00", "cierre": "21:00" },
+      "vie": { "abierto": true, "apertura": "09:00", "cierre": "21:00" },
+      "sab": { "abierto": true, "apertura": "09:00", "cierre": "21:00" },
+      "dom": { "abierto": true, "apertura": "10:00", "cierre": "18:00" }
+    },
+    "precio_promedio": "Sin comisión",
+    "imagenUrl": "https://picsum.photos/seed/cambio-divisas-garibaldi/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/cambio-divisas-garibaldi/640/480",
+      "https://picsum.photos/seed/dinero-internacional/640/480",
+      "https://picsum.photos/seed/plaza-garibaldi/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Cambio USD → MXN",          "descripcion": "Dólares americanos a pesos mexicanos. Sin comisión. Tipo de cambio del día.",         "precio": 0,   "categoria": "Cambio",         "popularidad": 920, "disponible": true },
+      { "id": "m2", "nombre": "Cambio EUR → MXN",          "descripcion": "Euros a pesos mexicanos. Sin comisión. Tipo de cambio actualizado cada 15 min.",      "precio": 0,   "categoria": "Cambio",         "popularidad": 810, "disponible": true },
+      { "id": "m3", "nombre": "Cambio GBP/JPY/CAD → MXN", "descripcion": "Libras, yenes, dólares canadienses y otras divisas. Consultar cotización.",          "precio": 0,   "categoria": "Cambio",         "popularidad": 540, "disponible": true },
+      { "id": "m4", "nombre": "Western Union (envío)",     "descripcion": "Envío de remesas a más de 200 países. Comisión fija de la red Western Union.",        "precio": 120, "categoria": "Transferencias", "popularidad": 430, "disponible": true },
+      { "id": "m5", "nombre": "Western Union (recepción)", "descripcion": "Cobro de remesas desde EUA, Canadá y Europa. Entrega inmediata en efectivo.",        "precio": 0,   "categoria": "Transferencias", "popularidad": 680, "disponible": true },
+      { "id": "m6", "nombre": "Cambio MXN → USD (salida)", "descripcion": "Cambio de pesos a dólares para viajeros que salen del país. Sin comisión.",         "precio": 0,   "categoria": "Cambio",         "popularidad": 350, "disponible": true }
+    ]
   },
   {
+    "id": "peluqueria-estilo-mexicano",
     "nombre": "Peluquería El Estilo Mexicano",
-    "descripcion": "Barbería y peluquería tradicional. Corte, afeitado con navaja y masaje de cabeza. Más de 30 años en el barrio.",
-    "descripcion_en": "Traditional barber shop and hair salon. Cut, straight razor shave and head massage. Over 30 years in the neighborhood.",
+    "descripcion": "El Estilo Mexicano lleva 32 años en la misma esquina de la Francisco Sosa, la calle más bonita de Coyoacán según varias publicaciones de turismo. El maestro barbero Aurelio Mendoza y su hijo Carlos atienden con la técnica tradicional de barbería mexicana que incluye corte con tijera —nunca máquina eléctrica en las sienes—, afeitado con navaja Gillette de hoja simple y masaje de cabeza con lociones de aceite de coco y lavanda. El ambiente es de barrio antiguo, con radio de transistor, revistas de los 90 y charlas espontáneas sobre fútbol, política y vecindad.",
+    "descripcion_en": "El Estilo Mexicano has been on the same corner of Francisco Sosa for 32 years, the most beautiful street in Coyoacán according to several tourism publications. Master barber Aurelio Mendoza and his son Carlos serve clients with the traditional Mexican barbershop technique that includes scissors cutting — never electric clippers on the temples — straight-blade Gillette shaving and head massage with coconut oil and lavender lotions. The atmosphere is old-neighborhood: transistor radio, 90s magazines and spontaneous conversations about soccer, politics and neighborhood life.",
     "categoria": "otro",
     "telefono": "+52 55 5658 7788",
     "whatsapp": "5215556587788",
@@ -476,13 +1190,36 @@
     "lat": 19.3496,
     "lng": -99.1600,
     "tags": ["barbería", "corte", "navaja", "tradicional", "coyoacán"],
-    "horario": "Mar-Dom 9:00-19:00",
-    "precio_promedio": "MXN 80-200"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "09:00", "cierre": "19:00" },
+      "mie": { "abierto": true,  "apertura": "09:00", "cierre": "19:00" },
+      "jue": { "abierto": true,  "apertura": "09:00", "cierre": "19:00" },
+      "vie": { "abierto": true,  "apertura": "09:00", "cierre": "19:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "dom": { "abierto": true,  "apertura": "10:00", "cierre": "16:00" }
+    },
+    "precio_promedio": "MXN 80-200",
+    "imagenUrl": "https://picsum.photos/seed/barberia-coyoacan/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/barberia-coyoacan/640/480",
+      "https://picsum.photos/seed/corte-cabello-clasico/640/480",
+      "https://picsum.photos/seed/afeitado-navaja/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Corte Clásico con Tijera",      "descripcion": "Corte de cabello 100% con tijera. Incluye lavado y peinado.",                     "precio": 120,  "categoria": "Cortes",   "popularidad": 780, "disponible": true },
+      { "id": "m2", "nombre": "Corte + Arreglo de Barba",     "descripcion": "Corte de cabello + perfilado de barba con tijera y navaja.",                        "precio": 160,  "categoria": "Cortes",   "popularidad": 850, "disponible": true },
+      { "id": "m3", "nombre": "Afeitado con Navaja",           "descripcion": "Afeitado completo con navaja Gillette, espuma en brocha y toalla caliente.",       "precio": 100,  "categoria": "Afeitado", "popularidad": 690, "disponible": true },
+      { "id": "m4", "nombre": "Corte + Afeitado Completo",    "descripcion": "El combo clásico: corte de cabello + afeitado con navaja + masaje de cabeza.",     "precio": 200,  "categoria": "Combos",   "popularidad": 920, "disponible": true },
+      { "id": "m5", "nombre": "Masaje de Cabeza (solo)",      "descripcion": "Masaje capilar con aceite de coco y lavanda. Duración 20 minutos.",                 "precio": 80,   "categoria": "Extras",   "popularidad": 450, "disponible": true },
+      { "id": "m6", "nombre": "Tinte Canoso",                  "descripcion": "Coloración para cubrir canas. Con tinte sin amoniaco. Tiempo: 45 min.",            "precio": 180,  "categoria": "Color",    "popularidad": 280, "disponible": true }
+    ]
   },
   {
+    "id": "impresion-san-ildefonso",
     "nombre": "Impresión y Fotocopiado San Ildefonso",
-    "descripcion": "Impresión de documentos, tarjetas de presentación y playeras personalizadas. Servicio exprés en 30 minutos.",
-    "descripcion_en": "Document printing, business cards and custom t-shirts. Express service in 30 minutes.",
+    "descripcion": "Ubicados a metros del Colegio de San Ildefonso, uno de los más antiguos de América, llevan 22 años dando servicio a estudiantes, investigadores, abogados y turistas que necesitan desde la simple fotocopia hasta la producción de materiales gráficos profesionales. El servicio exprés garantiza entregas en 30 minutos para pedidos estándar. Las playeras personalizadas con diseños prehispánicos o mensajes propios se terminan en 2 horas y son uno de los souvenirs más buscados por turistas. También imprimen fotografías en alta resolución, planos de arquitectura y mapas a escala.",
+    "descripcion_en": "Located meters from the Colegio de San Ildefonso, one of the oldest schools in the Americas, they have been serving students, researchers, lawyers and tourists for 22 years — from simple photocopies to professional graphic materials. The express service guarantees delivery in 30 minutes for standard orders. Custom t-shirts with pre-Hispanic designs or personal messages are finished in 2 hours and are one of the most sought-after souvenirs for tourists. They also print high-resolution photos, architectural blueprints and scale maps.",
     "categoria": "otro",
     "telefono": "+52 55 5702 4455",
     "whatsapp": "5215557024455",
@@ -491,13 +1228,36 @@
     "lat": 19.4358,
     "lng": -99.1322,
     "tags": ["impresión", "playeras", "tarjetas", "exprés", "centro"],
-    "horario": "Lun-Sáb 8:00-20:00",
-    "precio_promedio": "MXN 20-500"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "mar": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "mie": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "jue": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "vie": { "abierto": true,  "apertura": "08:00", "cierre": "20:00" },
+      "sab": { "abierto": true,  "apertura": "09:00", "cierre": "18:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 20-500",
+    "imagenUrl": "https://picsum.photos/seed/imprenta-centro-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/imprenta-centro-cdmx/640/480",
+      "https://picsum.photos/seed/impresion-playeras/640/480",
+      "https://picsum.photos/seed/tarjetas-presentacion/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Fotocopia B&N",              "descripcion": "Fotocopia en blanco y negro carta u oficio. Precio por hoja.",                       "precio": 2,    "categoria": "Copias",        "popularidad": 860, "disponible": true },
+      { "id": "m2", "nombre": "Impresión a Color",          "descripcion": "Impresión a color en papel couché o bond. Por hoja carta.",                          "precio": 12,   "categoria": "Impresión",     "popularidad": 720, "disponible": true },
+      { "id": "m3", "nombre": "Tarjetas de Presentación",   "descripcion": "100 tarjetas con diseño incluido, papel couché mate 350gr. Entrega en 2 horas.",    "precio": 180,  "categoria": "Impresos",      "popularidad": 650, "disponible": true },
+      { "id": "m4", "nombre": "Playera Personalizada",      "descripcion": "Playera 100% algodón con diseño personalizado impreso. Entrega en 2 horas.",         "precio": 200,  "categoria": "Playeras",      "popularidad": 780, "disponible": true },
+      { "id": "m5", "nombre": "Foto 10x15 cm",              "descripcion": "Impresión fotográfica en papel fotográfico brillante. Precio por foto.",             "precio": 15,   "categoria": "Fotografía",    "popularidad": 580, "disponible": true },
+      { "id": "m6", "nombre": "Encuadernado Térmico",       "descripcion": "Encuadernación de tesis o documentos hasta 300 páginas. Con portada.",               "precio": 80,   "categoria": "Encuadernado",  "popularidad": 340, "disponible": true }
+    ]
   },
   {
+    "id": "tostadas-los-panchos",
     "nombre": "Tostadas de Canasta Los Panchos",
-    "descripcion": "Tostadas de canasta de Tlaxcala: frijoles, tinga, mole y papa. El almuerzo más rápido y barato del Centro.",
-    "descripcion_en": "Tlaxcala basket tostadas: beans, tinga, mole and potato. The fastest and cheapest lunch in Downtown.",
+    "descripcion": "Los Panchos son los herederos de la tradición tlaxtalteca de las tostadas de canasta, una de las formas de alimentación callejera más antiguas de México que data del siglo XVIII. Cada mañana antes del amanecer se preparan cientos de tostadas que se guardan en una canasta forrada con plástico y tela para mantenerlas calientes y crujientes. Los rellenos clásicos son frijoles negros, tinga de pollo con chipotle, mole negro con pavo y papa con chorizo. El precio por tostada baja conforme el número que pides, haciendo de esto el almuerzo más económico del Centro Histórico.",
+    "descripcion_en": "Los Panchos are heirs to the Tlaxcalan tradition of basket tostadas, one of Mexico's oldest forms of street food dating back to the 18th century. Every morning before dawn, hundreds of tostadas are prepared and kept in a plastic-lined, fabric-wrapped basket to maintain their warmth and crunchiness. The classic fillings are black beans, chipotle chicken tinga, black mole with turkey and potato with chorizo. The per-tostada price drops with quantity, making this the most economical breakfast in the Historic Downtown.",
     "categoria": "comida",
     "telefono": "+52 55 5702 9988",
     "whatsapp": "5215557029988",
@@ -506,13 +1266,36 @@
     "lat": 19.4312,
     "lng": -99.1348,
     "tags": ["tostadas", "canasta", "tlaxcala", "económico", "rápido"],
-    "horario": "Lun-Sáb 7:00-13:00",
-    "precio_promedio": "MXN 12-25 por tostada"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "07:00", "cierre": "13:00" },
+      "mar": { "abierto": true,  "apertura": "07:00", "cierre": "13:00" },
+      "mie": { "abierto": true,  "apertura": "07:00", "cierre": "13:00" },
+      "jue": { "abierto": true,  "apertura": "07:00", "cierre": "13:00" },
+      "vie": { "abierto": true,  "apertura": "07:00", "cierre": "13:00" },
+      "sab": { "abierto": true,  "apertura": "07:00", "cierre": "13:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 12-25 por tostada",
+    "imagenUrl": "https://picsum.photos/seed/tostadas-canasta/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/tostadas-canasta/640/480",
+      "https://picsum.photos/seed/tostadas-tinga/640/480",
+      "https://picsum.photos/seed/canasta-tostadas-caliente/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tostada de Frijoles",      "descripcion": "Frijoles negros refritos sobre tostada crujiente. La más clásica. Por pieza.",      "precio": 12,  "categoria": "Tostadas", "popularidad": 840, "disponible": true },
+      { "id": "m2", "nombre": "Tostada de Tinga",         "descripcion": "Tinga de pollo con chipotle en adobo sobre tostada. Por pieza.",                     "precio": 18,  "categoria": "Tostadas", "popularidad": 920, "disponible": true },
+      { "id": "m3", "nombre": "Tostada de Mole con Pavo","descripcion": "Pavo deshebrado en mole negro sobre tostada. La más especial. Por pieza.",           "precio": 25,  "categoria": "Tostadas", "popularidad": 680, "disponible": true },
+      { "id": "m4", "nombre": "Tostada de Papa Chorizo", "descripcion": "Papas guisadas con chorizo sobre tostada. Contundente. Por pieza.",                   "precio": 18,  "categoria": "Tostadas", "popularidad": 720, "disponible": true },
+      { "id": "m5", "nombre": "Orden de 5 Tostadas",     "descripcion": "Elige 5 tostadas de la variedad del día. Salsa y limón incluidos.",                    "precio": 75,  "categoria": "Órdenes",  "popularidad": 780, "disponible": true },
+      { "id": "m6", "nombre": "Café de Olla (vaso)",      "descripcion": "Café de olla con piloncillo y canela. El complemento perfecto.",                       "precio": 20,  "categoria": "Bebidas",  "popularidad": 560, "disponible": true }
+    ]
   },
   {
+    "id": "helados-la-michoacana",
     "nombre": "Helados y Paletas La Michoacana Real",
-    "descripcion": "Paletas artesanales de frutas naturales: tamarindo, guanábana, pepino limón y más. Helados cremosos sin conservadores.",
-    "descripcion_en": "Artisan popsicles with natural fruits: tamarind, soursop, cucumber lime and more. Creamy ice cream without preservatives.",
+    "descripcion": "La Michoacana Real de la Roma Norte se diferencia de las demás franquicias por trabajar exclusivamente con frutas de temporada adquiridas tres veces por semana en el Mercado de Abastos de Tlhuac. Las paletas de hielo se hacen con fruta entera triturada sin agua añadida: la de tamarindo tiene la semilla adentro como marca la tradición; la de pepino limón se hace con pepino fresco sin pelar y chili piquín de Oaxaca. Los helados cremosos son sin conservadores y con leche entera de vaca. Los sabores únicos de la semana se anuncian en su pizarrón desde las 9 de la mañana.",
+    "descripcion_en": "La Michoacana Real in Roma Norte stands out from other franchises by working exclusively with seasonal fruits purchased three times a week at the Tlhuac wholesale market. The ice paletas are made with whole crushed fruit without added water: the tamarind one has the seed inside as tradition dictates; the cucumber lime is made with fresh unpeeled cucumber and Oaxacan piquín chili. The creamy ice creams are preservative-free and made with whole cow's milk. The week's unique flavors are announced on their chalkboard from 9am.",
     "categoria": "comida",
     "telefono": "+52 55 5543 1122",
     "whatsapp": "5215555431122",
@@ -521,13 +1304,36 @@
     "lat": 19.4175,
     "lng": -99.1600,
     "tags": ["paletas", "helados", "artesanal", "natural", "michoacana", "roma"],
-    "horario": "Lun-Dom 11:00-21:00",
-    "precio_promedio": "MXN 30-60"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "11:00", "cierre": "21:00" },
+      "mar": { "abierto": true, "apertura": "11:00", "cierre": "21:00" },
+      "mie": { "abierto": true, "apertura": "11:00", "cierre": "21:00" },
+      "jue": { "abierto": true, "apertura": "11:00", "cierre": "21:00" },
+      "vie": { "abierto": true, "apertura": "11:00", "cierre": "22:00" },
+      "sab": { "abierto": true, "apertura": "11:00", "cierre": "22:00" },
+      "dom": { "abierto": true, "apertura": "11:00", "cierre": "21:00" }
+    },
+    "precio_promedio": "MXN 30-60",
+    "imagenUrl": "https://picsum.photos/seed/paletas-michoacana/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/paletas-michoacana/640/480",
+      "https://picsum.photos/seed/helados-artesanales/640/480",
+      "https://picsum.photos/seed/paleta-tamarindo/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Paleta de Tamarindo",        "descripcion": "Tamarindo natural con la semilla adentro, sin azúcar añadida. Tradición michoacana.",  "precio": 35,  "categoria": "Paletas de Agua",   "popularidad": 890, "disponible": true },
+      { "id": "m2", "nombre": "Paleta Pepino-Limón-Chile",  "descripcion": "Pepino fresco con limón y chile piquín oaxaqueño. Refrescante y picosita.",            "precio": 35,  "categoria": "Paletas de Agua",   "popularidad": 820, "disponible": true },
+      { "id": "m3", "nombre": "Paleta de Guanábana",        "descripcion": "Guanábana entera triturada sin agua añadida. Cremosa y natural.",                       "precio": 40,  "categoria": "Paletas de Agua",   "popularidad": 710, "disponible": true },
+      { "id": "m4", "nombre": "Helado de Leche (bola)",     "descripcion": "Helado cremoso sin conservadores. Sabores: vainilla, chocolate, fresa, nuez.",          "precio": 45,  "categoria": "Helados",           "popularidad": 650, "disponible": true },
+      { "id": "m5", "nombre": "Paleta de Chocolate",        "descripcion": "Paleta cremosa de chocolate oscuro Oaxaqueño con almendras. Sin conservadores.",        "precio": 50,  "categoria": "Paletas Cremosas",  "popularidad": 580, "disponible": true },
+      { "id": "m6", "nombre": "Sabor del Día",              "descripcion": "Paleta o helado del sabor especial de la semana. Ver pizarrón.",                         "precio": 45,  "categoria": "Especiales",        "popularidad": 760, "disponible": true }
+    ]
   },
   {
+    "id": "cafe-olla-dona-ines",
     "nombre": "Café de Olla Doña Inés",
-    "descripcion": "Café de olla de Veracruz preparado en barro. Conchas, cuernitos y pan dulce horneado cada mañana. WiFi gratuito.",
-    "descripcion_en": "Veracruz clay pot coffee. Conchas, cuernitos and sweet bread baked every morning. Free WiFi.",
+    "descripcion": "En 2018 Inés Ramírez dejó su trabajo de ejecutiva en una empresa transnacional para cumplir su sueño de abrir una cafetería que honrara la tradición cafetalera de su tierra natal, Coatepec, Veracruz. El café de olla se prepara con granos de altura de la sierra veracruzana, molidos cada mañana y cocidos lentamente en una olla de barro con piloncillo de la Huasteca, canela de Ceilán y cáscara de naranja. El pan dulce —conchas, cuernitos, polvorones, campechanas— se hornea desde las 5 AM y suele agotarse antes del mediodía. El local tiene WiFi de fibra óptica y 14 mesas para trabajo remoto.",
+    "descripcion_en": "In 2018, Inés Ramírez left her corporate job at a transnational company to fulfill her dream of opening a café that honors the coffee tradition of her hometown, Coatepec, Veracruz. The clay pot coffee is made with high-altitude beans from the Veracruz highlands, ground every morning and slowly cooked in a clay pot with Huasteca piloncillo, Ceylon cinnamon and orange peel. The pan dulce — conchas, cuernitos, polvorones, campechanas — is baked from 5 AM and usually sells out before noon. The café has fiber optic WiFi and 14 tables for remote work.",
     "categoria": "comida",
     "telefono": "+52 55 5286 7799",
     "whatsapp": "5215552867799",
@@ -536,13 +1342,36 @@
     "lat": 19.4128,
     "lng": -99.1715,
     "tags": ["café", "pan dulce", "veracruz", "barro", "condesa", "wifi"],
-    "horario": "Lun-Vie 7:00-18:00, Sáb-Dom 8:00-15:00",
-    "precio_promedio": "MXN 50-120"
+    "horario": {
+      "lun": { "abierto": true,  "apertura": "07:00", "cierre": "18:00" },
+      "mar": { "abierto": true,  "apertura": "07:00", "cierre": "18:00" },
+      "mie": { "abierto": true,  "apertura": "07:00", "cierre": "18:00" },
+      "jue": { "abierto": true,  "apertura": "07:00", "cierre": "18:00" },
+      "vie": { "abierto": true,  "apertura": "07:00", "cierre": "18:00" },
+      "sab": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" },
+      "dom": { "abierto": true,  "apertura": "08:00", "cierre": "15:00" }
+    },
+    "precio_promedio": "MXN 50-120",
+    "imagenUrl": "https://picsum.photos/seed/cafe-olla-condesa/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/cafe-olla-condesa/640/480",
+      "https://picsum.photos/seed/pan-dulce-mexicano/640/480",
+      "https://picsum.photos/seed/cafe-veracruz/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Café de Olla (taza grande)",   "descripcion": "Café de altura veracruzano en olla de barro con piloncillo y canela.",              "precio": 55,  "categoria": "Cafés",       "popularidad": 920, "disponible": true },
+      { "id": "m2", "nombre": "Café Americano (filtrado)",    "descripcion": "Filtrado por goteo lento con granos de Coatepec. Para los puristas del café.",       "precio": 60,  "categoria": "Cafés",       "popularidad": 740, "disponible": true },
+      { "id": "m3", "nombre": "Concha + Café de Olla",        "descripcion": "Combo desayuno: concha recién horneada + taza grande de café de olla.",              "precio": 85,  "categoria": "Combos",      "popularidad": 870, "disponible": true },
+      { "id": "m4", "nombre": "Pan Dulce (selección 3 pzas)", "descripcion": "3 piezas de pan dulce a elegir: conchas, cuernitos, polvorones o campechanas.",     "precio": 60,  "categoria": "Pan",         "popularidad": 680, "disponible": true },
+      { "id": "m5", "nombre": "Chocolate de Metate",          "descripcion": "Chocolate oaxaqueño en leche caliente. Espeso y sin azúcar añadida.",                "precio": 70,  "categoria": "Bebidas",     "popularidad": 590, "disponible": true },
+      { "id": "m6", "nombre": "Café con Leche (jarro grande)","descripcion": "Mitad café de olla, mitad leche entera caliente. En jarro de Talavera.",            "precio": 65,  "categoria": "Cafés",       "popularidad": 810, "disponible": true }
+    ]
   },
   {
+    "id": "tour-muralismo-tlaloc",
     "nombre": "Muralismo Urbano Tour — Colectivo Tláloc",
-    "descripcion": "Recorrido por murales comunitarios de la Merced y Doctores. Arte urbano hecho por artistas locales. Gratis los sábados.",
-    "descripcion_en": "Tour through community murals in La Merced and Doctores. Urban art by local artists. Free on Saturdays.",
+    "descripcion": "El Colectivo Tláloc nació en 2016 como un proyecto de arte comunitario en La Merced y los Doctores, barrios históricamente estigmatizados que han encontrado en el arte urbano una herramienta de identidad y transformación social. Los más de 80 murales que guían sus recorridos fueron creados por artistas locales que trabajan sin intervención comercial, con temas que van desde la resistencia indígena hasta la mitología prehispánica pasando por la vida cotidiana del barrio. El guía de los sábados es el propio coordinador del colectivo, quien comparte la historia viva del proyecto desde adentro.",
+    "descripcion_en": "Colectivo Tláloc was born in 2016 as a community art project in La Merced and Doctores, historically stigmatized neighborhoods that have found in urban art a tool for identity and social transformation. The over 80 murals guiding their tours were created by local artists working without commercial intervention, with themes ranging from indigenous resistance to pre-Hispanic mythology to everyday neighborhood life. Saturday's guide is the collective's own coordinator, who shares the living history of the project from the inside.",
     "categoria": "tours",
     "telefono": "+52 55 5533 4466",
     "whatsapp": "5215555334466",
@@ -551,13 +1380,36 @@
     "lat": 19.4233,
     "lng": -99.1215,
     "tags": ["mural", "arte urbano", "merced", "doctores", "gratis", "cultura"],
-    "horario": "Sáb 10:00 y 14:00 (gratis), Mar-Vie con reserva",
-    "precio_promedio": "MXN 0 sábados / MXN 200 entre semana"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "10:00", "cierre": "16:00" },
+      "mie": { "abierto": true,  "apertura": "10:00", "cierre": "16:00" },
+      "jue": { "abierto": true,  "apertura": "10:00", "cierre": "16:00" },
+      "vie": { "abierto": true,  "apertura": "10:00", "cierre": "16:00" },
+      "sab": { "abierto": true,  "apertura": "10:00", "cierre": "17:00" },
+      "dom": { "abierto": false, "apertura": "00:00", "cierre": "00:00" }
+    },
+    "precio_promedio": "MXN 0 sábados / MXN 200 entre semana",
+    "imagenUrl": "https://picsum.photos/seed/muralismo-merced/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/muralismo-merced/640/480",
+      "https://picsum.photos/seed/arte-urbano-doctores/640/480",
+      "https://picsum.photos/seed/mural-indigena-cdmx/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Tour Gratuito (sábado)",       "descripcion": "Recorrido abierto al público con el coordinador del colectivo. 2.5 horas.",          "precio": 0,    "categoria": "Tours",       "popularidad": 890, "disponible": true },
+      { "id": "m2", "nombre": "Tour Entre Semana",             "descripcion": "Recorrido con guía artista del colectivo. Martes a viernes. 2 horas.",             "precio": 200,  "categoria": "Tours",       "popularidad": 640, "disponible": true },
+      { "id": "m3", "nombre": "Tour Privado para Grupos",      "descripcion": "Tour exclusivo para grupos de escuelas, empresas o agencias. Horario flexible.",    "precio": 1500, "categoria": "Grupos",      "popularidad": 380, "disponible": true },
+      { "id": "m4", "nombre": "Taller de Muralismo",           "descripcion": "Taller de 4 horas: técnica, pigmentos y práctica en muro comunitario.",             "precio": 350,  "categoria": "Talleres",    "popularidad": 520, "disponible": true },
+      { "id": "m5", "nombre": "Fotografía Artística + Tour",   "descripcion": "Guía + fotógrafo profesional del colectivo. 20 fotos editadas incluidas.",           "precio": 600,  "categoria": "Paquetes",    "popularidad": 430, "disponible": true },
+      { "id": "m6", "nombre": "Serigrafía Artesanal",          "descripcion": "Imprime un diseño de artista del colectivo en tu propia playera.",                  "precio": 250,  "categoria": "Extras",      "popularidad": 490, "disponible": true }
+    ]
   },
   {
+    "id": "chocolate-cacao-mesoamerica",
     "nombre": "Chocolate y Cacao Mesoamérica",
-    "descripcion": "Taller de chocolates artesanales con cacao de Tabasco y Chiapas. Aprende a hacer chocolate desde el grano. Tienda y degustación.",
-    "descripcion_en": "Artisan chocolate workshop with cacao from Tabasco and Chiapas. Learn to make chocolate from the bean. Store and tasting.",
+    "descripcion": "En este taller y tienda del Centro Histórico se recorre la historia completa del cacao, desde su origen como moneda y bebida sagrada en Mesoamérica hasta su transformación en el chocolate que conocemos hoy. El taller de 2 horas incluye tostar el cacao, descascararlo, molerlo en el metate y preparar tanto la bebida prehispánica amarga como la tablilla de chocolate contemporánea para llevar. Los granos vienen directamente de productores orgánicos de la Sierra Norte de Chiapas y de la Chontalpa de Tabasco, las regiones cacao más importantes de México.",
+    "descripcion_en": "In this workshop and store in the Historic Downtown, the complete history of cacao is traced, from its origin as sacred currency and beverage in Mesoamerica to its transformation into the chocolate we know today. The 2-hour workshop includes roasting the cacao, peeling it, grinding it on the metate and preparing both the bitter pre-Hispanic beverage and the contemporary chocolate bar to take home. The beans come directly from organic producers in the Sierra Norte de Chiapas and Chontalpa de Tabasco, Mexico's most important cacao regions.",
     "categoria": "artesanias",
     "telefono": "+52 55 5521 3388",
     "whatsapp": "5215555213388",
@@ -566,13 +1418,36 @@
     "lat": 19.4318,
     "lng": -99.1368,
     "tags": ["chocolate", "cacao", "taller", "artesanal", "mesoamérica", "centro"],
-    "horario": "Mar-Dom 10:00-19:00",
-    "precio_promedio": "MXN 200-800"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "mie": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "jue": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "vie": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "sab": { "abierto": true,  "apertura": "10:00", "cierre": "19:00" },
+      "dom": { "abierto": true,  "apertura": "11:00", "cierre": "17:00" }
+    },
+    "precio_promedio": "MXN 200-800",
+    "imagenUrl": "https://picsum.photos/seed/chocolate-cacao-cdmx/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/chocolate-cacao-cdmx/640/480",
+      "https://picsum.photos/seed/cacao-metate/640/480",
+      "https://picsum.photos/seed/tablilla-chocolate/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Taller Completo de Cacao (2h)",  "descripcion": "Tostar + descascarar + moler + hacer tablilla. Grupos de hasta 12 personas.",      "precio": 450,  "categoria": "Talleres",    "popularidad": 860, "disponible": true },
+      { "id": "m2", "nombre": "Degustación de Chocolates",      "descripcion": "Cata de 6 chocolates de diferentes regiones y porcentajes de cacao. 45 min.",      "precio": 200,  "categoria": "Degustación", "popularidad": 720, "disponible": true },
+      { "id": "m3", "nombre": "Bebida Prehispánica de Cacao",   "descripcion": "Bebida ceremonial azteca: cacao, chile, maíz y achiote. Sin azúcar.",              "precio": 80,   "categoria": "Bebidas",     "popularidad": 680, "disponible": true },
+      { "id": "m4", "nombre": "Tablilla Artesanal 70% Cacao",   "descripcion": "Tablilla de chocolate oscuro hecha a mano. 100g. Sin conservadores.",               "precio": 180,  "categoria": "Productos",   "popularidad": 790, "disponible": true },
+      { "id": "m5", "nombre": "Cacao Crudo en Grano (250g)",    "descripcion": "Granos de cacao orgánico de Chiapas listos para nibs o bebida. Bolsa 250g.",       "precio": 120,  "categoria": "Productos",   "popularidad": 550, "disponible": true },
+      { "id": "m6", "nombre": "Chocolate Caliente del Metate",  "descripcion": "Bebida caliente de chocolate molido en metate con leche entera y canela.",           "precio": 65,   "categoria": "Bebidas",     "popularidad": 830, "disponible": true }
+    ]
   },
   {
+    "id": "hostal-tlatelolco",
     "nombre": "Hostal Tlatelolco Residencial",
-    "descripcion": "Hostal moderno junto a la Plaza de las Tres Culturas. Terraza con vista, cocina comunitaria y tours incluidos.",
-    "descripcion_en": "Modern hostel next to Plaza de las Tres Culturas. Rooftop view, communal kitchen and tours included.",
+    "descripcion": "El hostal moderno más cercano a la Plaza de las Tres Culturas ofrece una experiencia de alojamiento que combina las comodidades contemporáneas con la historia viva del barrio de Tlatelolco. Desde la terraza del quinto piso hay una vista sin obstáculos hacia las pirámides prehispánicas, la iglesia colonial de Santiago Tlatelolco y las torres brutalistas de los años 60. La cocina comunitaria está equipada con todo lo necesario y hay cenas comunitarias optativas los jueves. Los tours incluidos cubren la Plaza, el Museo Memorial 68 y el Mercado de Tlatelolco.",
+    "descripcion_en": "The most modern hostel closest to the Plaza de las Tres Culturas offers an accommodation experience that combines contemporary amenities with the living history of the Tlatelolco neighborhood. From the fifth-floor rooftop there is an unobstructed view of the pre-Hispanic pyramids, the colonial church of Santiago Tlatelolco and the brutalist towers from the 1960s. The communal kitchen is fully equipped and optional communal dinners are held on Thursdays. Included tours cover the Plaza, the Memorial 68 Museum and the Tlatelolco Market.",
     "categoria": "hospedaje",
     "telefono": "+52 55 5583 6677",
     "whatsapp": "5215555836677",
@@ -581,13 +1456,36 @@
     "lat": 19.4528,
     "lng": -99.1428,
     "tags": ["hostal", "tlatelolco", "terraza", "cocina", "moderno"],
-    "horario": "Check-in 14:00 / Check-out 11:00",
-    "precio_promedio": "MXN 300-750 por noche"
+    "horario": {
+      "lun": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mar": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "mie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "jue": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "vie": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "sab": { "abierto": true, "apertura": "00:00", "cierre": "23:59" },
+      "dom": { "abierto": true, "apertura": "00:00", "cierre": "23:59" }
+    },
+    "precio_promedio": "MXN 300-750 por noche",
+    "imagenUrl": "https://picsum.photos/seed/hostal-tlatelolco/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/hostal-tlatelolco/640/480",
+      "https://picsum.photos/seed/terraza-tlatelolco/640/480",
+      "https://picsum.photos/seed/plaza-tres-culturas/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Cama en Dormitorio 8",    "descripcion": "Litera en cuarto de 8 personas con locker, WiFi y baño comunitario.",               "precio": 300,  "categoria": "Alojamiento", "popularidad": 720, "disponible": true },
+      { "id": "m2", "nombre": "Cama en Dormitorio 4",    "descripcion": "Litera en cuarto de 4 personas. Más privado, mismo precio base.",                    "precio": 380,  "categoria": "Alojamiento", "popularidad": 610, "disponible": true },
+      { "id": "m3", "nombre": "Habitación Privada",      "descripcion": "Cuarto privado con cama matrimonial, baño y vista a la terraza.",                     "precio": 750,  "categoria": "Alojamiento", "popularidad": 450, "disponible": true },
+      { "id": "m4", "nombre": "Tour Plaza Tres Culturas","descripcion": "Visita guiada por las zonas arqueológica, colonial y moderna. Incluida.",             "precio": 0,    "categoria": "Actividades", "popularidad": 810, "disponible": true },
+      { "id": "m5", "nombre": "Cena Comunitaria (jueves)","descripcion": "Cena colectiva optativa con platillo de temporada. Solo jueves.",                   "precio": 80,   "categoria": "Actividades", "popularidad": 540, "disponible": true },
+      { "id": "m6", "nombre": "Acceso Terraza y Cocina", "descripcion": "Acceso ilimitado a la terraza con vista a Tlatelolco y cocina equipada.",            "precio": 0,    "categoria": "Servicios",   "popularidad": 870, "disponible": true }
+    ]
   },
   {
+    "id": "mezcal-la-botica",
     "nombre": "Mezcal y Destilados La Botica",
-    "descripcion": "Más de 120 etiquetas de mezcal artesanal, sotol y raicilla. Catas guiadas con maridaje de botanas oaxaqueñas.",
-    "descripcion_en": "Over 120 labels of artisan mezcal, sotol and raicilla. Guided tastings with Oaxacan snack pairings.",
+    "descripcion": "La Botica es la mezcalería de referencia de la Roma Norte, con una curaduría de más de 120 etiquetas de mezcal artesanal de 14 estados de la república, incluyendo producciones de agave silvestre de Durango, sotol de Chihuahua y raicilla de Jalisco que no se consiguen en ningún otro establecimiento de la ciudad. El equipo de La Botica viaja tres veces al año a los estados productores para seleccionar directamente con los maestros mezcaleros. Las catas guiadas de los viernes y sábados incluyen tres mezcales de diferentes agaves con maridaje de botanas oaxaqueñas preparadas en el momento.",
+    "descripcion_en": "La Botica is Roma Norte's reference mezcalería, with a curated selection of over 120 artisan mezcal labels from 14 states of the republic, including wild agave productions from Durango, sotol from Chihuahua and raicilla from Jalisco that aren't available in any other establishment in the city. La Botica's team travels three times a year to producing states to select directly with master mezcaleros. Friday and Saturday guided tastings include three mezcals from different agaves paired with freshly prepared Oaxacan snacks.",
     "categoria": "comida",
     "telefono": "+52 55 5264 7788",
     "whatsapp": "5215552647788",
@@ -596,13 +1494,36 @@
     "lat": 19.4180,
     "lng": -99.1580,
     "tags": ["mezcal", "sotol", "raicilla", "cata", "oaxaca", "roma"],
-    "horario": "Mar-Dom 14:00-23:00",
-    "precio_promedio": "MXN 150-500 por copa"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": true,  "apertura": "14:00", "cierre": "23:00" },
+      "mie": { "abierto": true,  "apertura": "14:00", "cierre": "23:00" },
+      "jue": { "abierto": true,  "apertura": "14:00", "cierre": "23:00" },
+      "vie": { "abierto": true,  "apertura": "14:00", "cierre": "00:00" },
+      "sab": { "abierto": true,  "apertura": "14:00", "cierre": "00:00" },
+      "dom": { "abierto": true,  "apertura": "15:00", "cierre": "21:00" }
+    },
+    "precio_promedio": "MXN 150-500 por copa",
+    "imagenUrl": "https://picsum.photos/seed/mezcal-botica-roma/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/mezcal-botica-roma/640/480",
+      "https://picsum.photos/seed/destilados-artesanales/640/480",
+      "https://picsum.photos/seed/cata-mezcal/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Mezcal Espadín (copa)",     "descripcion": "Copa de mezcal de agave espadín. El más accesible y versátil. Con sal y naranja.",  "precio": 150,  "categoria": "Mezcales",  "popularidad": 820, "disponible": true },
+      { "id": "m2", "nombre": "Mezcal Tobalá (copa)",      "descripcion": "Mezcal de agave tobalá silvestre. Complejo y floral. Producción muy limitada.",       "precio": 350,  "categoria": "Mezcales",  "popularidad": 680, "disponible": true },
+      { "id": "m3", "nombre": "Sotol de Chihuahua (copa)", "descripcion": "Destilado de planta de sotol. Terroso y herbáceo. Difícil de conseguir en CDMX.",     "precio": 280,  "categoria": "Sotol",     "popularidad": 510, "disponible": true },
+      { "id": "m4", "nombre": "Raicilla de Jalisco (copa)","descripcion": "Raicilla de agave maximiliana de la Sierra de Jalisco. Intenso y afrutado.",           "precio": 300,  "categoria": "Raicilla",  "popularidad": 470, "disponible": true },
+      { "id": "m5", "nombre": "Cata Guiada (3 copas)",     "descripcion": "Viernes y sábados: 3 mezcales diferentes + botanas oaxaqueñas maridadas.",           "precio": 500,  "categoria": "Catas",     "popularidad": 760, "disponible": true },
+      { "id": "m6", "nombre": "Botanas Oaxaqueñas",        "descripcion": "Chapulines, tasajo, quesillo, tlayuda mini y salsa de chicatanas. Para compartir.",   "precio": 250,  "categoria": "Botanas",   "popularidad": 590, "disponible": true }
+    ]
   },
   {
+    "id": "bicis-electricas-xochimilco",
     "nombre": "Renta de Bicis Eléctricas Xochimilco Verde",
-    "descripcion": "Bicicletas eléctricas para recorrer los canales de Xochimilco. Sin contaminación, silenciosas. 2 y 4 horas disponibles.",
-    "descripcion_en": "Electric bikes to tour Xochimilco canals. No pollution, silent. 2 and 4 hours available.",
+    "descripcion": "Xochimilco Verde nació en 2022 como respuesta ecológica a la contaminación sonora y de agua que producen los motores de lancha convencionales en los canales patrimonio de la UNESCO. Sus bicicletas eléctricas de tres ruedas permiten recorrer los caminos elevados entre chinampas sin hacer ruido ni contaminar, acercándose a la fauna acuática —garzas, patos, ajolotes— que huye de los motores. La ruta de 2 horas incluye una chinampa activa donde se cultivan flores y verduras para los mercados de la ciudad. Los fines de semana se organizan tours madrugadores de amanecer.",
+    "descripcion_en": "Xochimilco Verde was born in 2022 as an ecological response to the noise and water pollution caused by conventional outboard motors in the UNESCO heritage canals. Their three-wheeled electric bikes allow exploring the raised paths between chinampas without noise or pollution, getting close to aquatic wildlife — herons, ducks, axolotls — that flee from motors. The 2-hour route includes an active chinampa where flowers and vegetables are grown for the city's markets. On weekends, early-morning sunrise tours are organized.",
     "categoria": "transporte",
     "telefono": "+52 55 5676 4400",
     "whatsapp": "5215556764400",
@@ -611,7 +1532,29 @@
     "lat": 19.2568,
     "lng": -99.1020,
     "tags": ["bicicleta eléctrica", "xochimilco", "ecológico", "canales", "renta"],
-    "horario": "Sáb-Dom 8:00-17:00",
-    "precio_promedio": "MXN 180-320 por bici"
+    "horario": {
+      "lun": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mar": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "mie": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "jue": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "vie": { "abierto": false, "apertura": "00:00", "cierre": "00:00" },
+      "sab": { "abierto": true,  "apertura": "07:00", "cierre": "17:00" },
+      "dom": { "abierto": true,  "apertura": "07:00", "cierre": "17:00" }
+    },
+    "precio_promedio": "MXN 180-320 por bici",
+    "imagenUrl": "https://picsum.photos/seed/bici-electrica-xochimilco/640/480",
+    "imagenes": [
+      "https://picsum.photos/seed/bici-electrica-xochimilco/640/480",
+      "https://picsum.photos/seed/canales-chinampas/640/480",
+      "https://picsum.photos/seed/xochimilco-verde/640/480"
+    ],
+    "menu": [
+      { "id": "m1", "nombre": "Bici Eléctrica 2 Horas",     "descripcion": "E-bike 3 ruedas + casco + ruta por chinampas activas. Solo Sáb-Dom.",              "precio": 250,  "categoria": "Renta",       "popularidad": 780, "disponible": true },
+      { "id": "m2", "nombre": "Bici Eléctrica 4 Horas",     "descripcion": "4 horas para explorar a fondo los canales. Con parada en chinampa activa.",         "precio": 380,  "categoria": "Renta",       "popularidad": 650, "disponible": true },
+      { "id": "m3", "nombre": "Tour Amanecer (6:30-9:00)",  "descripcion": "Salida al amanecer por los canales más tranquilos. Fauna y naturaleza. Sáb-Dom.",    "precio": 320,  "categoria": "Tours",       "popularidad": 820, "disponible": true },
+      { "id": "m4", "nombre": "Tour Chinampa Activa",        "descripcion": "Visita guiada a chinampa donde se cultivan flores y verduras. 3 horas.",            "precio": 350,  "categoria": "Tours",       "popularidad": 740, "disponible": true },
+      { "id": "m5", "nombre": "Tandem Eléctrico (2 pax)",   "descripcion": "Bicicleta eléctrica tándem para 2 personas. Por 2 horas.",                           "precio": 400,  "categoria": "Renta",       "popularidad": 520, "disponible": true },
+      { "id": "m6", "nombre": "Fotografía de Naturaleza",   "descripcion": "Guía fotógrafo especializado en fauna de los canales. 3 horas. Material propio.",   "precio": 600,  "categoria": "Especiales",  "popularidad": 390, "disponible": true }
+    ]
   }
 ]

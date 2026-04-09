@@ -121,24 +121,14 @@ export default function RegistroNegocioPage() {
   const userRol   = (session as { rol?: string } | null)?.rol ?? null
 
   useEffect(() => {
-    console.log('[registro/useEffect] status:', status, '| userRol:', userRol, '| userEmail:', userEmail)
     if (status === 'loading') return
-    if (status === 'unauthenticated') {
-      console.log('[registro/useEffect] unauthenticated — redirecting to /login')
-      router.replace('/login?next=/negocio/registro')
-      return
-    }
+    if (status === 'unauthenticated') { router.replace('/login?next=/negocio/registro'); return }
     if (userRol === 'admin') { router.replace('/admin/dashboard'); return }
 
-    console.log('[registro/useEffect] authenticated — fetching /api/negocios/mio')
     fetch('/api/negocios/mio')
-      .then(r => { console.log('[registro/negocios/mio] status:', r.status); return r.json() })
-      .then(d => {
-        console.log('[registro/negocios/mio] data:', d)
-        setNegocioExistente(d.data ?? null)
-        setChecking(false)
-      })
-      .catch(err => { console.log('[registro/negocios/mio] error:', err); setChecking(false) })
+      .then(r => r.json())
+      .then(d => { setNegocioExistente(d.data ?? null); setChecking(false) })
+      .catch(() => setChecking(false))
   }, [status, router, userEmail, userRol])
 
   const usarUbicacion = () => {

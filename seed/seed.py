@@ -60,7 +60,7 @@ def build_categoria(cat: dict, now: str) -> dict:
 
 
 def build_negocio(negocio: dict, now: str) -> dict:
-    negocio_id = str(uuid.uuid4())
+    negocio_id = negocio.get("id") or str(uuid.uuid4())
     cat        = negocio["categoria"]
 
     return {
@@ -87,9 +87,11 @@ def build_negocio(negocio: dict, now: str) -> dict:
         "lat":              str(negocio["lat"]),   # DynamoDB Decimal → str para evitar float issues
         "lng":              str(negocio["lng"]),
         "tags":             negocio.get("tags", []),
-        "horario":          negocio.get("horario", ""),
+        "horario":          negocio.get("horario", {}),
         "precio_promedio":  negocio.get("precio_promedio", ""),
-        "imagenUrl":        "",
+        "imagenUrl":        negocio.get("imagenUrl", ""),
+        "imagenes":         negocio.get("imagenes", []),
+        "menu":             negocio.get("menu", []),
         "calificacion":     None,
         "totalReviews":     0,
         "propietarioId":    "SEED",           # marcado como seed, sin dueño real
