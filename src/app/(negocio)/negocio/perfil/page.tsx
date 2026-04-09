@@ -271,21 +271,21 @@ export default function PerfilNegocioPage() {
                     <div style={{ marginBottom: 10 }}>
                       <label style={{ display: 'block', fontSize: 12, fontWeight: 800, color: '#8a9690', textTransform: 'uppercase', marginBottom: 8 }}>Foto del Negocio</label>
                       <ImageUploader 
-                        onUploadComplete={(url) => setProfileDraft(p => ({ ...p, imagenUrl: url }))} 
-                        onUploadClear={() => setProfileDraft(p => ({ ...p, imagenUrl: undefined }))} 
+                        onUploadComplete={(url) => setProfileDraft((p: any) => ({ ...p, imagenUrl: url }))}
+                        onUploadClear={() => setProfileDraft((p: any) => ({ ...p, imagenUrl: undefined }))}
                       />
                     </div>
                     <div>
                       <label style={{ display: 'block', fontSize: 12, fontWeight: 800, color: '#8a9690', marginBottom: 6 }}>Nombre Público</label>
-                      <input value={profileDraft.nombre} onChange={e => setProfileDraft(p => ({ ...p, nombre: e.target.value }))} style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(13,124,102,0.2)' }} />
+                      <input value={profileDraft.nombre} onChange={e => setProfileDraft((p: any) => ({ ...p, nombre: e.target.value }))} style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(13,124,102,0.2)' }} />
                     </div>
                     <div>
                       <label style={{ display: 'block', fontSize: 12, fontWeight: 800, color: '#8a9690', marginBottom: 6 }}>Descripción</label>
-                      <textarea rows={4} value={profileDraft.descripcion} onChange={e => setProfileDraft(p => ({ ...p, descripcion: e.target.value }))} style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(13,124,102,0.2)', resize: 'none' }} />
+                      <textarea rows={4} value={profileDraft.descripcion} onChange={e => setProfileDraft((p: any) => ({ ...p, descripcion: e.target.value }))} style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(13,124,102,0.2)', resize: 'none' }} />
                     </div>
                     <div>
                       <label style={{ display: 'block', fontSize: 12, fontWeight: 800, color: '#8a9690', marginBottom: 6 }}>WhatsApp / Teléfono</label>
-                      <input value={profileDraft.telefono} onChange={e => setProfileDraft(p => ({ ...p, telefono: e.target.value }))} style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(13,124,102,0.2)' }} />
+                      <input value={profileDraft.telefono} onChange={e => setProfileDraft((p: any) => ({ ...p, telefono: e.target.value }))} style={{ width: '100%', padding: '12px', borderRadius: 12, border: '1.5px solid rgba(13,124,102,0.2)' }} />
                     </div>
                     <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
                       <button onClick={() => setIsEditingProfile(false)} style={{ flex: 1, padding: '14px', borderRadius: 12, border: '1.5px solid #e0ddd5', background: '#fff', color: '#8a9690', fontWeight: 700, cursor: 'pointer' }}>Cancelar</button>
