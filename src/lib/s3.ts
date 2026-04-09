@@ -1,19 +1,10 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
-
-const env = process.env as Record<string, string | undefined>
-
-const credentials = env['AWS_ACCESS_KEY_ID'] && env['AWS_SECRET_ACCESS_KEY']
-  ? {
-      accessKeyId:     env['AWS_ACCESS_KEY_ID'],
-      secretAccessKey: env['AWS_SECRET_ACCESS_KEY'],
-      sessionToken:    env['AWS_SESSION_TOKEN'],
-    }
-  : undefined
+import { AWS_REGION, awsCredentials } from '@/lib/aws-config'
 
 const s3 = new S3Client({
-  region:                     env['AWS_REGION'] ?? 'us-east-1',
-  credentials,
+  region:                     AWS_REGION,
+  credentials:                awsCredentials,
   requestChecksumCalculation: 'WHEN_REQUIRED',
   responseChecksumValidation: 'WHEN_REQUIRED',
 })
