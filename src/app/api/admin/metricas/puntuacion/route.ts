@@ -1,9 +1,16 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 import { QueryCommand } from '@aws-sdk/lib-dynamodb'
 import { dynamo, TABLE_NAME, GSI_STATUS } from '@/lib/dynamo'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 // GET /api/admin/metricas/puntuacion
 export async function GET() {
+  const session = await getServerSession(authOptions)
+  if ((session as any)?.rol !== 'admin') {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+  }
+
   try {
     const activos = await dynamo.send(new QueryCommand({
       TableName: TABLE_NAME,
@@ -19,11 +26,9 @@ export async function GET() {
 
     const conResenas = items.filter(n => n.calificacion != null && (n.totalReviews ?? 0) > 0)
 
-    const totalResenas = conResenas.reduce((sum, n) => sum + (n.totalReviews ?? 0), 0)
-    const sumaPonderada = conResenas.reduce((sum, n) => sum + (n.calificacion ?? 0) * (n.totalReviews ?? 0), 0)
-    const promedioGlobal = totalResenas > 0
-      ? Math.round((sumaPonderada / totalResenas) * 10) / 10
-      : 0
+    const totalResenas   = conResenas.reduce((sum, n) => sum + (n.totalReviews ?? 0), 0)
+    const sumaPonderada  = conResenas.reduce((sum, n) => sum + (n.calificacion ?? 0) * (n.totalReviews ?? 0), 0)
+    const promedioGlobal = totalResenas > 0 ? Math.round((sumaPonderada / totalResenas) * 10) / 10 : 0
 
     const porNegocio = conResenas
       .map(n => ({ negocioId: n.id, nombre: n.nombre, calificacion: n.calificacion!, totalReviews: n.totalReviews! }))

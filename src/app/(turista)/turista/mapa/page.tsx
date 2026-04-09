@@ -294,6 +294,16 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
 
   const requireLogin = (msg: string) => { setLoginMsg(msg); setShowLoginPrompt(true) }
 
+  // Track vista event when business detail opens
+  useEffect(() => {
+    fetch('/api/eventos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ negocioId: negocio.id, tipo: 'vista', idioma }),
+    }).catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [negocio.id])
+
   // Fetch favorites status + reviews on mount
   useEffect(() => {
     fetch(`/api/resenas?negocioId=${negocio.id}`)

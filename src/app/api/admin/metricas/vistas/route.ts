@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 import { QueryCommand } from '@aws-sdk/lib-dynamodb'
 import { dynamo, TABLE_NAME, GSI_STATUS } from '@/lib/dynamo'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 // GET /api/admin/metricas/vistas
 export async function GET() {
+  const session = await getServerSession(authOptions)
+  if ((session as any)?.rol !== 'admin') {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+  }
+
   try {
-    // 1. Obtener todos los negocios activos
     const activos = await dynamo.send(new QueryCommand({
       TableName: TABLE_NAME,
       IndexName: GSI_STATUS,
@@ -16,7 +22,6 @@ export async function GET() {
 
     const negocios = (activos.Items ?? []) as { id: string; nombre: string }[]
 
-    // 2. Contar eventos de tipo 'vista' por negocio en paralelo
     const conteos = await Promise.all(
       negocios.map(n =>
         dynamo.send(new QueryCommand({

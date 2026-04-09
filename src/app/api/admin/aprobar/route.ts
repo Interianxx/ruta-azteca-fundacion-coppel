@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { dynamo, TABLE_NAME } from '@/lib/dynamo'
 import { moverAGrupo } from '@/lib/cognito'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 // PUT /api/admin/aprobar — aprueba o rechaza un negocio
 export async function PUT(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+  if ((session as any)?.rol !== 'admin') {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
+  }
+
   const { negocioId, propietarioId, propietarioEmail, accion }: {
     negocioId: string
     propietarioId: string
@@ -15,7 +22,6 @@ export async function PUT(req: NextRequest) {
   const nuevoEstado = accion === 'aprobar' ? 'ACTIVE' : 'REJECTED'
   const updatedAt   = new Date().toISOString()
 
-  // 1. Actualizar estado en DynamoDB
   await dynamo.send(new UpdateCommand({
     TableName:                 TABLE_NAME,
     Key:                       { PK: `NEGOCIO#${negocioId}`, SK: 'METADATA' },
@@ -28,7 +34,6 @@ export async function PUT(req: NextRequest) {
     },
   }))
 
-  // 2. Mover usuario en Cognito (usar email como username; fallback al sub)
   if (accion === 'aprobar') {
     await moverAGrupo(propietarioEmail ?? propietarioId, 'negocio_pendiente', 'negocio_activo')
   }

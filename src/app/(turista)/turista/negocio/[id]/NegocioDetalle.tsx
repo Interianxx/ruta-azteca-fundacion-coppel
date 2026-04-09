@@ -86,6 +86,16 @@ export function NegocioDetalle({ negocio }: Props) {
     }).finally(() => setTraduciendo(false))
   }, [idioma])
 
+  // Track vista event
+  useEffect(() => {
+    fetch('/api/eventos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ negocioId: negocio.id, tipo: 'vista', idioma }),
+    }).catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [negocio.id])
+
   const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${negocio.lat},${negocio.lng}`
   const whatsappUrl   = negocio.whatsapp
     ? `https://wa.me/${negocio.whatsapp.replace(/\D/g, '')}`
@@ -340,7 +350,11 @@ export function NegocioDetalle({ negocio }: Props) {
             <Phone size={18} color="#0D7C66" /> {ui.contact}
           </div>
 
-          <a href={`tel:${negocio.telefono}`} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.5)', textDecoration: 'none', color: '#1A2E26', border: '1px solid rgba(255,255,255,0.4)' }}>
+          <a
+            href={`tel:${negocio.telefono}`}
+            onClick={() => fetch('/api/eventos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ negocioId: negocio.id, tipo: 'click_telefono', idioma }) }).catch(() => {})}
+            style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.5)', textDecoration: 'none', color: '#1A2E26', border: '1px solid rgba(255,255,255,0.4)' }}
+          >
             <div style={{ width: 36, height: 36, background: '#e1f5ee', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Phone size={18} color="#0D7C66" />
             </div>
@@ -348,7 +362,11 @@ export function NegocioDetalle({ negocio }: Props) {
           </a>
 
           {whatsappUrl && (
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.5)', textDecoration: 'none', color: '#1A2E26', border: '1px solid rgba(255,255,255,0.4)' }}>
+            <a
+              href={whatsappUrl} target="_blank" rel="noopener noreferrer"
+              onClick={() => fetch('/api/eventos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ negocioId: negocio.id, tipo: 'click_whatsapp', idioma }) }).catch(() => {})}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, borderRadius: 14, background: 'rgba(255,255,255,0.5)', textDecoration: 'none', color: '#1A2E26', border: '1px solid rgba(255,255,255,0.4)' }}
+            >
               <div style={{ width: 36, height: 36, background: '#25D366', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <MessageCircle size={18} color="#fff" />
               </div>
