@@ -1,4 +1,11 @@
 import type { NextConfig } from "next";
+import WithSerwistInit from "@serwist/next";
+
+const withSerwist = WithSerwistInit({
+  swSrc: 'src/app/service_worker.tsx',
+  swDest: 'public/service-worker.js',
+  reloadOnOnline: true,
+})
 
 const nextConfig: NextConfig = {
   turbopack: {
@@ -15,4 +22,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSerwist(nextConfig);

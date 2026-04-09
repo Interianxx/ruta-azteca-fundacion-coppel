@@ -1,14 +1,8 @@
 'use client'
-
 import { useState, useEffect } from 'react'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { 
-  Clock, CheckCircle, Map, BarChart2, Loader2, 
-  ShieldCheck, Check, ArrowLeft, MapPin, Phone, 
-  Store, Smartphone, LocateFixed, Utensils, Palette, 
-  BedDouble, Bus, LayoutGrid, type LucideIcon 
-} from 'lucide-react'
+import { Clock, CheckCircle, Map, BarChart2, Loader2, ShieldCheck, Check, ArrowLeft, MapPin, Phone, Store, Smartphone, LocateFixed, Utensils, Palette, BedDouble, Bus, LayoutGrid, type LucideIcon } from 'lucide-react'
 import type { CategoriaSlug } from '@/types/negocio'
 import { ImageUploader } from '@/components/Business/ImageUploader'
 
@@ -23,30 +17,25 @@ const CATEGORIAS: { slug: CategoriaSlug; label: string; Icon: LucideIcon; desc: 
   { slug: 'otro',       label: 'Otro',              Icon: LayoutGrid, desc: 'Servicios, tiendas, otros' },
 ]
 
-const CATEGORIA_EMOJI_REG: Record<string, string> = {
-  comida: '🥘', artesanias: '🎨', hospedaje: '🏨', tours: '🗺️', transporte: '🚐', otro: '🏪'
-}
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const inputStyle = (focused: boolean): React.CSSProperties => ({
-  width: '100%', padding: '14px 16px', borderRadius: 16,
-  border: `1.5px solid ${focused ? 'var(--color-jade-air-accent)' : 'rgba(13, 124, 102, 0.25)'}`,
-  outline: 'none', fontSize: 16, color: 'var(--text-main)', 
-  background: '#ffffff',
+  width: '100%', padding: '12px 14px', borderRadius: 12,
+  border: `1.5px solid ${focused ? '#0D7C66' : '#e0ddd5'}`,
+  outline: 'none', fontSize: 14, color: '#1A2E26', background: '#fafaf8',
   boxSizing: 'border-box',
-  boxShadow: focused ? '0 0 0 4px rgba(13,124,102,.12)' : '0 4px 12px rgba(0,0,0,0.03)',
-  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+  boxShadow: focused ? '0 0 0 3px rgba(13,124,102,.1)' : 'none',
+  transition: 'border-color .2s, box-shadow .2s',
 })
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div style={{ marginBottom: 18 }}>
-      <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#0A2E26', marginBottom: 6 }}>
+      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1A2E26', marginBottom: 6 }}>
         {label}
       </label>
       {children}
-      {hint && <p style={{ margin: '5px 0 0', fontSize: 11, color: '#4a5a52', fontWeight: 500 }}>{hint}</p>}
+      {hint && <p style={{ margin: '5px 0 0', fontSize: 11, color: '#8a9690' }}>{hint}</p>}
     </div>
   )
 }
@@ -55,35 +44,32 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28 }}>
       {Array.from({ length: total }).map((_, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{
-            width: 32, height: 32, borderRadius: '50%',
-            background: i < current ? '#0D7C66' : i === current ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : 'rgba(255,255,255,0.5)',
-            border: `1px solid ${i <= current ? 'transparent' : 'rgba(13,124,102,0.1)'}`,
+            width: 28, height: 28, borderRadius: '50%',
+            background: i < current ? '#0D7C66' : i === current ? '#0D7C66' : '#e8e6e0',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, transition: 'all .4s ease',
-            boxShadow: i === current ? '0 4px 12px rgba(13,124,102,0.3)' : 'none'
+            flexShrink: 0, transition: 'background .3s',
           }}>
             {i < current
-              ? <Check size={16} color="#fff" strokeWidth={3} />
-              : <span style={{ fontSize: 13, fontWeight: 800, color: i === current ? '#fff' : '#8a9690' }}>{i + 1}</span>
+              ? <Check size={14} color="#fff" strokeWidth={3} />
+              : <span style={{ fontSize: 12, fontWeight: 700, color: i === current ? '#fff' : '#8a9690' }}>{i + 1}</span>
             }
           </div>
           {i < total - 1 && (
             <div style={{
-              height: 2, width: 40, borderRadius: 2,
-              background: i < current ? '#0D7C66' : 'rgba(13,124,102,0.1)',
-              transition: 'all .4s ease',
+              height: 2, width: 32, borderRadius: 2,
+              background: i < current ? '#0D7C66' : '#e8e6e0',
+              transition: 'background .3s',
             }} />
           )}
         </div>
       ))}
-      <div style={{ marginLeft: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-        <span style={{ fontSize: 10, color: '#4a5a52', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '.05em' }}>Progreso</span>
-        <span style={{ fontSize: 14, color: '#0D7C66', fontWeight: 900 }}>{Math.round(((current + 1) / total) * 100)}%</span>
-      </div>
+      <span style={{ marginLeft: 4, fontSize: 12, color: '#8a9690', fontWeight: 500 }}>
+        Paso {current + 1} de {total}
+      </span>
     </div>
   )
 }
@@ -99,8 +85,7 @@ export default function RegistroNegocioPage() {
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const [geoLoading, setGeoLoading] = useState(false)
-  const [negocioExistente, setNegocioExistente] = useState<any>(null)
-  const [checking, setChecking] = useState(true)
+  const [negocioExistente, setNegocioExistente] = useState<Record<string, unknown> | null | 'loading'>('loading')
 
   // Focus states
   const [focused, setFocused] = useState<string>('')
@@ -120,19 +105,14 @@ export default function RegistroNegocioPage() {
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') { router.replace('/login?next=/negocio/registro'); return }
-    
     const rol = (session as { rol?: string } | null)?.rol
     if (rol === 'admin') { router.replace('/admin/dashboard'); return }
-    
     // Verificar si ya tiene negocio registrado
     fetch('/api/negocios/mio')
       .then(r => r.json())
-      .then(d => {
-        setNegocioExistente(d.data ?? null)
-        setChecking(false)
-      })
-      .catch(() => setChecking(false))
-  }, [status, router, session])
+      .then(d => setNegocioExistente(d.data ?? null))
+      .catch(() => setNegocioExistente(null))
+  }, [status, router])
 
   const usarUbicacion = () => {
     if (!navigator.geolocation) return
@@ -168,67 +148,61 @@ export default function RegistroNegocioPage() {
       })
       if (!res.ok) throw new Error('Error al registrar')
       setDone(true)
-    } catch (err) {
+    } catch {
       setError('Ocurrió un error al enviar tu registro. Intenta de nuevo.')
     } finally {
       setSubmitting(false)
     }
   }
 
-  if (status === 'loading' || checking) return (
-    <div className="bg-jade-air flex items-center justify-center min-h-screen">
-      <div style={{ textAlign: 'center' }}>
-        <Loader2 size={42} color="var(--color-jade-air-accent)" className="animate-spin mb-4" />
-        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-jade-air-accent)', letterSpacing: '.08em' }}>SINCRONIZANDO REGISTRO...</div>
-      </div>
+  if (status === 'loading' || negocioExistente === 'loading') return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f7f6f2' }}>
+      <Loader2 size={32} color="#0D7C66" style={{ animation: 'spin 0.8s linear infinite' }} />
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </div>
   )
 
   // ── Ya registró su negocio — en revisión ──
   if (negocioExistente && !done) {
-    const neg = negocioExistente
+    const neg = negocioExistente as { nombre?: string; categoria?: string; createdAt?: string }
     return (
-      <div className="bg-jade-air flex items-center justify-center min-h-screen p-6 overflow-hidden relative">
-        <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '40%', height: '40%', background: 'radial-gradient(circle, rgba(13,124,102,0.1) 0%, transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: 460, width: '100%', position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40, justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(13,124,102,0.2)' }}>
-                <ShieldCheck size={18} color="#fff" />
-              </div>
-              <span style={{ fontSize: 18, fontWeight: 900, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
+      <div style={{ minHeight: '100vh', background: '#f7f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: 'system-ui,-apple-system,sans-serif' }}>
+        <div style={{ maxWidth: 440, width: '100%' }}>
+          {/* Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 16, fontWeight: 800, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
+              <ShieldCheck size={16} color="#1A9E78" />
             </div>
           </div>
 
-          <div className="glass-card" style={{ padding: 32, marginBottom: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32 }}>
-              <div style={{ width: 68, height: 68, borderRadius: 20, background: 'rgba(197, 160, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: '1px solid rgba(197, 160, 68, 0.2)' }}>
-                <Clock size={32} color="#C5A044" />
+          {/* Status card */}
+          <div style={{ background: '#fff', borderRadius: 20, padding: 28, border: '1px solid #e8e6e0', boxShadow: '0 4px 20px rgba(0,0,0,.06)', marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 16, background: 'linear-gradient(135deg, #FFF8E7, #FEF3C7)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Clock size={28} color="#C5A044" />
               </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 900, color: '#C5A044', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 4 }}>Solicitud en Curso</div>
-                <div style={{ fontSize: 22, fontWeight: 900, color: '#1A2E26', letterSpacing: '-0.02em' }}>{neg.nombre ?? 'Tu negocio'}</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#C5A044', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 4 }}>En revisión</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#1A2E26' }}>{neg.nombre ?? 'Tu negocio'}</div>
               </div>
             </div>
 
-            <p style={{ fontSize: 15, color: '#4a5a52', lineHeight: 1.7, marginBottom: 28 }}>
-              Estamos validando tu información. Recibimos tu solicitud el <strong>{neg.createdAt ? new Date(neg.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) : 'recientemente'}</strong>.
+            <p style={{ fontSize: 14, color: '#4a5a52', lineHeight: 1.7, marginBottom: 20 }}>
+              Recibimos tu solicitud el <strong>{neg.createdAt ? new Date(neg.createdAt).toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) : '—'}</strong>. El equipo de Ruta Azteca la está revisando.
             </p>
 
-            <div style={{ background: 'rgba(13, 124, 102, 0.05)', borderRadius: 24, padding: 20, border: '1px solid rgba(13, 124, 102, 0.08)' }}>
-              <div style={{ fontSize: 11, fontWeight: 800, color: '#0D7C66', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 16 }}>Hoja de ruta</div>
+            <div style={{ background: '#f7f6f2', borderRadius: 12, padding: 16 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 12 }}>Próximos pasos</div>
               {[
-                { Icon: CheckCircle, t: 'Validación Técnica',   d: 'Verificamos fotos y coordenadas' },
-                { Icon: Map,         t: 'Publicación en Mapa',   d: 'Visibilidad para fans de la FIFA' },
-                { Icon: BarChart2,   t: 'Dashboard Activo',       d: 'Acceso a métricas de impacto' },
+                { Icon: CheckCircle, t: 'Revisión del equipo',   d: 'Verificamos que tu negocio cumpla los requisitos' },
+                { Icon: Map,         t: 'Aprobación',             d: 'Apareces en el mapa para turistas del Mundial' },
+                { Icon: BarChart2,   t: 'Tu perfil activo',       d: 'Recibes reseñas y métricas de visitas' },
               ].map(({ Icon, t, d }) => (
-                <div key={t} style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 14 }}>
-                  <div style={{ width: 32, height: 32, borderRadius: 10, background: 'rgba(13, 124, 102, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon size={16} color="#0D7C66" />
-                  </div>
+                <div key={t} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
+                  <Icon size={16} color="#0D7C66" style={{ flexShrink: 0, marginTop: 2 }} />
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#1A2E26' }}>{t}</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>{t}</div>
                     <div style={{ fontSize: 12, color: '#8a9690' }}>{d}</div>
                   </div>
                 </div>
@@ -236,17 +210,15 @@ export default function RegistroNegocioPage() {
             </div>
           </div>
 
+          <p style={{ fontSize: 12, color: '#8a9690', textAlign: 'center', lineHeight: 1.6, marginBottom: 20 }}>
+            Si tienes preguntas, contacta al equipo en la sección de soporte.
+          </p>
+
           <button
             onClick={() => router.replace('/turista/mapa')}
-            style={{ 
-              width: '100%', padding: '18px', 
-              background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', 
-              border: 'none', borderRadius: 20, fontSize: 16, fontWeight: 800, color: '#fff', 
-              cursor: 'pointer', boxShadow: '0 8px 24px rgba(13,124,102,0.3)',
-              transition: 'transform 0.2s'
-            }}
+            style={{ width: '100%', padding: '15px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer' }}
           >
-            Explorar como Turista
+            Explorar el mapa
           </button>
         </div>
       </div>
@@ -255,340 +227,341 @@ export default function RegistroNegocioPage() {
 
   // ── Pantalla de éxito ──
   if (done) return (
-    <div className="bg-jade-air flex items-center justify-center min-h-screen p-6">
-      <div style={{ maxWidth: 460, width: '100%', textAlign: 'center' }}>
-        <div style={{ 
-          width: 88, height: 88, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', 
-          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px', 
-          boxShadow: '0 12px 32px rgba(13,124,102,0.25)', borderRadius: '50%'
-        }}>
-          <Check size={40} color="#fff" strokeWidth={3} />
+    <div style={{ minHeight: '100vh', background: '#f7f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: 'system-ui,-apple-system,sans-serif' }}>
+      <div style={{ maxWidth: 420, width: '100%', textAlign: 'center' }}>
+        <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', boxShadow: '0 8px 24px rgba(13,124,102,.3)' }}>
+          <Check size={36} color="#fff" strokeWidth={3} />
         </div>
-        
-        <h1 style={{ fontSize: 26, fontWeight: 900, color: '#1A2E26', marginBottom: 12 }}>¡Solicitud Enviada!</h1>
-        <p style={{ fontSize: 16, color: '#4a5a52', lineHeight: 1.6, marginBottom: 32 }}>
-          Tu negocio <strong>{nombre}</strong> ha iniciado su proceso de registro de manera exitosa.
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: '#1A2E26', marginBottom: 12 }}>¡Registro enviado!</h1>
+        <p style={{ fontSize: 15, color: '#4a5a52', lineHeight: 1.6, marginBottom: 8 }}>
+          Tu negocio <strong>{nombre}</strong> está en revisión por el equipo de Ola México.
         </p>
-
-        <div className="glass-card" style={{ padding: 24, paddingBottom: 16, textAlign: 'left', marginBottom: 32 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--color-jade-air-accent)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 16 }}>¿Qué sigue?</div>
+        <p style={{ fontSize: 13, color: '#8a9690', lineHeight: 1.6, marginBottom: 32 }}>
+          Recibirás una notificación cuando sea aprobado y aparezca en el mapa.
+        </p>
+        <div style={{ background: '#fff', borderRadius: 16, padding: '16px 20px', border: '1px solid #e8e6e0', marginBottom: 28, textAlign: 'left' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: 12 }}>¿Qué sigue?</div>
           {[
-            { n: '1', t: 'Verificación', d: 'Validamos fotos y datos del local.' },
-            { n: '2', t: 'Aprobación', d: 'Tu pin aparece activo en el mapa.' },
-          ].map(({ n, t, d }) => (
-            <div key={n} style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 14 }}>
-              <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(13, 124, 102, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span style={{ fontSize: 12, fontWeight: 900, color: '#0D7C66' }}>{n}</span>
+            ['1', 'El equipo revisa tu información'],
+            ['2', 'Te contactamos si necesitamos algo más'],
+            ['3', 'Tu negocio aparece en el mapa para turistas FIFA 2026'],
+          ].map(([n, t]) => (
+            <div key={n} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
+              <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#e0f7f1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#0D7C66' }}>{n}</span>
               </div>
-              <div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: '#1A2E26' }}>{t}: </span>
-                <span style={{ fontSize: 13, color: '#8a9690' }}>{d}</span>
-              </div>
+              <span style={{ fontSize: 13, color: '#4a5a52', lineHeight: 1.5 }}>{t}</span>
             </div>
           ))}
-          <div style={{ marginTop: 8, padding: '12px 14px', background: 'rgba(197, 160, 68, 0.08)', borderRadius: 14, display: 'flex', gap: 10, alignItems: 'center' }}>
-            <span style={{ fontSize: 20 }}>💡</span>
-            <p style={{ fontSize: 12, color: '#92400E', margin: 0, fontWeight: 600 }}>Cierra sesión y vuelve a entrar para activar tus permisos.</p>
-          </div>
         </div>
-
         <button
-          onClick={() => signOut({ callbackUrl: '/login' })}
-          style={{ 
-            width: '100%', padding: '18px', 
-            background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', 
-            border: 'none', borderRadius: 20, fontSize: 16, fontWeight: 800, color: '#fff', 
-            cursor: 'pointer', boxShadow: '0 8px 24px rgba(13,124,102,0.3)'
-          }}
+          onClick={() => router.replace('/turista/mapa')}
+          style={{ width: '100%', padding: '15px', background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700, color: '#fff', cursor: 'pointer' }}
         >
-          Cerrar sesión ahora
+          Explorar el mapa
         </button>
       </div>
     </div>
   )
 
   return (
-    <div className="bg-jade-air min-h-screen" style={{ fontFamily: 'var(--font-inter), sans-serif', paddingBottom: 40 }}>
-      {/* Header Premium Jade Air Dense */}
-      <div style={{ 
-        background: 'rgba(255, 255, 255, 0.85)', 
-        backdropFilter: 'var(--glass-blur)', 
-        borderBottom: '1px solid rgba(13,124,102,0.12)', 
-        padding: '16px 24px', 
-        display: 'flex', alignItems: 'center', gap: 16, 
-        position: 'sticky', top: 0, zIndex: 100,
-        boxShadow: '0 4px 20px rgba(0,0,0,0.03)'
-      }}>
+    <div style={{ minHeight: '100vh', background: '#f7f6f2', fontFamily: 'system-ui,-apple-system,sans-serif' }}>
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+
+      {/* Header */}
+      <div style={{ background: '#fff', borderBottom: '1px solid #f0efeb', padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12, position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => step === 0 ? router.back() : setStep(s => s - 1)}
-          style={{ width: 40, height: 40, borderRadius: 14, border: '1px solid rgba(13, 124, 102, 0.1)', background: 'rgba(13, 124, 102, 0.05)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
-          <ArrowLeft size={20} color="#0D7C66" />
+          style={{ width: 36, height: 36, borderRadius: '50%', border: 'none', background: '#f7f6f2', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4a5a52' }}>
+          <ArrowLeft size={20} color="#4a5a52" />
         </button>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 16, fontWeight: 900, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
-            <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#1A9E78' }} />
-            <span style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 600 }}>Registro</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 15, fontWeight: 800, color: '#0D7C66', letterSpacing: '.05em' }}>RUTA AZTECA</span>
+            <ShieldCheck size={16} color="#1A9E78" />
           </div>
+          <div style={{ fontSize: 11, color: '#8a9690', fontWeight: 500 }}>Registrar negocio</div>
         </div>
         {session?.user?.image && (
           <img src={session.user.image} alt="" referrerPolicy="no-referrer"
-            style={{ width: 36, height: 36, borderRadius: 12, objectFit: 'cover', marginLeft: 'auto', border: '2px solid #fff', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+            style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', marginLeft: 'auto', border: '2px solid #e0f7f1' }} />
         )}
       </div>
 
-      <div style={{ maxWidth: 580, margin: '0 auto', padding: '32px 20px' }}>
-        
-        <div className="glass-card" style={{ padding: 32 }}>
+      {/* Content */}
+      <div style={{ maxWidth: 520, margin: '0 auto', padding: '28px 20px 60px' }}>
 
-          <StepIndicator current={step} total={3} />
+        <StepIndicator current={step} total={3} />
 
-          {/* ── Paso 0: Info básica ── */}
-          {step === 0 && (
-            <div>
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', marginBottom: 14 }}>
-                  <Store size={24} color="#fff" />
-                </div>
-                <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A2E26', marginBottom: 6 }}>Cuéntanos de tu negocio</h1>
-                <p style={{ fontSize: 14, color: '#8a9690', lineHeight: 1.6 }}>Esta información aparecerá en el mapa para los turistas del Mundial.</p>
+        {/* ── Paso 0: Info básica ── */}
+        {step === 0 && (
+          <div>
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', marginBottom: 14 }}>
+                <Store size={24} color="#fff" />
               </div>
-
-              <Field label="Nombre del negocio *" hint="Máximo 80 caracteres">
-                <input
-                  value={nombre}
-                  onChange={e => setNombre(e.target.value)}
-                  onFocus={() => setFocused('nombre')}
-                  onBlur={() => setFocused('')}
-                  placeholder="Ej. Tacos de Canasta El Rey"
-                  maxLength={80}
-                  style={inputStyle(focused === 'nombre')}
-                />
-              </Field>
-
-              <Field label="Descripción *" hint="Cuéntale al turista qué ofreces (mín 10 car.)">
-                <textarea
-                  value={descripcion}
-                  onChange={e => setDescripcion(e.target.value)}
-                  onFocus={() => setFocused('desc')}
-                  onBlur={() => setFocused('')}
-                  placeholder="Ej. Los mejores tacos de guisado en el área, hechos al momento..."
-                  maxLength={300}
-                  rows={4}
-                  style={{ ...inputStyle(focused === 'desc'), resize: 'vertical', minHeight: 96 }}
-                />
-                <p style={{ margin: '4px 0 0', fontSize: 11, color: descripcion.length > 250 ? '#C5A044' : '#8a9690', textAlign: 'right' }}>{descripcion.length}/300</p>
-              </Field>
-
-              <Field label="Categoría *">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
-                  {CATEGORIAS.map(cat => {
-                    const selected = categoria === cat.slug
-                    return (
-                      <button key={cat.slug} onClick={() => setCategoria(cat.slug)}
-                        style={{
-                          display: 'flex', flexDirection: 'column', gap: 10,
-                          padding: '16px 14px', borderRadius: 18, textAlign: 'left',
-                          background: selected ? 'rgba(13, 124, 102, 0.04)' : '#fff',
-                          border: `1.5px solid ${selected ? 'var(--color-jade-air-accent)' : 'rgba(13,102,102,0.1)'}`,
-                          cursor: 'pointer', transition: 'all .2s',
-                        }}>
-                        <div style={{ width: 40, height: 40, borderRadius: 12, background: selected ? 'var(--color-jade-air-accent)' : 'rgba(13, 124, 102, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .2s' }}>
-                          <cat.Icon size={20} color={selected ? '#fff' : 'var(--color-jade-air-accent)'} />
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: selected ? 'var(--color-jade-air-accent)' : '#1A2E26' }}>{cat.label}</div>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-              </Field>
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A2E26', marginBottom: 6 }}>Cuéntanos de tu negocio</h1>
+              <p style={{ fontSize: 14, color: '#8a9690', lineHeight: 1.6 }}>Esta información aparecerá en el mapa para los turistas del Mundial FIFA 2026.</p>
             </div>
-          )}
 
-          {/* ── Paso 1: Contacto y ubicación ── */}
-          {step === 1 && (
-            <div>
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', marginBottom: 14 }}>
-                  <MapPin size={24} color="#fff" />
-                </div>
-                <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A2E26', marginBottom: 6 }}>¿Dónde estás?</h1>
-                <p style={{ fontSize: 14, color: '#8a9690', lineHeight: 1.6 }}>Indica tu ubicación exacta para el mapa.</p>
+            <Field label="Nombre del negocio *" hint="El nombre que los turistas verán en el mapa">
+              <input
+                value={nombre}
+                onChange={e => setNombre(e.target.value)}
+                onFocus={() => setFocused('nombre')}
+                onBlur={() => setFocused('')}
+                placeholder="Ej. Tacos de Canasta Don Memo"
+                maxLength={80}
+                style={inputStyle(focused === 'nombre')}
+              />
+            </Field>
+
+            <Field label="Descripción *" hint="Mínimo 10 caracteres — qué ofreces, qué te hace especial">
+              <textarea
+                value={descripcion}
+                onChange={e => setDescripcion(e.target.value)}
+                onFocus={() => setFocused('desc')}
+                onBlur={() => setFocused('')}
+                placeholder="Ej. Auténticos tacos de canasta con 30 años de tradición familiar, a media cuadra del metro..."
+                maxLength={300}
+                rows={4}
+                style={{ ...inputStyle(focused === 'desc'), resize: 'vertical', minHeight: 96 }}
+              />
+              <p style={{ margin: '4px 0 0', fontSize: 11, color: descripcion.length > 250 ? '#C5A044' : '#8a9690', textAlign: 'right' }}>{descripcion.length}/300</p>
+            </Field>
+
+            <Field label="Categoría *">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                {CATEGORIAS.map(cat => {
+                  const selected = categoria === cat.slug
+                  return (
+                    <button key={cat.slug} onClick={() => setCategoria(cat.slug)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 10,
+                        padding: '12px 14px', borderRadius: 14, textAlign: 'left',
+                        background: selected ? '#f0fdf8' : '#fff',
+                        border: `1.5px solid ${selected ? '#0D7C66' : '#e8e6e0'}`,
+                        cursor: 'pointer', transition: 'all .2s',
+                      }}>
+                      <div style={{ width: 36, height: 36, borderRadius: 10, background: selected ? '#0D7C66' : '#f7f6f2', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background .2s' }}>
+                        <cat.Icon size={18} color={selected ? '#fff' : '#4a5a52'} />
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 12, fontWeight: 700, color: selected ? '#0D7C66' : '#1A2E26' }}>{cat.label}</div>
+                        <div style={{ fontSize: 10, color: '#8a9690', lineHeight: 1.3 }}>{cat.desc}</div>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
+            </Field>
+          </div>
+        )}
 
-              <Field label="Foto representativa" hint="Una foto de tu local o productos estrella">
-                <ImageUploader
-                  onUploadComplete={(url) => setImagenUrl(url)}
-                  onUploadClear={() => setImagenUrl(undefined)}
-                />
-              </Field>
+        {/* ── Paso 1: Contacto y ubicación ── */}
+        {step === 1 && (
+          <div>
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', marginBottom: 14 }}>
+                <MapPin size={24} color="#fff" />
+              </div>
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A2E26', marginBottom: 6 }}>¿Cómo encontrarte?</h1>
+              <p style={{ fontSize: 14, color: '#8a9690', lineHeight: 1.6 }}>Los turistas necesitan saber dónde estás y cómo contactarte.</p>
+            </div>
 
-              <Field label="Teléfono de contacto *" hint="Para llamadas directas de turistas">
-                <div style={{ position: 'relative' }}>
-                  <div style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}><Phone size={16} /></div>
-                  <input
-                    value={telefono}
-                    onChange={e => setTelefono(e.target.value.replace(/\D/g, '').slice(0, 15))}
-                    onFocus={() => setFocused('tel')}
-                    onBlur={() => setFocused('')}
-                    placeholder="Ej. 5512345678"
-                    type="tel"
-                    style={{ ...inputStyle(focused === 'tel'), paddingLeft: 40 }}
-                  />
-                </div>
-              </Field>
+            <Field label="Foto del negocio" hint="Opcional — ayuda a los turistas a reconocer tu negocio">
+              <ImageUploader
+                onUploadComplete={(url) => setImagenUrl(url)}
+                onUploadClear={() => setImagenUrl(undefined)}
+              />
+            </Field>
 
-              <Field label="Dirección exacta *" hint="Calle, número, colonia">
-                <textarea
-                  value={direccion}
-                  onChange={e => setDireccion(e.target.value)}
-                  onFocus={() => setFocused('dir')}
+            <Field label="Teléfono *" hint="Con código de área, ej. 5512345678">
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#8a9690', display: 'flex' }}><Phone size={16} color="#8a9690" /></div>
+                <input
+                  value={telefono}
+                  onChange={e => setTelefono(e.target.value.replace(/\D/g, '').slice(0, 15))}
+                  onFocus={() => setFocused('tel')}
                   onBlur={() => setFocused('')}
-                  placeholder="Ej. Av. Reforma 123, Col. Juárez..."
-                  rows={2}
-                  style={{ ...inputStyle(focused === 'dir'), resize: 'none' }}
+                  placeholder="5512345678"
+                  type="tel"
+                  style={{ ...inputStyle(focused === 'tel'), paddingLeft: 36 }}
                 />
-              </Field>
+              </div>
+            </Field>
 
-              <Field label="Ubicación GPS *" hint="Presiona el botón para mejores resultados">
-                <button onClick={usarUbicacion} disabled={geoLoading}
-                  style={{
-                    width: '100%', padding: '14px', borderRadius: 16, marginBottom: 12,
-                    background: geoLoading ? 'rgba(13, 124, 102, 0.05)' : 'rgba(13, 124, 102, 0.05)',
-                    border: '1.5px dashed var(--color-jade-air-accent)', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                    fontSize: 14, fontWeight: 700, color: 'var(--color-jade-air-accent)',
-                  }}>
-                  {geoLoading
-                    ? <><Loader2 size={16} className="animate-spin" /> Localizando...</>
-                    : <><LocateFixed size={18} /> Obtener ubicación actual</>}
-                </button>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <Field label="WhatsApp" hint="Opcional — si tienes número diferente al teléfono">
+              <div style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', display: 'flex' }}><Smartphone size={16} color="#8a9690" /></div>
+                <input
+                  value={whatsapp}
+                  onChange={e => setWhatsapp(e.target.value.replace(/\D/g, '').slice(0, 15))}
+                  onFocus={() => setFocused('wa')}
+                  onBlur={() => setFocused('')}
+                  placeholder="5512345678"
+                  type="tel"
+                  style={{ ...inputStyle(focused === 'wa'), paddingLeft: 36 }}
+                />
+              </div>
+            </Field>
+
+            <Field label="Dirección *" hint="Calle, número, colonia, ciudad">
+              <textarea
+                value={direccion}
+                onChange={e => setDireccion(e.target.value)}
+                onFocus={() => setFocused('dir')}
+                onBlur={() => setFocused('')}
+                placeholder="Ej. Calle Madero 45, Col. Centro, CDMX"
+                rows={2}
+                style={{ ...inputStyle(focused === 'dir'), resize: 'none' }}
+              />
+            </Field>
+
+            <Field label="Coordenadas GPS *" hint="Necesarias para aparecer en el mapa">
+              <button onClick={usarUbicacion} disabled={geoLoading}
+                style={{
+                  width: '100%', padding: '11px 14px', borderRadius: 12, marginBottom: 10,
+                  background: geoLoading ? '#f0efeb' : '#e0f7f1',
+                  border: '1.5px dashed #0D7C66', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  fontSize: 13, fontWeight: 600, color: '#0D7C66',
+                }}>
+                {geoLoading
+                  ? <><Loader2 size={15} style={{ animation: 'spin 0.8s linear infinite' }} /> Obteniendo ubicación…</>
+                  : <><LocateFixed size={15} /> Usar mi ubicación actual</>}
+              </button>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div>
+                  <label style={{ fontSize: 11, color: '#8a9690', display: 'block', marginBottom: 4 }}>Latitud</label>
                   <input
                     value={lat}
                     onChange={e => setLat(e.target.value === '' ? '' : Number(e.target.value))}
                     onFocus={() => setFocused('lat')}
                     onBlur={() => setFocused('')}
-                    placeholder="Latitud"
+                    placeholder="19.4326"
                     type="number"
+                    step="any"
                     style={inputStyle(focused === 'lat')}
                   />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, color: '#8a9690', display: 'block', marginBottom: 4 }}>Longitud</label>
                   <input
                     value={lng}
                     onChange={e => setLng(e.target.value === '' ? '' : Number(e.target.value))}
                     onFocus={() => setFocused('lng')}
                     onBlur={() => setFocused('')}
-                    placeholder="Longitud"
+                    placeholder="-99.1332"
                     type="number"
+                    step="any"
                     style={inputStyle(focused === 'lng')}
                   />
                 </div>
-              </Field>
+              </div>
+            </Field>
 
-              <Field label="Etiquetas (Tags)" hint="Separadas por comas (ej: tacos, barato, vegano)">
-                <input
-                  value={tags}
-                  onChange={e => setTags(e.target.value)}
-                  onFocus={() => setFocused('tags')}
-                  onBlur={() => setFocused('')}
-                  placeholder="tacos, tortas, local..."
-                  style={inputStyle(focused === 'tags')}
-                />
-              </Field>
+            <Field label="Etiquetas" hint="Opcional — palabras clave separadas por coma">
+              <input
+                value={tags}
+                onChange={e => setTags(e.target.value)}
+                onFocus={() => setFocused('tags')}
+                onBlur={() => setFocused('')}
+                placeholder="Ej. vegano, tradicional, barato, familiar"
+                style={inputStyle(focused === 'tags')}
+              />
+            </Field>
+          </div>
+        )}
+
+        {/* ── Paso 2: Resumen ── */}
+        {step === 2 && (
+          <div>
+            <div style={{ marginBottom: 24 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', marginBottom: 14 }}>
+                <ShieldCheck size={16} color="#1A9E78" />
+              </div>
+              <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A2E26', marginBottom: 6 }}>Confirma tu registro</h1>
+              <p style={{ fontSize: 14, color: '#8a9690', lineHeight: 1.6 }}>Revisa que todo esté correcto antes de enviar.</p>
             </div>
-          )}
 
-          {/* ── Paso 2: Resumen ── */}
-          {step === 2 && (
-            <div>
-              <div style={{ marginBottom: 24 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 14, background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', marginBottom: 14 }}>
-                  <CheckCircle size={24} color="#fff" />
+            <div style={{ background: '#fff', borderRadius: 18, border: '1px solid #e8e6e0', overflow: 'hidden', marginBottom: 20 }}>
+              {/* Cat badge */}
+              <div style={{ background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 28 }}>{CATEGORIAS.find(c => c.slug === categoria)?.emoji}</span>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: '#fff' }}>{nombre}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,.75)' }}>{CATEGORIAS.find(c => c.slug === categoria)?.label}</div>
                 </div>
-                <h1 style={{ fontSize: 22, fontWeight: 800, color: '#1A2E26', marginBottom: 6 }}>Todo listo</h1>
-                <p style={{ fontSize: 14, color: '#8a9690', lineHeight: 1.6 }}>Revisa tu registro por última vez.</p>
               </div>
 
-              <div className="glass-card" style={{ padding: 0, overflow: 'hidden', marginBottom: 24, background: 'rgba(255,255,255,0.6)' }}>
-                <div style={{ background: 'linear-gradient(135deg, #0D7C66, #1A9E78)', padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div style={{ fontSize: 32 }}>{CATEGORIA_EMOJI_REG[categoria] ?? '🏪'}</div>
-                  <div>
-                    <div style={{ fontSize: 18, fontWeight: 900, color: '#fff' }}>{nombre}</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)', fontWeight: 700 }}>{CATEGORIAS.find(c => c.slug === categoria)?.label}</div>
+              <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {[
+                  { label: 'Descripción', value: descripcion },
+                  { label: 'Teléfono',    value: telefono },
+                  { label: 'WhatsApp',    value: whatsapp || '—' },
+                  { label: 'Dirección',   value: direccion },
+                  { label: 'Coordenadas', value: `${Number(lat).toFixed(5)}, ${Number(lng).toFixed(5)}` },
+                  { label: 'Etiquetas',   value: tags || '—' },
+                ].map(({ label, value }) => (
+                  <div key={label}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 2 }}>{label}</div>
+                    <div style={{ fontSize: 13, color: '#1A2E26', lineHeight: 1.5 }}>{value}</div>
                   </div>
-                </div>
-
-                <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {[
-                    { l: 'Descripción', v: descripcion },
-                    { l: 'Ubicación', v: direccion },
-                    { l: 'Contacto', v: telefono },
-                  ].map(x => (
-                    <div key={x.l}>
-                      <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--color-jade-air-accent)', textTransform: 'uppercase', letterSpacing: '.05em' }}>{x.l}</div>
-                      <div style={{ fontSize: 14, color: '#1A2E26', fontWeight: 500 }}>{x.v}</div>
-                    </div>
-                  ))}
-                </div>
+                ))}
               </div>
-
-              {error && (
-                <div style={{ background: 'rgba(220, 38, 38, 0.05)', border: '1px solid rgba(220, 38, 38, 0.2)', padding: '12px 16px', borderRadius: 16, color: '#DC2626', fontSize: 13, marginBottom: 20 }}>
-                  {error}
-                </div>
-              )}
             </div>
-          )}
 
-          {/* ── Navegación ── */}
-          <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-            {step > 0 && (
-              <button onClick={() => setStep(s => s - 1)}
-                style={{ 
-                  flex: 1, padding: '18px', 
-                  background: 'rgba(255,255,255,0.5)', 
-                  border: '1.5px solid rgba(13, 102, 102, 0.12)', 
-                  borderRadius: 20, fontSize: 15, fontWeight: 700, color: '#4a5a52', 
-                  cursor: 'pointer'
-                }}>
-                Atrás
-              </button>
-            )}
-            {step < 2 ? (
-              <button
-                onClick={() => setStep(s => s + 1)}
-                disabled={step === 0 ? !canNext0 : !canNext1}
-                style={{
-                  flex: 2, padding: '18px',
-                  background: (step === 0 ? canNext0 : canNext1) ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : 'rgba(13, 102, 102, 0.1)',
-                  border: 'none', borderRadius: 20, fontSize: 16, fontWeight: 800,
-                  color: (step === 0 ? canNext0 : canNext1) ? '#fff' : '#8a9690',
-                  cursor: (step === 0 ? canNext0 : canNext1) ? 'pointer' : 'not-allowed',
-                  boxShadow: (step === 0 ? canNext0 : canNext1) ? '0 8px 24px rgba(13,124,102,0.2)' : 'none',
-                }}>
-                Siguiente Paso
-              </button>
-            ) : (
-              <button onClick={handleSubmit} disabled={submitting}
-                style={{
-                  flex: 2, padding: '18px',
-                  background: submitting ? 'rgba(13, 102, 102, 0.1)' : 'linear-gradient(135deg, #0D7C66, #1A9E78)',
-                  border: 'none', borderRadius: 20, fontSize: 16, fontWeight: 800,
-                  color: submitting ? '#8a9690' : '#fff', cursor: submitting ? 'not-allowed' : 'pointer',
-                  boxShadow: submitting ? 'none' : '0 8px 24px rgba(13,124,102,0.2)',
-                }}>
-                {submitting ? <Loader2 size={18} className="animate-spin" /> : 'Registrar Negocio'}
-              </button>
+            <div style={{ background: '#fffbeb', border: '1px solid #f0e68c', borderRadius: 14, padding: '14px 16px', marginBottom: 20, display: 'flex', gap: 10 }}>
+              <span style={{ fontSize: 18, flexShrink: 0 }}>⏳</span>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#92400e', marginBottom: 2 }}>Revisión en 24–48 horas</div>
+                <div style={{ fontSize: 12, color: '#78350f', lineHeight: 1.5 }}>El equipo de Ola México verificará tu negocio antes de que aparezca en el mapa.</div>
+              </div>
+            </div>
+
+            {error && (
+              <div style={{ background: '#fff5f5', border: '1px solid #fcc', borderRadius: 12, padding: '12px 16px', marginBottom: 16, fontSize: 13, color: '#C53030' }}>
+                {error}
+              </div>
             )}
           </div>
+        )}
+
+        {/* ── Botones de navegación ── */}
+        <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
+          {step > 0 && (
+            <button onClick={() => setStep(s => s - 1)}
+              style={{ flex: 1, padding: '14px', background: '#fff', border: '1.5px solid #e0ddd5', borderRadius: 14, fontSize: 15, fontWeight: 600, color: '#4a5a52', cursor: 'pointer' }}>
+              Atrás
+            </button>
+          )}
+          {step < 2 ? (
+            <button
+              onClick={() => setStep(s => s + 1)}
+              disabled={step === 0 ? !canNext0 : !canNext1}
+              style={{
+                flex: 1, padding: '14px',
+                background: (step === 0 ? canNext0 : canNext1) ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#e0ddd5',
+                border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700,
+                color: (step === 0 ? canNext0 : canNext1) ? '#fff' : '#aaa',
+                cursor: (step === 0 ? canNext0 : canNext1) ? 'pointer' : 'not-allowed',
+                transition: 'background .2s',
+              }}>
+              Continuar →
+            </button>
+          ) : (
+            <button onClick={handleSubmit} disabled={submitting}
+              style={{
+                flex: 1, padding: '14px',
+                background: submitting ? '#e0ddd5' : 'linear-gradient(135deg, #0D7C66, #1A9E78)',
+                border: 'none', borderRadius: 14, fontSize: 15, fontWeight: 700,
+                color: submitting ? '#aaa' : '#fff', cursor: submitting ? 'not-allowed' : 'pointer',
+              }}>
+              {submitting ? 'Enviando…' : '✅ Enviar registro'}
+            </button>
+          )}
         </div>
       </div>
-
-      <style>{`
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .animate-spin { animation: spin 1s linear infinite; }
-      `}</style>
     </div>
   )
 }

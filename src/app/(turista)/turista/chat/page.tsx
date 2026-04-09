@@ -33,108 +33,70 @@ function tryParseCards(text: string): CardData | null {
 
 function StarMini({ rating }: { rating: number }) {
   return (
-    <div style={{ 
-      display: 'flex', alignItems: 'center', gap: 4, 
-      padding: '4px 10px', borderRadius: 10,
-      background: 'rgba(255, 248, 224, 0.9)',
-      backdropFilter: 'blur(8px)',
-      border: '1px solid rgba(197, 160, 68, 0.3)',
-      boxShadow: '0 2px 8px rgba(197, 160, 68, 0.15)'
-    }}>
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="#C5A044">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-      </svg>
-      <span style={{ fontSize: 13, color: '#C5A044', fontWeight: 800, letterSpacing: '-0.02em' }}>
-        {rating.toFixed(1)}
-      </span>
-    </div>
+    <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 12, color: '#C5A044', fontWeight: 700 }}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#C5A044"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      {rating.toFixed(1)}
+    </span>
   )
 }
 
 function CardBubble({ cards, onNavigate }: { cards: CardData; onNavigate: (id: string) => void }) {
   if (cards.type === 'empty') {
     return (
-      <div className="glass-card" style={{ padding: '12px 18px', borderRadius: '20px 20px 20px 6px' }}>
-        <p className="text-jade-muted" style={{ margin: 0, fontStyle: 'italic' }}>{cards.message}</p>
+      <div style={{ padding: '11px 15px', borderRadius: '16px 16px 16px 4px', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,.08)', fontSize: 14, color: '#8a9690' }}>
+        {cards.message}
       </div>
     )
   }
   return (
-    <div style={{ animation: 'slideUp 0.3s ease-out' }}>
+    <div>
       {cards.title && (
-        <div style={{ 
-          fontSize: 11, fontWeight: 800, color: 'var(--color-jade-air-accent)', 
-          textTransform: 'uppercase', letterSpacing: '.08em',
-          marginBottom: 12, paddingLeft: 4
-        }}>
-          {cards.title}
-        </div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#1A2E26', marginBottom: 10 }}>{cards.title}</div>
       )}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {cards.items?.map(item => (
           <button
             key={item.id}
             onClick={() => onNavigate(item.action.target)}
-            className="glass-card"
             style={{
               display: 'flex', alignItems: 'stretch', gap: 0,
-              borderRadius: 22, cursor: 'pointer',
-              textAlign: 'left', padding: 0, width: '100%',
-              transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-              position: 'relative'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)'
-              e.currentTarget.style.boxShadow = '0 12px 32px rgba(13,124,102,0.12)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)'
-              e.currentTarget.style.boxShadow = 'var(--glass-shadow)'
+              background: '#fff', border: '1.5px solid #e8e5de',
+              borderRadius: 14, overflow: 'hidden', cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,.07)', textAlign: 'left',
+              padding: 0, width: '100%',
             }}
           >
-            {/* Visual Accents */}
             <div style={{
-              width: 88, minHeight: 88, flexShrink: 0,
-              background: 'linear-gradient(135deg, #0D7C66 0%, #1A9E78 100%)',
+              width: 80, minHeight: 80, flexShrink: 0,
+              background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              position: 'relative', overflow: 'hidden'
             }}>
-              <div style={{ position: 'absolute', top: '-20%', right: '-20%', width: '100%', height: '100%', background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)', filter: 'blur(20px)' }} />
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
-
-            <div style={{ flex: 1, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                <span className="text-jade-title" style={{ fontSize: 16, lineHeight: 1.1 }}>
-                  {item.name}
-                </span>
+            <div style={{ flex: 1, padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: '#1A2E26', lineHeight: 1.2 }}>{item.name}</span>
                 <StarMini rating={item.rating} />
               </div>
-              
-              <span className="text-jade-muted" style={{ fontSize: 13, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                {item.description}
-              </span>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-                <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(13,124,102,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#0D7C66" strokeWidth="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                </div>
-                <span className="text-jade-muted" style={{ fontSize: 12, fontWeight: 500 }}>{item.address}</span>
+              <span style={{ fontSize: 12, color: '#5a6e67', lineHeight: 1.4 }}>{item.description}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0D7C66" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span style={{ fontSize: 11, color: '#8a9690' }}>{item.address}</span>
               </div>
+              {item.tags.length > 0 && (
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 2 }}>
+                  {item.tags.slice(0, 3).map(tag => (
+                    <span key={tag} style={{ fontSize: 10, padding: '2px 7px', borderRadius: 10, background: 'rgba(13,124,102,0.1)', color: '#0D7C66', fontWeight: 600 }}>{tag}</span>
+                  ))}
+                </div>
+              )}
             </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', paddingRight: 16, color: '#0D7C66', opacity: 0.6 }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <div style={{ display: 'flex', alignItems: 'center', paddingRight: 12, color: '#0D7C66' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
         ))}
       </div>
-      <style>{`
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   )
 }
@@ -236,11 +198,12 @@ export default function ChatPage() {
   const showSugerencias = msgs.length === 1
 
   return (
-    <div className="bg-jade-air" style={{
+    <div style={{
       height: '100dvh',
       display: 'flex',
       flexDirection: 'column',
-      fontFamily: 'var(--font-inter), sans-serif',
+      background: '#f7f6f2',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
     }}>
 
       {/* ── Top bar ──────────────────────────────────────────── */}
@@ -283,39 +246,31 @@ export default function ChatPage() {
         display: 'flex', flexDirection: 'column', gap: 12,
       }}>
         {msgs.map((m, i) => (
-          <div key={i} style={{ 
-            alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start', 
-            maxWidth: m.cards ? '92%' : '82%',
-            marginBottom: 4
-          }}>
+          <div key={i} style={{ alignSelf: m.from === 'user' ? 'flex-end' : 'flex-start', maxWidth: m.cards ? '92%' : '82%' }}>
             {m.from === 'bot' && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, marginLeft: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
                 <div style={{
-                  width: 24, height: 24, borderRadius: '50%',
+                  width: 22, height: 22, borderRadius: '50%',
                   background: 'linear-gradient(135deg, #0D7C66, #1A9E78)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(13,124,102,0.15)'
                 }}>
-                  <Bot size={14} color="#fff" />
+                  <Bot size={13} color="#fff" />
                 </div>
-                <span style={{ fontSize: 11, color: 'var(--color-jade-air-accent)', fontWeight: 800, letterSpacing: '.04em' }}>{ui.assistant}</span>
+                <span style={{ fontSize: 11, color: '#8a9690', fontWeight: 600 }}>{ui.assistant}</span>
               </div>
             )}
             {m.cards ? (
               <CardBubble cards={m.cards} onNavigate={(id) => router.push(`/turista/negocio/${id}`)} />
             ) : (
-              <div 
-                className={m.from === 'bot' ? 'glass-card' : ''}
-                style={{
-                  padding: '12px 18px',
-                  borderRadius: m.from === 'user' ? '22px 22px 4px 22px' : '22px 22px 22px 4px',
-                  background: m.from === 'user' ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : undefined,
-                  color: m.from === 'user' ? '#fff' : 'var(--text-main)',
-                  fontSize: 14, lineHeight: 1.6,
-                  boxShadow: m.from === 'user' ? '0 4px 12px rgba(13,124,102,0.2)' : undefined,
-                  whiteSpace: 'pre-wrap',
-                  fontWeight: m.from === 'bot' ? 500 : 400
-                }}>
+              <div style={{
+                padding: '11px 15px',
+                borderRadius: m.from === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                background: m.from === 'user' ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#fff',
+                color: m.from === 'user' ? '#fff' : '#1A2E26',
+                fontSize: 14, lineHeight: 1.55,
+                boxShadow: '0 1px 4px rgba(0,0,0,.08)',
+                whiteSpace: 'pre-wrap',
+              }}>
                 {m.text}
               </div>
             )}
@@ -390,11 +345,13 @@ export default function ChatPage() {
           <button
             onClick={() => send()}
             disabled={loading || !input.trim()}
-            className="btn-jade"
             style={{
               width: 38, height: 38, borderRadius: 12,
-              opacity: input.trim() && !loading ? 1 : 0.4,
-              flexShrink: 0,
+              background: input.trim() && !loading ? 'linear-gradient(135deg, #0D7C66, #1A9E78)' : '#e0ddd5',
+              border: 'none', cursor: input.trim() && !loading ? 'pointer' : 'default',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: input.trim() && !loading ? '#fff' : '#aaa',
+              transition: 'background .2s, color .2s', flexShrink: 0,
             }}
           >
             <SendIcon />

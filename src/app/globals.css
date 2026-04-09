@@ -20,224 +20,39 @@
   --color-obs-900: #2C2C2A;
 }
 
-:root {
-  /* Jade Air Palette - Lighter & Professional */
-  --color-jade-air-bg: #f8faf9;
-  --color-jade-air-accent: #0D7C66;
-  --color-jade-air-light: #e6f8f0;
-  
-  /* Glass Tokens - Jade Air Dense v2.1 */
-  --glass-bg: rgba(255, 255, 255, 0.92);
-  --glass-blur: blur(60px) saturate(120%);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.6);
-  --glass-shadow: 0 12px 40px rgba(13, 124, 102, 0.12);
-
-  /* Typography */
-  --text-main: #1A2E26;
-  --text-muted: #5a6e67;
-  --text-on-jade: #ffffff;
-}
-
 @layer utilities {
-  /* Fondo Base con Auras Suaves */
-  .bg-jade-air {
-    background-color: var(--color-jade-air-bg);
-    background-image: 
-      radial-gradient(circle at 10% 20%, rgba(13, 124, 102, 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(29, 158, 117, 0.04) 0%, transparent 50%);
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* El "Panel de Cristal" Definitivo */
-  .glass-card, .glass-panel-map {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: var(--glass-border);
-    border-radius: 24px;
-    box-shadow: var(--glass-shadow);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Iluminación interna de cristal */
-  .glass-card::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  }
-
-  /* Botones Premium Jade */
-  .btn-jade {
-    background: linear-gradient(135deg, #0D7C66 0%, #1A9E78 100%);
-    color: white;
-    border: none !important;
-    border-radius: 14px;
-    font-weight: 700;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(13, 124, 102, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  .btn-jade:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(13, 124, 102, 0.3);
-    opacity: 0.95;
-  }
-
-  /* Tipografía Modular */
-  .text-jade-title {
-    color: var(--text-main);
-    font-weight: 900;
-    letter-spacing: -0.02em;
-  }
-
-  .text-jade-muted {
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-
-  /* --- NUEVAS CLASES SEMÁNTICAS (Clean Design) --- */
-
-  /* Input Premium con prevención de Zoom en iOS */
-  .input-jade-premium {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    font-size: 16px; /* Vital para iOS */
-    color: #fff;
-    outline: none;
-    transition: all 0.2s ease;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-  }
-  .input-jade-premium:focus {
-    border-color: #fff;
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
-  }
-  .input-jade-premium::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-  }
-
-  /* Botón Primario de Acción */
-  .btn-jade-primary {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
-    color: #fff;
-    border: none;
-    border-radius: 16px;
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .btn-jade-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-    opacity: 0.9;
-  }
-  .btn-jade-primary:active {
-    transform: scale(0.98);
-  }
-
-  /* Botón secundario (Outline) */
-  .btn-jade-outline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    padding: 14px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-  .btn-jade-outline:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  /* Enlaces de texto Jade */
-  .btn-jade-link {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #1A9E78;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: underline;
-    transition: color 0.2s ease;
-  }
-  .btn-jade-link:hover {
-    color: #fff;
-  }
-
-  /* Categorías del Mapa (Jade Air Dense) */
-  .map-category-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
+  .glass-panel {
+    /* Estado original oscuro (Obsidian) del Login */
+    background-color: rgba(4, 52, 44, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.30);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 
+                0 8px 32px rgba(4, 52, 44, 0.5);
+    
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(13, 102, 102, 0.15);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-main);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    white-space: nowrap;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .map-category-pill:hover {
-    background: #fff;
-    transform: translateY(-1px);
-  }
-  .map-category-pill.active {
-    background: var(--color-jade-air-accent);
-    color: #fff;
-    border-color: var(--color-jade-air-accent);
-    box-shadow: 0 4px 12px rgba(13, 124, 102, 0.3);
   }
 
-  /* Grids Responsivos Estándar */
-  .grid-responsive-kpi {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  @media (min-width: 640px) {
-    .grid-responsive-kpi {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (min-width: 1024px) {
-    .grid-responsive-kpi {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+  .glass-panel-map {
+    /* Estado transparente y fuertemente difuminado */
+    background-color: rgba(230, 248, 240, 0.85); /* Aumentado a 85% para mayor legibilidad */
+    backdrop-filter: blur(48px);
+    -webkit-backdrop-filter: blur(48px);
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.40);
+    border-left: 1px solid rgba(255, 255, 255, 0.20);
+    border-right: 1px solid rgba(255, 255, 255, 0.20);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+    
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 
+                0 12px 40px rgba(13, 124, 102, 0.15); /* Sombras jade */
+    
+    border-radius: 20px; 
   }
 }
 

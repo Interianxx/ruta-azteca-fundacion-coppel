@@ -59,9 +59,3 @@ infra/lambda-src/**/*.zip
 STYLE_GUIDE.md
 FRONTEND_BOUNDARIES.md
 .claude/settings.local.json
-AGENT_HANDOVER.md
-api-metricas-negocios.md
-style-guide-v3.md
-raul-referencia.md
-MIGRATION_ROADMAP.md    
-

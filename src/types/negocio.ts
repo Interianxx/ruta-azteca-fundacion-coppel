@@ -40,6 +40,12 @@ export interface Negocio {
   updatedAt: string
 }
 
+export interface NegocioCache {
+  id: string,
+  negocio: Negocio,
+  synced: boolean
+}
+
 export interface NegocioInput {
   nombre: string
   descripcion: string
