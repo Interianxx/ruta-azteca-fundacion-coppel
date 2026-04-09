@@ -3,7 +3,7 @@
 **Genius Arena Hackathon 2026 — Track Fundación Coppel: Ola México**
 Equipo: **DevsVelados**
 
-Plataforma PWA que conecta a turistas del Mundial FIFA 2026 con micro y pequeños negocios locales verificados del programa Ola México en Ciudad de México.
+Plataforma PWA que ayuda a micro y pequeños negocios locales verificados del programa Ola México en Ciudad de México para captar turistas en el Mundial de Fútbol 2026 y a digitalizarse.
 
 ---
 
@@ -110,6 +110,13 @@ yarn install
 
 ```bash
 yarn dev
+```
+
+### 4. Levantar servidor de producción
+
+```bash
+yarn build
+yarn start
 ```
 
 ---
