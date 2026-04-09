@@ -117,14 +117,14 @@ export default function RegistroNegocioPage() {
   const [tags,        setTags]        = useState('')
   const [imagenUrl,   setImagenUrl]   = useState<string | undefined>(undefined)
 
+  const userEmail = session?.user?.email ?? null
+  const userRol   = (session as { rol?: string } | null)?.rol ?? null
+
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') { router.replace('/login?next=/negocio/registro'); return }
-    
-    const rol = (session as { rol?: string } | null)?.rol
-    if (rol === 'admin') { router.replace('/admin/dashboard'); return }
-    
-    // Verificar si ya tiene negocio registrado
+    if (userRol === 'admin') { router.replace('/admin/dashboard'); return }
+
     fetch('/api/negocios/mio')
       .then(r => r.json())
       .then(d => {
@@ -132,7 +132,7 @@ export default function RegistroNegocioPage() {
         setChecking(false)
       })
       .catch(() => setChecking(false))
-  }, [status, router, session])
+  }, [status, router, userEmail, userRol])
 
   const usarUbicacion = () => {
     if (!navigator.geolocation) return

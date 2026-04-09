@@ -60,6 +60,8 @@ export default function PerfilNegocioPage() {
   const [draftHorario,  setDraftHorario]  = useState<Horario>(DEFAULT_HORARIO)
   const [savingHorario, setSavingHorario] = useState(false)
 
+  const userEmail = session?.user?.email ?? null
+
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') { router.replace('/login'); return }
@@ -74,7 +76,7 @@ export default function PerfilNegocioPage() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [status, router])
+  }, [status, router, userEmail])
 
   const startEditHorario = () => { setDraftHorario(horario); setEditingHorario(true) }
   const cancelEditHorario = () => setEditingHorario(false)
