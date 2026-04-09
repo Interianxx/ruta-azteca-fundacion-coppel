@@ -54,6 +54,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     sign_in: 'Iniciar sesión', nav_explore: 'Explorar', nav_favorites: 'Favoritos', nav_routes: 'Rutas',
     hours: 'Horarios', open_now: 'Abierto', closed_now: 'Cerrado', closed_day: 'Cerrado',
     days_short: 'Lun,Mar,Mié,Jue,Vie,Sáb,Dom',
+    rutas_title: 'Rutas Temáticas', rutas_subtitle: 'Itinerarios verificados por Ruta Azteca',
+    rutas_start: 'Empezar ruta', rutas_stops: 'paradas', rutas_coming_soon: '🚧 Próximamente: navegación multi-parada',
   },
   en: {
     search_ph: 'Search local businesses...', loading: 'Loading…',
@@ -78,6 +80,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     sign_in: 'Sign in', nav_explore: 'Explore', nav_favorites: 'Favorites', nav_routes: 'Routes',
     hours: 'Hours', open_now: 'Open now', closed_now: 'Closed', closed_day: 'Closed',
     days_short: 'Mon,Tue,Wed,Thu,Fri,Sat,Sun',
+    rutas_title: 'Thematic Routes', rutas_subtitle: 'Itineraries verified by Ruta Azteca',
+    rutas_start: 'Start route', rutas_stops: 'stops', rutas_coming_soon: '🚧 Coming soon: multi-stop navigation',
   },
   fr: {
     search_ph: 'Rechercher des commerces locaux...', loading: 'Chargement…',
@@ -102,6 +106,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     sign_in: 'Se connecter', nav_explore: 'Explorer', nav_favorites: 'Favoris', nav_routes: 'Itinéraires',
     hours: 'Horaires', open_now: 'Ouvert', closed_now: 'Fermé', closed_day: 'Fermé',
     days_short: 'Lun,Mar,Mer,Jeu,Ven,Sam,Dim',
+    rutas_title: 'Circuits Thématiques', rutas_subtitle: 'Itinéraires vérifiés par Ruta Azteca',
+    rutas_start: 'Démarrer le circuit', rutas_stops: 'étapes', rutas_coming_soon: '🚧 Bientôt: navigation multi-étapes',
   },
   pt: {
     search_ph: 'Pesquisar negócios locais...', loading: 'Carregando…',
@@ -126,6 +132,8 @@ const MAP_UI: Record<string, Record<string, string>> = {
     sign_in: 'Entrar', nav_explore: 'Explorar', nav_favorites: 'Favoritos', nav_routes: 'Rotas',
     hours: 'Horários', open_now: 'Aberto', closed_now: 'Fechado', closed_day: 'Fechado',
     days_short: 'Seg,Ter,Qua,Qui,Sex,Sáb,Dom',
+    rutas_title: 'Rotas Temáticas', rutas_subtitle: 'Itinerários verificados pela Ruta Azteca',
+    rutas_start: 'Iniciar rota', rutas_stops: 'paradas', rutas_coming_soon: '🚧 Em breve: navegação multi-parada',
   },
   de: {
     search_ph: 'Lokale Unternehmen suchen...', loading: 'Laden…',
@@ -150,8 +158,47 @@ const MAP_UI: Record<string, Record<string, string>> = {
     sign_in: 'Anmelden', nav_explore: 'Erkunden', nav_favorites: 'Favoriten', nav_routes: 'Routen',
     hours: 'Öffnungszeiten', open_now: 'Geöffnet', closed_now: 'Geschlossen', closed_day: 'Geschlossen',
     days_short: 'Mo,Di,Mi,Do,Fr,Sa,So',
+    rutas_title: 'Thematische Routen', rutas_subtitle: 'Von Ruta Azteca geprüfte Reiserouten',
+    rutas_start: 'Route starten', rutas_stops: 'Stopps', rutas_coming_soon: '🚧 Demnächst: Mehrfach-Stopp-Navigation',
   },
 }
+
+// ─── Rutas temáticas (mock) ─────────────────────────────────────────────────
+
+const RUTAS_MOCK = [
+  {
+    id: 'gastronomica',
+    emoji: '🍽️',
+    nombre:    { es: 'Ruta Gastronómica',  en: 'Food Tour',          fr: 'Circuit Gastronomique',  pt: 'Rota Gastronômica',   de: 'Kulinarische Tour'      },
+    desc:      { es: '4 fondas y taquerías del centro histórico', en: '4 local food spots in the historic center', fr: '4 restaurants du centre historique', pt: '4 restaurantes do centro histórico', de: '4 lokale Restaurants im historischen Zentrum' },
+    duracion:  '2h 30min',
+    distancia: '1.8 km',
+    color:     '#E8762B',
+    paradas: ['Fonda La Abuela', 'Tacos El Güero', 'Pozolería Tradición', 'Mercado de Artesanías'],
+  },
+  {
+    id: 'artesanal',
+    emoji: '🎨',
+    nombre:    { es: 'Ruta Artesanal',     en: 'Crafts Trail',       fr: 'Circuit Artisanal',      pt: 'Rota Artesanal',      de: 'Kunsthandwerk-Tour'     },
+    desc:      { es: 'Talleres y tiendas de artesanías locales', en: 'Local craft workshops and shops', fr: 'Ateliers et boutiques artisanaux', pt: 'Ateliês e lojas de artesanato local', de: 'Lokale Kunsthandwerk-Werkstätten' },
+    duracion:  '1h 45min',
+    distancia: '1.2 km',
+    color:     '#9B59B6',
+    paradas: ['Taller de Barro Negro', 'Casa de Artesanías', 'Bordados Regionales', 'Galería Local'],
+  },
+  {
+    id: 'cultural',
+    emoji: '🏛️',
+    nombre:    { es: 'Ruta Cultural',      en: 'Cultural Route',     fr: 'Circuit Culturel',       pt: 'Rota Cultural',       de: 'Kulturroute'            },
+    desc:      { es: 'Sitios históricos y patrimonio del centro', en: 'Historic sites and heritage downtown', fr: 'Sites historiques et patrimoine', pt: 'Sítios históricos e patrimônio', de: 'Historische Stätten und Kulturerbe' },
+    duracion:  '3h',
+    distancia: '2.5 km',
+    color:     '#2980B9',
+    paradas: ['Museo Regional', 'Templo Principal', 'Jardín Central', 'Casa de Cultura', 'Ex-Convento'],
+  },
+] as const
+
+type RutaMock = typeof RUTAS_MOCK[number]
 
 // ─── Horario helpers ────────────────────────────────────────────────────────
 
@@ -1364,6 +1411,8 @@ export default function MapaPage() {
   const [showChat,    setShowChat]    = useState(false)
   const [showProfile,    setShowProfile]    = useState(false)
   const [showFavoritos,  setShowFavoritos]  = useState(false)
+  const [showRutas,      setShowRutas]      = useState(false)
+  const [rutaExpandida,  setRutaExpandida]  = useState<string | null>(null)
   const [favIds,         setFavIds]         = useState<string[]>([])
   const [favNegocios,    setFavNegocios]    = useState<Negocio[]>([])
   const [listening,      setListening]      = useState(false)
@@ -2173,6 +2222,119 @@ export default function MapaPage() {
         </div>
       )}
 
+      {/* ── Panel: Rutas Temáticas ── */}
+      {showRutas && (
+        <div
+          style={{ position: 'absolute', inset: 0, zIndex: 50, background: 'rgba(0,0,0,.45)', display: 'flex', alignItems: 'flex-end' }}
+          onClick={() => { setShowRutas(false); setActiveTab('explorar') }}
+        >
+          <div
+            className="glass-panel-map"
+            onClick={e => e.stopPropagation()}
+            style={{
+              position: 'absolute', bottom: isDesktop ? 16 : 0, left: isDesktop ? 412 : 0, right: isDesktop ? 16 : 0,
+              borderRadius: isDesktop ? 24 : '20px 20px 0 0',
+              padding: '8px 20px 48px', boxShadow: '0 -4px 32px rgba(0,0,0,.4)',
+              maxHeight: '85vh', overflowY: 'auto',
+            }}
+          >
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 20px' }} />
+
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 6 }}>
+              <div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: '#1A2E26' }}>
+                  🗺️ {(ui as any).rutas_title}
+                </div>
+                <div style={{ fontSize: 12, color: '#8a9690', marginTop: 3, fontWeight: 500 }}>
+                  {(ui as any).rutas_subtitle}
+                </div>
+              </div>
+              <button
+                onClick={() => { setShowRutas(false); setActiveTab('explorar') }}
+                style={{ width: 32, height: 32, borderRadius: 10, border: 'none', background: 'rgba(0,0,0,0.06)', color: '#8a9690', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Cards de rutas */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16 }}>
+              {(RUTAS_MOCK as readonly RutaMock[]).map(ruta => {
+                const expanded = rutaExpandida === ruta.id
+                const lang = (idiomaGlobal in ruta.nombre) ? idiomaGlobal as keyof typeof ruta.nombre : 'es'
+                return (
+                  <div
+                    key={ruta.id}
+                    style={{ borderRadius: 18, background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.8)', overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}
+                  >
+                    {/* Barra de color superior */}
+                    <div style={{ height: 3, background: ruta.color }} />
+
+                    {/* Header de la card (clickable) */}
+                    <button
+                      onClick={() => setRutaExpandida(expanded ? null : ruta.id)}
+                      style={{ width: '100%', padding: '14px 16px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 48, height: 48, borderRadius: 14, background: `${ruta.color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, flexShrink: 0 }}>
+                          {ruta.emoji}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: 15, fontWeight: 800, color: '#1A2E26', marginBottom: 3 }}>
+                            {ruta.nombre[lang]}
+                          </div>
+                          <div style={{ fontSize: 12, color: '#8a9690', marginBottom: 6 }}>
+                            {ruta.desc[lang]}
+                          </div>
+                          <div style={{ display: 'flex', gap: 6 }}>
+                            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 7, background: `${ruta.color}18`, color: ruta.color }}>
+                              ⏱ {ruta.duracion}
+                            </span>
+                            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 7, background: 'rgba(13,124,102,0.08)', color: '#0D7C66' }}>
+                              📍 {ruta.paradas.length} {(ui as any).rutas_stops}
+                            </span>
+                            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 7, background: 'rgba(0,0,0,0.04)', color: '#8a9690' }}>
+                              🚶 {ruta.distancia}
+                            </span>
+                          </div>
+                        </div>
+                        <div style={{ fontSize: 16, color: '#8a9690', transition: 'transform 0.2s', transform: expanded ? 'rotate(180deg)' : 'none' }}>▾</div>
+                      </div>
+                    </button>
+
+                    {/* Paradas expandidas */}
+                    {expanded && (
+                      <div style={{ padding: '0 16px 16px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 12, marginBottom: 14 }}>
+                          {ruta.paradas.map((parada, idx) => (
+                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <div style={{ width: 26, height: 26, borderRadius: 8, background: ruta.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: '#fff', flexShrink: 0 }}>
+                                {idx + 1}
+                              </div>
+                              <span style={{ fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>{parada}</span>
+                              {idx < ruta.paradas.length - 1 && (
+                                <div style={{ width: 1, height: 8, background: `${ruta.color}40`, marginLeft: 12, position: 'absolute', marginTop: 28 }} />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        <button
+                          onClick={() => { alert((ui as any).rutas_coming_soon); setShowRutas(false); setActiveTab('explorar') }}
+                          style={{ width: '100%', padding: '12px', background: `linear-gradient(135deg, ${ruta.color}, ${ruta.color}cc)`, border: 'none', borderRadius: 13, fontSize: 14, fontWeight: 700, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+                        >
+                          {(ui as any).rutas_start} →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Bottom navigation bar (mobile only) ── */}
       {!isDesktop && !showRoute && (
         <div className="glass-panel-map" style={{
@@ -2184,7 +2346,7 @@ export default function MapaPage() {
           {[
             { key: 'explorar',  label: ui.nav_explore,   Icon: Compass,     action: () => setActiveTab('explorar') },
             { key: 'favoritos', label: ui.nav_favorites, Icon: Heart,       action: () => { setActiveTab('favoritos'); openFavoritos() } },
-            { key: 'rutas',     label: ui.nav_routes,    Icon: Navigation2, action: () => setActiveTab('rutas') },
+            { key: 'rutas',     label: ui.nav_routes,    Icon: Navigation2, action: () => { setActiveTab('rutas'); setShowRutas(true); setRutaExpandida(null) } },
           ].map(({ key, label, Icon, action }) => (
             <button key={key} onClick={action} style={{
               flex: 1, display: 'flex', flexDirection: 'column',
