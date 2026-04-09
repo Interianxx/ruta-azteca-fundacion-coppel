@@ -323,7 +323,10 @@ export default function LoginPage() {
     if (savedDest) {
       sessionStorage.removeItem('postVerifyDest')
       console.log('[login/sessionEffect] redirecting to postVerifyDest:', savedDest)
-      router.replace(savedDest)
+      // window.location.href instead of router.replace: the session cookie is already
+      // set at this point (session: true confirmed above), so a full reload reads it
+      // fresh — router.replace silently fails when a competing async op is in-flight.
+      window.location.href = savedDest
       return
     }
     // 3. Default by role
