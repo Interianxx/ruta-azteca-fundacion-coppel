@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, useSession, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
@@ -312,19 +312,22 @@ export default function LoginPage() {
   const skipSessionRedirectRef = useRef(false)
 
   useEffect(() => {
+    const rol = (session as { rol?: string } | null)?.rol
+    const savedDest = typeof window !== 'undefined' ? sessionStorage.getItem('postVerifyDest') : null
+    console.log('[login/sessionEffect] session:', !!session, '| rol:', rol, '| skip:', skipSessionRedirectRef.current, '| nextParam:', nextParam, '| postVerifyDest:', savedDest)
     if (!session) return
     if (skipSessionRedirectRef.current) return
     // 1. ?next= param (from protected page redirects)
-    if (nextParam) { router.replace(nextParam); return }
+    if (nextParam) { console.log('[login/sessionEffect] redirecting to nextParam:', nextParam); router.replace(nextParam); return }
     // 2. Destination saved during email verification flow
-    const savedDest = sessionStorage.getItem('postVerifyDest')
     if (savedDest) {
       sessionStorage.removeItem('postVerifyDest')
+      console.log('[login/sessionEffect] redirecting to postVerifyDest:', savedDest)
       router.replace(savedDest)
       return
     }
     // 3. Default by role
-    const rol = (session as { rol?: string }).rol
+    console.log('[login/sessionEffect] role-based redirect — rol:', rol)
     if (rol === 'admin') {
       router.replace('/admin/dashboard')
     } else if (rol === 'negocio_activo' || rol === 'negocio_pendiente') {
@@ -405,11 +408,11 @@ export default function LoginPage() {
       // (more reliable than calling router.replace directly from async handler)
       sessionStorage.setItem('postVerifyDest', dest)
       let login = await signIn('credentials', { redirect: false, email, password })
-      console.log('[verify] login attempt 1:', login?.error ?? 'OK')
+      console.log('[verify] login attempt 1:', login?.error ?? 'OK', '| ok:', login?.ok, '| status:', login?.status)
       if (login?.error) {
         await new Promise(r => setTimeout(r, 2000))
         login = await signIn('credentials', { redirect: false, email, password })
-        console.log('[verify] login attempt 2:', login?.error ?? 'OK')
+        console.log('[verify] login attempt 2:', login?.error ?? 'OK', '| ok:', login?.ok)
       }
       if (login?.error) {
         console.log('[verify] auto-login failed — postVerifyDest saved, showing manual login')
@@ -417,6 +420,9 @@ export default function LoginPage() {
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
+        // Verify session is in the React context before the useEffect redirects
+        const s = await getSession()
+        console.log('[verify] session after signIn — rol:', (s as { rol?: string } | null)?.rol, '| email:', s?.user?.email, '| exists:', !!s)
         console.log('[verify] auto-login OK — session useEffect will redirect to:', dest)
         // No manual navigation — useEffect handles it once session is in React context
       }
