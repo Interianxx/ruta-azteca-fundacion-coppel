@@ -36,7 +36,7 @@ const MAP_UI: Record<string, Record<string, string>> = {
     count_verified: '{n} negocios verificados', more_results: '+{n} resultados más — sigue escribiendo para filtrar',
     back: 'Volver al mapa', directions: 'Cómo llegar',
     reviews: 'Reseñas', write_review: '+ Escribir reseña', cancel: 'Cancelar',
-    login_to_review: 'Inicia sesión para reseñar', your_rating: 'Tu calificación',
+    login_to_review: 'Inicia sesión para reseñar', login_to_fav: 'Inicia sesión para guardar favoritos', your_rating: 'Tu calificación',
     review_ph: 'Cuéntanos tu experiencia...', submitting: 'Enviando…', publish_review: 'Publicar reseña',
     no_reviews: 'Sin reseñas todavía. ¡Sé el primero!', thanks_review: '¡Gracias por tu reseña!',
     route_to: 'Ruta a', on_foot: 'A pie', by_car: 'Auto', by_metro: 'Metro',
@@ -60,7 +60,7 @@ const MAP_UI: Record<string, Record<string, string>> = {
     count_verified: '{n} verified businesses', more_results: '+{n} more results — keep typing to filter',
     back: 'Back to map', directions: 'Get directions',
     reviews: 'Reviews', write_review: '+ Write a review', cancel: 'Cancel',
-    login_to_review: 'Sign in to leave a review', your_rating: 'Your rating',
+    login_to_review: 'Sign in to leave a review', login_to_fav: 'Sign in to save favorites', your_rating: 'Your rating',
     review_ph: 'Tell us about your experience...', submitting: 'Sending…', publish_review: 'Post review',
     no_reviews: 'No reviews yet. Be the first!', thanks_review: 'Thanks for your review!',
     route_to: 'Route to', on_foot: 'Walking', by_car: 'Car', by_metro: 'Metro',
@@ -84,7 +84,7 @@ const MAP_UI: Record<string, Record<string, string>> = {
     count_verified: '{n} commerces vérifiés', more_results: '+{n} résultats — continuez à taper pour filtrer',
     back: 'Retour à la carte', directions: 'Itinéraire',
     reviews: 'Avis', write_review: '+ Écrire un avis', cancel: 'Annuler',
-    login_to_review: 'Connectez-vous pour laisser un avis', your_rating: 'Votre note',
+    login_to_review: 'Connectez-vous pour laisser un avis', login_to_fav: 'Connectez-vous pour sauvegarder les favoris', your_rating: 'Votre note',
     review_ph: 'Parlez-nous de votre expérience...', submitting: 'Envoi…', publish_review: "Publier l'avis",
     no_reviews: "Pas encore d'avis. Soyez le premier!", thanks_review: 'Merci pour votre avis!',
     route_to: 'Itinéraire vers', on_foot: 'À pied', by_car: 'Voiture', by_metro: 'Métro',
@@ -108,7 +108,7 @@ const MAP_UI: Record<string, Record<string, string>> = {
     count_verified: '{n} negócios verificados', more_results: '+{n} resultados — continue digitando para filtrar',
     back: 'Voltar ao mapa', directions: 'Como chegar',
     reviews: 'Avaliações', write_review: '+ Escrever avaliação', cancel: 'Cancelar',
-    login_to_review: 'Entre para deixar uma avaliação', your_rating: 'Sua avaliação',
+    login_to_review: 'Entre para deixar uma avaliação', login_to_fav: 'Entre para salvar favoritos', your_rating: 'Sua avaliação',
     review_ph: 'Conte-nos sobre sua experiência...', submitting: 'Enviando…', publish_review: 'Publicar avaliação',
     no_reviews: 'Sem avaliações ainda. Seja o primeiro!', thanks_review: 'Obrigado pela sua avaliação!',
     route_to: 'Rota para', on_foot: 'A pé', by_car: 'Carro', by_metro: 'Metrô',
@@ -132,7 +132,7 @@ const MAP_UI: Record<string, Record<string, string>> = {
     count_verified: '{n} verifizierte Unternehmen', more_results: '+{n} weitere Ergebnisse — tippen Sie weiter zum Filtern',
     back: 'Zurück zur Karte', directions: 'Route',
     reviews: 'Bewertungen', write_review: '+ Bewertung schreiben', cancel: 'Abbrechen',
-    login_to_review: 'Anmelden um zu bewerten', your_rating: 'Ihre Bewertung',
+    login_to_review: 'Anmelden um zu bewerten', login_to_fav: 'Anmelden um Favoriten zu speichern', your_rating: 'Ihre Bewertung',
     review_ph: 'Erzählen Sie uns von Ihrer Erfahrung...', submitting: 'Senden…', publish_review: 'Bewertung veröffentlichen',
     no_reviews: 'Noch keine Bewertungen. Seien Sie der Erste!', thanks_review: 'Vielen Dank für Ihre Bewertung!',
     route_to: 'Route nach', on_foot: 'Zu Fuß', by_car: 'Auto', by_metro: 'U-Bahn',
@@ -279,16 +279,20 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
     }).finally(() => setTraduciendo(false))
   }, [idioma, negocio.id, bizDesc])
 
-  const [isFav,        setIsFav]       = useState(false)
-  const [favLoading,   setFavLoading]  = useState(false)
-  const [resenas,      setResenas]     = useState<Resena[]>([])
-  const [showForm,     setShowForm]    = useState(false)
-  const [stars,        setStars]       = useState(0)
-  const [comentario,   setComentario]  = useState('')
-  const [submitting,   setSubmitting]  = useState(false)
-  const [submitMsg,    setSubmitMsg]   = useState('')
-  const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [showPago,     setShowPago]    = useState(false)
+  const [isFav,           setIsFav]          = useState(false)
+  const [favLoading,      setFavLoading]     = useState(false)
+  const [resenas,         setResenas]        = useState<Resena[]>([])
+  const [showForm,        setShowForm]       = useState(false)
+  const [stars,           setStars]          = useState(0)
+  const [comentario,      setComentario]     = useState('')
+  const [submitting,      setSubmitting]     = useState(false)
+  const [submitMsg,       setSubmitMsg]      = useState('')
+  const [lightboxOpen,    setLightboxOpen]   = useState(false)
+  const [showPago,        setShowPago]       = useState(false)
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const [loginMsg,        setLoginMsg]       = useState('')
+
+  const requireLogin = (msg: string) => { setLoginMsg(msg); setShowLoginPrompt(true) }
 
   // Fetch favorites status + reviews on mount
   useEffect(() => {
@@ -421,7 +425,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
                 <BackIcon /> {ui.back}
               </button>
               <button
-                onClick={session ? toggleFav : () => router.push('/login')}
+                onClick={session ? toggleFav : () => requireLogin(ui.login_to_fav)}
                 disabled={favLoading}
                 style={{
                   width: 42, height: 42, borderRadius: '50%', border: '1px solid rgba(26, 46, 38, 0.12)',
@@ -516,8 +520,88 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
             <button onClick={() => setShowPago(true)} style={{ width: '100%', padding: '14px', borderRadius: 14, border: '1px solid rgba(255,107,0,0.2)', background: 'rgba(255,107,0,0.05)', color: '#FF6B00', fontWeight: 800, fontSize: 14, marginBottom: 20 }}>
               Pagar monto directo (sin orden)
             </button>
-            
+
             {showPago && <PagoModal negocio={{ ...negocio, nombre: bizName }} onClose={() => setShowPago(false)} />}
+
+            {/* ── Reviews ── */}
+            <div style={{ borderTop: '1px solid rgba(26,46,38,0.08)', paddingTop: 20, marginTop: 4 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <span style={{ fontWeight: 700, fontSize: 15, color: '#1A2E26' }}>{ui.reviews}</span>
+                {!showForm && (
+                  <button
+                    onClick={session ? () => setShowForm(true) : () => requireLogin(ui.login_to_review)}
+                    style={{
+                      background: session ? 'rgba(13,124,102,0.08)' : 'rgba(26,46,38,0.05)',
+                      border: 'none', borderRadius: 10, padding: '6px 12px',
+                      color: session ? '#0D7C66' : '#8a9690', fontWeight: 700, fontSize: 13, cursor: 'pointer',
+                    }}
+                  >
+                    {ui.write_review}
+                  </button>
+                )}
+              </div>
+
+              {submitMsg && (
+                <div style={{ padding: '10px 14px', background: 'rgba(13,124,102,0.1)', borderRadius: 10, color: '#0D7C66', fontWeight: 600, fontSize: 13, marginBottom: 12 }}>
+                  {submitMsg}
+                </div>
+              )}
+
+              {showForm && (
+                <div style={{ background: 'rgba(13,124,102,0.05)', borderRadius: 14, padding: 16, marginBottom: 16 }}>
+                  <div style={{ marginBottom: 10 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1A2E26', marginBottom: 6 }}>{ui.your_rating}</div>
+                    <StarPicker value={stars} onChange={setStars} />
+                  </div>
+                  <textarea
+                    value={comentario} onChange={e => setComentario(e.target.value)}
+                    placeholder={ui.review_ph}
+                    rows={3}
+                    style={{
+                      width: '100%', borderRadius: 10, border: '1px solid rgba(26,46,38,0.12)',
+                      padding: '10px 12px', fontSize: 14, resize: 'none', outline: 'none',
+                      fontFamily: 'inherit', background: '#fff', color: '#1A2E26', boxSizing: 'border-box',
+                    }}
+                  />
+                  <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+                    <button onClick={() => { setShowForm(false); setStars(0); setComentario('') }}
+                      style={{ flex: 1, padding: '10px', borderRadius: 10, border: '1px solid rgba(26,46,38,0.12)', background: '#fff', color: '#8a9690', fontWeight: 600, fontSize: 13, cursor: 'pointer' }}>
+                      {ui.cancel}
+                    </button>
+                    <button onClick={submitResena} disabled={submitting || stars === 0 || !comentario.trim()}
+                      style={{ flex: 2, padding: '10px', borderRadius: 10, border: 'none', background: '#0D7C66', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: (stars === 0 || !comentario.trim()) ? 0.5 : 1 }}>
+                      {submitting ? ui.submitting : ui.publish_review}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {resenas.length === 0 && !showForm ? (
+                <p style={{ fontSize: 13, color: '#8a9690', textAlign: 'center', padding: '12px 0' }}>{ui.no_reviews}</p>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {resenas.map(r => (
+                    <div key={r.id} style={{ padding: '12px 14px', background: '#fff', borderRadius: 12, border: '1px solid rgba(26,46,38,0.08)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        {r.userImage
+                          ? <img src={r.userImage} alt={r.userName} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover' }} />
+                          : <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#0D7C66', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700 }}>{r.userName?.[0] ?? '?'}</div>
+                        }
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: '#1A2E26' }}>{r.userName}</div>
+                          <div style={{ display: 'flex', gap: 2 }}>
+                            {[1,2,3,4,5].map(n => (
+                              <svg key={n} width="11" height="11" viewBox="0 0 24 24" fill={n <= r.calificacion ? '#C5A044' : '#ddd'} stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <p style={{ margin: 0, fontSize: 13, color: '#4d5d55', lineHeight: 1.45 }}>{r.comentario}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </motion.div>
         ) : (
           <motion.div key="menu" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
@@ -602,6 +686,46 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
         <div onClick={() => setLightboxOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,.88)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img src={bizImg} alt={bizName} style={{ maxWidth: '92vw', maxHeight: '80vh', borderRadius: 16, objectFit: 'contain' }} />
         </div>
+      )}
+
+      {/* ── Login Prompt ── */}
+      {showLoginPrompt && (
+        <>
+          <div
+            onClick={() => setShowLoginPrompt(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 2000 }}
+          />
+          <div style={{
+            position: 'fixed', bottom: 0, left: 0, right: 0,
+            background: '#fff', borderRadius: '20px 20px 0 0',
+            padding: '8px 24px 44px', zIndex: 2001,
+            boxShadow: '0 -4px 32px rgba(0,0,0,0.2)',
+          }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#ddd', margin: '10px auto 24px' }} />
+            <div style={{ textAlign: 'center', marginBottom: 28 }}>
+              <div style={{ fontSize: 44, marginBottom: 12 }}>🔒</div>
+              <div style={{ fontWeight: 700, fontSize: 17, color: '#1A2E26', marginBottom: 6 }}>{loginMsg}</div>
+            </div>
+            <button
+              onClick={() => router.push('/login')}
+              style={{
+                width: '100%', padding: '15px', background: '#0D7C66', color: '#fff',
+                borderRadius: 14, fontWeight: 700, fontSize: 16, border: 'none', cursor: 'pointer', marginBottom: 10,
+              }}
+            >
+              {ui.sign_in}
+            </button>
+            <button
+              onClick={() => setShowLoginPrompt(false)}
+              style={{
+                width: '100%', padding: '13px', background: 'transparent', color: '#8a9690',
+                border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14,
+              }}
+            >
+              {ui.cancel}
+            </button>
+          </div>
+        </>
       )}
     </motion.div>
   )
