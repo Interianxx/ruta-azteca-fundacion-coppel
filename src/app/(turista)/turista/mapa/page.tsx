@@ -436,36 +436,42 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
     ? (resenas.reduce((s, r) => s + r.calificacion, 0) / resenas.length).toFixed(1)
     : negocio.calificacion?.toFixed(1)
 
+  const dragControls = useDragControls()
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ y: '100%' }}
       animate={{ y: 0 }}
       exit={{ y: '100%' }}
       transition={{ type: 'spring', damping: 25, stiffness: 200 }}
       drag="y"
+      dragControls={dragControls}
+      dragListener={false}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.15}
       onDragEnd={(e, info) => {
         if (info.offset.y > 150) onBack()
       }}
-      className="glass-panel-map text-[#1A2E26]" 
+      className="glass-panel-map text-[#1A2E26]"
       style={{
-        position: 'absolute', 
-        bottom: isDesktop ? 16 : 0, 
-        left: isDesktop ? 412 : 0, 
+        position: 'absolute',
+        bottom: isDesktop ? 16 : 0,
+        left: isDesktop ? 412 : 0,
         right: isDesktop ? 16 : 0,
         borderRadius: isDesktop ? 24 : '32px 32px 0 0',
         padding: '0 20px 36px',
-        zIndex: 30, 
-        maxHeight: '85vh', 
+        zIndex: 30,
+        maxHeight: '85vh',
         overflowY: 'auto',
         borderTop: 'none',
         boxShadow: '0 -10px 40px rgba(0,0,0,0.15)',
-        touchAction: 'none'
       }}
     >
       {/* Handle draggable */}
-      <div style={{ padding: '12px 0 20px', cursor: 'grab' }}>
+      <div
+        onPointerDown={e => dragControls.start(e)}
+        style={{ padding: '12px 0 20px', cursor: 'grab', touchAction: 'none' }}
+      >
         <div style={{ width: 40, height: 5, borderRadius: 2.5, background: '#0D7C66', opacity: 0.3, margin: '0 auto' }} />
       </div>
 
