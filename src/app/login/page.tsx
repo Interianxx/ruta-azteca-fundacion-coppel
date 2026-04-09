@@ -417,7 +417,7 @@ export default function LoginPage() {
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
         console.log('[verify] auto-login OK — redirecting to:', dest)
-        window.location.href = dest
+        router.replace(dest)
       }
     } catch {
       setError(ui.err_network)
