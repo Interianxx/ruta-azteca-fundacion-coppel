@@ -494,11 +494,12 @@ export default function LoginPage() {
     : ''
 
   // ── Common Tailwind Style Tokens ───────────────────────────────────────────
-  const twInput = "w-full px-4 py-3 bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.12)] rounded-xl text-[var(--color-jade-50)] placeholder-[rgba(225,245,238,0.4)] text-[15px] outline-none focus:border-[var(--color-jade-400)] focus:bg-[rgba(255,255,255,0.08)] transition-all"
-  const twPrimaryBtn = "w-full p-3.5 bg-[var(--color-jade-600)] hover:bg-[var(--color-jade-400)] text-white text-[15px] font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(4,52,44,0.3)]"
-  const twOutlineBtn = "flex items-center justify-center gap-2.5 w-full p-3.5 bg-[rgba(241,239,232,0.08)] hover:bg-[rgba(241,239,232,0.15)] border border-[rgba(255,255,255,0.12)] rounded-xl text-[var(--color-jade-50)] text-[15px] font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-  const twLinkBtn = "bg-transparent border-none cursor-pointer text-[var(--color-jade-100)] text-[13px] py-1 underline hover:text-[var(--color-jade-50)] transition-colors"
-  const twBackBtn = "bg-transparent border-none cursor-pointer text-[var(--color-obs-100)] text-[13px] mt-1 p-2 hover:text-[var(--color-jade-50)] transition-colors"
+  // ── Common Semantic Classes (moved to globals.css) ─────────────────────────
+  const twInput      = "input-jade-premium"
+  const twPrimaryBtn = "btn-jade-primary"
+  const twOutlineBtn = "btn-jade-outline"
+  const twLinkBtn    = "btn-jade-link"
+  const twBackBtn    = "bg-transparent border-none cursor-pointer text-jade-100/50 text-[13px] mt-1 p-2 hover:text-white transition-colors font-bold"
 
   const divider = (text: string) => (
     <div className="flex items-center gap-4 my-2 opacity-60">
@@ -523,19 +524,19 @@ export default function LoginPage() {
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-[var(--color-obs-900)] overflow-hidden relative selection:bg-[var(--color-jade-400)] selection:text-white">
+    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-jade-air overflow-hidden relative selection:bg-[var(--color-jade-air-accent)] selection:text-white">
       <style>{`
         @keyframes slideInFwd  { from { opacity:0; transform:translateX(24px)  } to { opacity:1; transform:none } }
         @keyframes slideInBack { from { opacity:0; transform:translateX(-24px) } to { opacity:1; transform:none } }
       `}</style>
 
-      {/* ── Brand Panel (Left on Desktop, Top on Mobile) ──────────────────── */}
-      <div className="flex-none md:flex-1 md:w-1/2 bg-gradient-to-br from-[var(--color-obs-900)] via-[#083025] to-[var(--color-jade-900)] flex flex-col items-center justify-center p-10 md:p-16 relative overflow-hidden min-h-[300px] md:min-h-screen">
+      {/* ── Brand Panel (Dark Jade for Logo Contrast) ──────────────────── */}
+      <div className="flex-none md:flex-1 md:w-1/2 bg-gradient-to-br from-[#04342C] via-[#0D7C66] to-[#04342C] flex flex-col items-center justify-center p-10 md:p-16 relative overflow-hidden min-h-[300px] md:min-h-screen">
         {patterns.map((p, i) => (
-          <div key={i} className="absolute pointer-events-none opacity-5" style={{ left: `${p.x}%`, top: `${p.y}%`, transform: `rotate(${p.r}deg)` }}>
+          <div key={i} className="absolute pointer-events-none opacity-10" style={{ left: `${p.x}%`, top: `${p.y}%`, transform: `rotate(${p.r}deg)` }}>
             <svg width="80" height="80" viewBox="0 0 60 60">
-              <polygon points="30,0 60,30 30,60 0,30" fill="none" stroke="var(--color-gold-200)" strokeWidth="1.5"/>
-              <polygon points="30,10 50,30 30,50 10,30" fill="none" stroke="var(--color-jade-400)" strokeWidth="1"/>
+              <polygon points="30,0 60,30 30,60 0,30" fill="none" stroke="var(--color-jade-100)" strokeWidth="1.5" opacity="0.4"/>
+              <polygon points="30,10 50,30 30,50 10,30" fill="none" stroke="var(--color-jade-100)" strokeWidth="1" opacity="0.2"/>
             </svg>
           </div>
         ))}
@@ -548,67 +549,67 @@ export default function LoginPage() {
           />
         </div>
 
-        <h1 className="relative z-10 m-0 text-3xl md:text-5xl font-bold tracking-[0.12em] text-[var(--color-jade-50)] uppercase text-center">
+        <h1 className="relative z-10 m-0 text-3xl md:text-5xl font-extrabold tracking-[0.12em] text-white uppercase text-center">
           Ruta Azteca
         </h1>
 
-        <div className="relative z-10 w-12 h-1 bg-gradient-to-r from-[var(--color-gold-200)] to-[var(--color-jade-400)] my-5 rounded-full" />
+        <div className="relative z-10 w-12 h-1 bg-gradient-to-r from-[var(--color-gold-200)] to-[#FDE68A] my-5 rounded-full shadow-lg" />
 
-        <p className="relative z-10 m-0 text-[14px] md:text-[16px] text-[var(--color-jade-100)] text-center max-w-[340px] leading-relaxed tracking-wide font-light">
+        <p className="relative z-10 m-0 text-[14px] md:text-[16px] text-jade-50 text-center max-w-[340px] leading-relaxed tracking-wide font-medium opacity-90">
           {ui.subtitle_brand}
         </p>
 
         <div className="hidden md:flex gap-3 mt-10 relative z-10">
           {['CDMX', 'Guadalajara', 'Monterrey'].map(city => (
-            <span key={city} className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-[var(--color-gold-200)]/30 text-[var(--color-gold-200)] text-[12px] font-medium tracking-[0.05em] bg-[var(--color-gold-900)]/40 backdrop-blur-sm">
+            <span key={city} className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full border border-white/20 text-white text-[12px] font-black tracking-[0.05em] bg-white/10 backdrop-blur-md shadow-sm">
               <MapPinIcon /> {city}
             </span>
           ))}
         </div>
 
-        <p className="hidden md:block absolute bottom-8 text-[11px] text-[var(--color-jade-100)]/40 tracking-[0.1em] uppercase font-semibold">
+        <p className="hidden md:block absolute bottom-8 text-[11px] text-white/50 tracking-[0.1em] uppercase font-black">
           {ui.subtitle_footer}
         </p>
       </div>
 
-      {/* ── Form Panel (Right on Desktop, Bottom on Mobile) ──────────────── */}
-      <div className="flex-1 md:w-1/2 flex items-start md:items-center justify-center p-6 md:p-16 relative bg-gradient-to-b from-[var(--color-obs-900)] to-[#0c1a16] md:bg-none">
+      {/* ── Form Panel (Jade Air Look) ──────────────── */}
+      <div className="flex-1 md:w-1/2 flex items-start md:items-center justify-center p-6 md:p-16 relative">
 
-        {/* Glass Form Container */}
-        <div className="glass-panel w-full max-w-[420px] p-8 md:p-10 relative z-10">
+        {/* Deep Contrast Container */}
+        <div className="w-full max-w-[420px] p-8 md:p-10 relative z-10 bg-[#04342C]/95 backdrop-blur-3xl border border-white/10 rounded-[32px] shadow-2xl shadow-black/40">
 
           <div className={animClass}>
-            <h2 className="m-0 mb-2 text-2xl md:text-3xl font-semibold text-[var(--color-jade-50)] tracking-tight">
+            <h2 className="m-0 mb-2 text-2xl md:text-3xl font-black text-white tracking-tight">
               {TITLES[view]}
             </h2>
-            <p className="m-0 mb-8 text-[14px] text-[var(--color-jade-100)] opacity-80 leading-relaxed font-light">
+            <p className="m-0 mb-8 text-[14px] text-jade-100/70 font-semibold leading-relaxed">
               {SUBTITLES[view]}
             </p>
 
             {/* ── select ──────────────────────────────────────────────────── */}
             {view === 'select' && (
               <div className="flex flex-col gap-4">
-                <button onClick={() => nav('tourist', 'fwd')} className="group flex items-center gap-4 w-full p-4 bg-gradient-to-br from-[var(--color-jade-600)] to-[var(--color-jade-900)] hover:from-[var(--color-jade-400)] hover:to-[var(--color-jade-600)] rounded-2xl border border-[var(--color-jade-400)]/30 transition-all shadow-lg text-left">
-                  <span className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <button onClick={() => nav('tourist', 'fwd')} className="group flex items-center gap-4 w-full p-4 bg-gradient-to-br from-[#0D7C66] to-[#1A9E78] hover:scale-[1.02] rounded-2xl transition-all shadow-xl text-left border-none">
+                  <span className="w-12 h-12 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
                     </svg>
                   </span>
                   <div>
-                    <div className="text-[var(--color-jade-50)] font-semibold text-[16px] mb-0.5">{ui.tourist_btn}</div>
-                    <div className="text-[var(--color-jade-100)] opacity-70 text-[13px] font-light">{ui.tourist_sub}</div>
+                    <div className="text-white font-black text-[16px] mb-0.5">{ui.tourist_btn}</div>
+                    <div className="text-white/70 text-[13px] font-semibold">{ui.tourist_sub}</div>
                   </div>
                 </button>
 
-                <button onClick={() => nav('business', 'fwd')} className="group flex items-center gap-4 w-full p-4 bg-[rgba(255,255,255,0.03)] hover:bg-[rgba(255,255,255,0.06)] rounded-2xl border border-[rgba(255,255,255,0.1)] transition-all text-left">
-                  <span className="w-12 h-12 rounded-xl bg-[var(--color-gold-900)]/50 group-hover:bg-[var(--color-gold-900)] flex items-center justify-center shrink-0 transition-colors">
-                    <svg className="w-6 h-6 text-[var(--color-gold-200)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <button onClick={() => nav('business', 'fwd')} className="group flex items-center gap-4 w-full p-4 bg-white hover:bg-jade-50 rounded-2xl transition-all text-left shadow-lg scale-[1.01] border-none">
+                  <span className="w-12 h-12 rounded-xl bg-[var(--color-jade-air-light)] flex items-center justify-center shrink-0">
+                    <svg className="w-6 h-6 text-[var(--color-jade-air-accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
                     </svg>
                   </span>
                   <div>
-                    <div className="text-[var(--color-jade-50)] font-semibold text-[16px] mb-0.5">{ui.business_btn}</div>
-                    <div className="text-[var(--color-jade-100)] opacity-70 text-[13px] font-light">{ui.business_sub}</div>
+                    <div className="text-[#04342C] font-black text-[16px] mb-0.5">{ui.business_btn}</div>
+                    <div className="text-[var(--text-muted)] text-[13px] font-semibold">{ui.business_sub}</div>
                   </div>
                 </button>
               </div>
@@ -655,7 +656,7 @@ export default function LoginPage() {
                     </button>
                   </div>
                   <div className="text-right">
-                    <button type="button" onClick={() => nav('t-forgot', 'fwd')} className={twLinkBtn}>
+                    <button type="button" onClick={() => nav('t-forgot', 'fwd')} className="text-jade-100/60 hover:text-white bg-transparent border-none cursor-pointer text-[12px] py-1 underline transition-colors font-semibold">
                       {ui.forgot}
                     </button>
                   </div>
@@ -665,8 +666,8 @@ export default function LoginPage() {
                   </button>
                 </form>
                 <div className="text-center mt-2">
-                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">{ui.no_account} </span>
-                  <button onClick={() => nav('t-signup', 'fwd')} className={twLinkBtn + " font-medium"}>{ui.register}</button>
+                  <span className="text-[13px] text-jade-100/60 font-medium">{ui.no_account} </span>
+                  <button onClick={() => nav('t-signup', 'fwd')} className="text-white hover:text-jade-400 bg-transparent border-none cursor-pointer text-[13px] py-1 underline transition-colors font-bold">{ui.register}</button>
                 </div>
                 <button onClick={() => nav('tourist', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>
@@ -700,8 +701,8 @@ export default function LoginPage() {
                   </button>
                 </form>
                 <div className="text-center mt-2">
-                  <span className="text-[13px] text-[var(--color-obs-100)] font-light">{ui.have_account} </span>
-                  <button onClick={() => nav('t-login', 'back')} className={twLinkBtn + " font-medium"}>{ui.login_btn}</button>
+                  <span className="text-[13px] text-jade-100/60 font-medium">{ui.have_account} </span>
+                  <button onClick={() => nav('t-login', 'back')} className="text-white hover:text-jade-400 bg-transparent border-none cursor-pointer text-[13px] py-1 underline transition-colors font-bold">{ui.login_btn}</button>
                 </div>
                 <button onClick={() => nav('tourist', 'back')} className={twBackBtn}>{ui.back}</button>
               </div>

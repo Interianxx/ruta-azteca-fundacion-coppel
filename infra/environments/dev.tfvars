@@ -30,7 +30,7 @@ github_branch = "main"
 # nextauth_url: vacío en el primer apply.
 #   Después del primer apply, copia el output amplify_app_url aquí y vuelve a aplicar.
 # ---------------------------------------------------------------------------
-nextauth_url = ""
+nextauth_url = "https://main.dq7orj9s3fr7v.amplifyapp.com"
 
 # ---------------------------------------------------------------------------
 # Mapbox — va en variable de entorno: export TF_VAR_mapbox_token="pk.eyJ1..."
@@ -41,12 +41,11 @@ nextauth_url = ""
 # ---------------------------------------------------------------------------
 callback_urls = [
   "http://localhost:3000/api/auth/callback/cognito",
-  # Agrega aquí la URL de Amplify después del primer apply:
-  # "https://main.XXXXXXXX.amplifyapp.com/api/auth/callback/cognito",
+  "https://main.dq7orj9s3fr7v.amplifyapp.com/api/auth/callback/cognito",
 ]
 
 logout_urls = [
   "http://localhost:3000",
   "http://localhost:3000/login",
-  # "https://main.XXXXXXXX.amplifyapp.com",
+  "https://main.dq7orj9s3fr7v.amplifyapp.com",
 ]

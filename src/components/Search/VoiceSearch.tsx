@@ -8,18 +8,19 @@ export function VoiceSearch({ onResult }: Props) {
   const [escuchando, setEscuchando] = useState(false)
 
   function iniciar() {
-    // Intentar Web Speech API primero (sin costo)
-    const SpeechRecognition = window.SpeechRecognition ?? (window as unknown as { webkitSpeechRecognition: typeof SpeechRecognition }).webkitSpeechRecognition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SR = (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
 
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition()
+    if (SR) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const recognition: any = new SR()
       recognition.lang = 'es-MX'
-      recognition.onresult = (e) => onResult(e.results[0][0].transcript)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      recognition.onresult = (e: any) => onResult(e.results[0][0].transcript)
       recognition.onend    = () => setEscuchando(false)
       recognition.start()
       setEscuchando(true)
     } else {
-      // TODO: fallback a AWS Transcribe vía /api/voz
       alert('Tu navegador no soporta reconocimiento de voz')
     }
   }

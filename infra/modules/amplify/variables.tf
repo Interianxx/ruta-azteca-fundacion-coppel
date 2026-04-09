@@ -22,22 +22,6 @@ variable "github_token" {
 
 # ── Valores inyectados desde otros módulos ───────────────────────────────────
 
-variable "aws_region" {
-  type = string
-}
-
-variable "aws_access_key_id" {
-  description = "AWS_ACCESS_KEY_ID del IAM user nextjs-bff"
-  type        = string
-  sensitive   = true
-}
-
-variable "aws_secret_access_key" {
-  description = "AWS_SECRET_ACCESS_KEY del IAM user nextjs-bff"
-  type        = string
-  sensitive   = true
-}
-
 variable "cognito_user_pool_id" { type = string }
 variable "cognito_client_id"    { type = string }
 variable "cognito_client_secret" {
@@ -74,4 +58,9 @@ variable "mapbox_token" {
   description = "NEXT_PUBLIC_MAPBOX_TOKEN — account.mapbox.com"
   type        = string
   sensitive   = true
+}
+
+variable "nextjs_bff_policy_arn" {
+  description = "ARN de la política IAM del BFF — se adjunta al rol de Amplify para acceso runtime a DynamoDB, Lambda, S3, Cognito"
+  type        = string
 }

@@ -19,9 +19,11 @@ export async function addNegocio(
     lat: number,
     lng: number): Promise<NegocioCache> {
         const db = await getDB()
+        const newId = crypto.randomUUID()
         const business: NegocioCache = {
+            id: newId,
             negocio: {
-                id: crypto.randomUUID(),
+                id: newId,
                 nombre: nombre,
                 descripcion: descripcion,
                 categoria: categoria as Negocio['categoria'],

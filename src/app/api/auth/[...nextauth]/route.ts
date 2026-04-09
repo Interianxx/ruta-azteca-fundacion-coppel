@@ -5,6 +5,7 @@ import {
   InitiateAuthCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { createHmac } from 'crypto'
+import { AWS_REGION, awsCredentials } from '@/lib/aws-config'
 
 // Decode a JWT payload without cryptographic verification (safe for trusted Cognito tokens)
 function decodeJwtPayload(jwt: string): Record<string, unknown> {
@@ -19,7 +20,7 @@ const COGNITO_DOMAIN = process.env.NEXT_PUBLIC_COGNITO_DOMAIN!
 const CLIENT_ID      = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!
 const SECRET         = process.env.COGNITO_CLIENT_SECRET!
 
-const cognitoClient = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION ?? 'us-east-1' })
+const cognitoClient = new CognitoIdentityProviderClient({ region: AWS_REGION, credentials: awsCredentials })
 
 function secretHash(username: string) {
   return createHmac('sha256', SECRET).update(username + CLIENT_ID).digest('base64')
@@ -51,6 +52,7 @@ const cookieOpts = (extra?: object) => ({
 })
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     // ── Google via Cognito Hosted UI ──────────────────────────────────────────
     // Custom provider con endpoints explícitos: evita la llamada de OIDC discovery
@@ -69,10 +71,8 @@ export const authOptions: NextAuthOptions = {
       // (la validación requiere JWKS de cognito-idp.amazonaws.com, dominio inaccesible aquí).
       token: {
         url: `https://${COGNITO_DOMAIN}/oauth2/token`,
-        async request(context: {
-          params: Record<string, string>
-          checks: Record<string, string>
-        }) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        async request(context: any) {
           const body = new URLSearchParams({
             grant_type:   'authorization_code',
             code:         context.params.code,

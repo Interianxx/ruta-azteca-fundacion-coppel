@@ -4,8 +4,9 @@ import {
   ForgotPasswordCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { createHmac } from 'crypto'
+import { AWS_REGION, awsCredentials } from '@/lib/aws-config'
 
-const client    = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION ?? 'us-east-1' })
+const client    = new CognitoIdentityProviderClient({ region: AWS_REGION, credentials: awsCredentials })
 const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!
 const SECRET    = process.env.COGNITO_CLIENT_SECRET!
 

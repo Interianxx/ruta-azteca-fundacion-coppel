@@ -42,6 +42,12 @@ resource "aws_iam_role_policy_attachment" "amplify_managed" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess-Amplify"
 }
 
+# Permisos del BFF (DynamoDB, Lambda invoke, S3, Cognito) en runtime SSR
+resource "aws_iam_role_policy_attachment" "amplify_bff" {
+  role       = aws_iam_role.amplify.name
+  policy_arn = var.nextjs_bff_policy_arn
+}
+
 # ---------------------------------------------------------------------------
 # Amplify App
 # ---------------------------------------------------------------------------
@@ -76,9 +82,6 @@ resource "aws_amplify_app" "frontend" {
 
   # Variables de entorno — inyectadas desde outputs de otros módulos
   environment_variables = {
-    AWS_REGION                       = var.aws_region
-    AWS_ACCESS_KEY_ID                = var.aws_access_key_id
-    AWS_SECRET_ACCESS_KEY            = var.aws_secret_access_key
     NEXT_PUBLIC_COGNITO_USER_POOL_ID = var.cognito_user_pool_id
     NEXT_PUBLIC_COGNITO_CLIENT_ID    = var.cognito_client_id
     COGNITO_CLIENT_SECRET            = var.cognito_client_secret
