@@ -397,22 +397,26 @@ export default function LoginPage() {
         body: JSON.stringify({ email, code, role: view === 'b-verify' ? 'negocio' : 'turista' }),
       })
       const data = await res.json()
+      console.log('[verify] API response:', data)
       if (data.error) { setError(data.error); return }
       const dest = view === 'b-verify' ? '/negocio/registro' : '/turista/mapa'
+      console.log('[verify] dest:', dest, '| attempting auto-login...')
       skipSessionRedirectRef.current = true
-      // Retry once after 2s — Cognito takes time to propagate the new user
       let login = await signIn('credentials', { redirect: false, email, password })
+      console.log('[verify] login attempt 1:', login?.error ?? 'OK')
       if (login?.error) {
         await new Promise(r => setTimeout(r, 2000))
         login = await signIn('credentials', { redirect: false, email, password })
+        console.log('[verify] login attempt 2:', login?.error ?? 'OK')
       }
       if (login?.error) {
-        // Still failing — save destination so the useEffect picks it up after manual login
+        console.log('[verify] auto-login failed — saving postVerifyDest:', dest)
         skipSessionRedirectRef.current = false
         sessionStorage.setItem('postVerifyDest', dest)
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
+        console.log('[verify] auto-login OK — redirecting to:', dest)
         window.location.href = dest
       }
     } catch {
