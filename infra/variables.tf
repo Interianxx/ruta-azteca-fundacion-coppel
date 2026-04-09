@@ -130,3 +130,28 @@ variable "mapbox_token" {
   type        = string
   sensitive   = true
 }
+
+# ---------------------------------------------------------------------------
+# SSR AWS credentials (usuario IAM ruta-azteca-ssr)
+# Turbopack reemplaza process.env.AWS_* — se usan con prefijo SSR_AWS_
+# Valores sensibles: export TF_VAR_ssr_aws_access_key_id="..."
+#                    export TF_VAR_ssr_aws_secret_access_key="..."
+# ---------------------------------------------------------------------------
+
+variable "ssr_aws_region" {
+  description = "Región AWS para SSR"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "ssr_aws_access_key_id" {
+  description = "Access Key ID del usuario IAM ruta-azteca-ssr"
+  type        = string
+  sensitive   = true
+}
+
+variable "ssr_aws_secret_access_key" {
+  description = "Secret Access Key del usuario IAM ruta-azteca-ssr"
+  type        = string
+  sensitive   = true
+}

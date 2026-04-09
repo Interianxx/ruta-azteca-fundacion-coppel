@@ -121,4 +121,8 @@ module "amplify" {
   nextauth_url          = var.nextauth_url
   mapbox_token          = var.mapbox_token
   nextjs_bff_policy_arn = module.ai_services.nextjs_bff_policy_arn
+
+  ssr_aws_region            = var.ssr_aws_region
+  ssr_aws_access_key_id     = var.ssr_aws_access_key_id
+  ssr_aws_secret_access_key = var.ssr_aws_secret_access_key
 }

@@ -96,6 +96,9 @@ resource "aws_amplify_app" "frontend" {
     LAMBDA_VOZ_NAME                  = var.lambda_voz_name
     NEXTAUTH_SECRET                  = var.nextauth_secret
     NEXTAUTH_URL                     = local.nextauth_url_effective
+    SSR_AWS_REGION                   = var.ssr_aws_region
+    SSR_AWS_ACCESS_KEY_ID            = var.ssr_aws_access_key_id
+    SSR_AWS_SECRET_ACCESS_KEY        = var.ssr_aws_secret_access_key
   }
 
   tags = { Name = local.prefix }

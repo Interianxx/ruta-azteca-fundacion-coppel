@@ -64,3 +64,23 @@ variable "nextjs_bff_policy_arn" {
   description = "ARN de la política IAM del BFF — se adjunta al rol de Amplify para acceso runtime a DynamoDB, Lambda, S3, Cognito"
   type        = string
 }
+
+# Credenciales IAM dedicadas para SSR (inlineadas en el bundle de Next.js)
+# Turbopack reemplaza process.env.AWS_* con undefined — estas usan prefijo SSR_AWS_
+variable "ssr_aws_region" {
+  description = "Región AWS para el cliente SSR (SSR_AWS_REGION)"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "ssr_aws_access_key_id" {
+  description = "Access Key ID del usuario IAM ruta-azteca-ssr (SSR_AWS_ACCESS_KEY_ID)"
+  type        = string
+  sensitive   = true
+}
+
+variable "ssr_aws_secret_access_key" {
+  description = "Secret Access Key del usuario IAM ruta-azteca-ssr (SSR_AWS_SECRET_ACCESS_KEY)"
+  type        = string
+  sensitive   = true
+}

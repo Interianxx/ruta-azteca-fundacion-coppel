@@ -51,7 +51,7 @@ logout_urls = [
 ]
 
 # CORS del bucket S3 — orígenes permitidos para uploads pre-firmados
-allowed_origins = [
+cors_origins = [
   "http://localhost:3000",
   "https://main.dq7orj9s3fr7v.amplifyapp.com",
 ]
