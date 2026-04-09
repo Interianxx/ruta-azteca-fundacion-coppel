@@ -5,7 +5,10 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Utensils, Palette, BedDouble, Map as MapIcon, Bus, Store } from 'lucide-react'
 import { MAPBOX_TOKEN, MAPBOX_STYLE, CDMX_CENTER, DEFAULT_ZOOM } from '@/lib/mapbox'
+
+
 import type { Negocio, CategoriaSlug } from '@/types/negocio'
+
 
 export const CATEGORIA_COLOR: Record<CategoriaSlug, string> = {
   comida:     '#C5A044',
@@ -55,6 +58,7 @@ interface Props {
   negocios:  Negocio[]
   onSelect:  (negocio: Negocio) => void
   selected?: Negocio | null
+  mapStyle?: string
 }
 
 export interface MapViewHandle {
@@ -63,7 +67,7 @@ export interface MapViewHandle {
 }
 
 export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
-  { negocios, onSelect, selected },
+  { negocios, onSelect, selected, mapStyle },
   ref,
 ) {
   const containerRef   = useRef<HTMLDivElement>(null)
@@ -118,8 +122,8 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
       'top-right',
     )
 
-    // Agregar source y layer de ruta cuando el mapa cargue
-    map.on('load', () => {
+// Agregar source y layers de ruta en cada carga de estilo (inicial + setStyle)
+    map.on('style.load', () => {
       map.addSource('route', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] },
@@ -152,6 +156,14 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
       mapRef.current = null
     }
   }, [])
+
+  // ── Efecto 1b: cambiar estilo del mapa ────────────────────────────────────
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapStyle) return
+    routeReadyRef.current = false
+    map.setStyle(mapStyle)
+  }, [mapStyle])
 
   // ── Efecto 2: sincronizar markers con negocios (solo crea/elimina) ────────
   // NO depende de `selected` ni `onSelect` → no se dispara al seleccionar
@@ -207,7 +219,7 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
         .setLngLat([negocio.lng, negocio.lat])
         .addTo(map)
 
-      entriesRef.current.set(negocio.id, { marker, pin })
+entriesRef.current.set(negocio.id, { marker, pin })
     })
   }, [negocios])  // ← solo negocios; selected y onSelect NO están aquí
 
@@ -246,8 +258,58 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
 
   return (
     <>
-      {/* Empuja los controles de Mapbox por debajo del top bar + category pills */}
-      <style>{`.mapboxgl-ctrl-top-right { margin-top: 155px; margin-right: 8px; }`}</style>
+      {/* Controles Mapbox — Glass Jade */}
+      <style>{`
+        .mapboxgl-ctrl-top-right {
+          margin-top: 155px;
+          margin-right: 10px;
+        }
+
+        /* Contenedor del grupo (zoom + brújula / geolocate) */
+        .mapboxgl-ctrl-group {
+          background: rgba(255,255,255,0.92) !important;
+          backdrop-filter: blur(20px) saturate(120%) !important;
+          -webkit-backdrop-filter: blur(20px) saturate(120%) !important;
+          border: 1px solid rgba(255,255,255,0.7) !important;
+          border-radius: 16px !important;
+          box-shadow: 0 4px 20px rgba(13,124,102,0.14), 0 1px 4px rgba(0,0,0,0.07) !important;
+          overflow: hidden !important;
+        }
+
+        /* Botones individuales */
+        .mapboxgl-ctrl-group button {
+          width: 38px !important;
+          height: 38px !important;
+          background: transparent !important;
+          transition: background 0.15s ease !important;
+        }
+
+        .mapboxgl-ctrl-group button:hover {
+          background: rgba(13,124,102,0.09) !important;
+        }
+
+        /* Separador entre botones */
+        .mapboxgl-ctrl-group button + button {
+          border-top: 1px solid rgba(13,124,102,0.1) !important;
+        }
+
+        /* Iconos — tinte jade */
+        .mapboxgl-ctrl-zoom-in  .mapboxgl-ctrl-icon,
+        .mapboxgl-ctrl-zoom-out .mapboxgl-ctrl-icon,
+        .mapboxgl-ctrl-compass  .mapboxgl-ctrl-icon {
+          filter: invert(30%) sepia(60%) saturate(600%) hue-rotate(128deg) brightness(85%) !important;
+        }
+
+        .mapboxgl-ctrl-geolocate .mapboxgl-ctrl-icon {
+          filter: invert(30%) sepia(60%) saturate(600%) hue-rotate(128deg) brightness(85%) !important;
+        }
+
+        /* Geolocate activo → jade sólido */
+        .mapboxgl-ctrl-geolocate-active .mapboxgl-ctrl-icon,
+        .mapboxgl-ctrl-geolocate-background .mapboxgl-ctrl-icon {
+          filter: invert(42%) sepia(90%) saturate(450%) hue-rotate(128deg) brightness(80%) !important;
+        }
+      `}</style>
       <div ref={containerRef} className="w-full h-full" />
     </>
   )
