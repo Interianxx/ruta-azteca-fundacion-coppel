@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession, signOut, getSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { 
   Phone, MessageCircle, MapPin, Map, Star, 
@@ -64,13 +64,7 @@ export default function PerfilNegocioPage() {
 
   useEffect(() => {
     if (status === 'loading') return
-    if (status === 'unauthenticated') {
-      const t = setTimeout(async () => {
-        const s = await getSession()
-        if (!s) router.replace('/login')
-      }, 800)
-      return () => clearTimeout(t)
-    }
+    if (status === 'unauthenticated') { router.replace('/login'); return }
     fetch('/api/negocios/mio')
       .then(r => r.json())
       .then(d => {

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession, signOut, getSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { 
   Clock, CheckCircle, Map, BarChart2, Loader2, 
@@ -124,19 +124,9 @@ export default function RegistroNegocioPage() {
     console.log('[registro/useEffect] status:', status, '| userRol:', userRol, '| userEmail:', userEmail)
     if (status === 'loading') return
     if (status === 'unauthenticated') {
-      // Production timing: after signIn + client-side navigation, the session JWT
-      // might not be resolved yet. Retry once before redirecting.
-      console.log('[registro/useEffect] unauthenticated — retrying getSession in 800ms...')
-      const t = setTimeout(async () => {
-        const s = await getSession()
-        console.log('[registro/useEffect] retry getSession — exists:', !!s, '| rol:', (s as { rol?: string } | null)?.rol)
-        if (!s) {
-          console.log('[registro/useEffect] still unauthenticated — redirecting to /login')
-          router.replace('/login?next=/negocio/registro')
-        }
-        // if session exists now, useSession hook will update status → effect fires again
-      }, 800)
-      return () => clearTimeout(t)
+      console.log('[registro/useEffect] unauthenticated — redirecting to /login')
+      router.replace('/login?next=/negocio/registro')
+      return
     }
     if (userRol === 'admin') { router.replace('/admin/dashboard'); return }
 
