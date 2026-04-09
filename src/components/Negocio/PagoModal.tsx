@@ -4,9 +4,14 @@ import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { CreditCard, X, ChevronRight, Check, Loader2, AlertCircle } from 'lucide-react'
 
+import { MenuItem, Pedido } from '@/types/negocio'
+import { NegocioStore } from '@/lib/negocioStore'
+
 interface PagoModalProps {
   negocio: { id: string; nombre: string; categoria?: string }
   onClose: () => void
+  items?: (MenuItem & { cantidad: number })[]
+  total?: number
 }
 
 type Step = 'monto' | 'metodo' | 'procesando' | 'exito' | 'error'
@@ -38,9 +43,9 @@ function generateFolio() {
   return 'RA-' + Math.random().toString(36).substring(2, 8).toUpperCase()
 }
 
-export function PagoModal({ negocio, onClose }: PagoModalProps) {
-  const [step, setStep]       = useState<Step>('monto')
-  const [monto, setMonto]     = useState('')
+export function PagoModal({ negocio, onClose, items, total }: PagoModalProps) {
+  const [step, setStep]       = useState<Step>(items ? 'metodo' : 'monto')
+  const [monto, setMonto]     = useState(total ? total.toString() : '')
   const [desc, setDesc]       = useState('')
   const [metodo, setMetodo]   = useState<string | null>(null)
   const [folio, setFolio]     = useState('')
@@ -78,6 +83,18 @@ export function PagoModal({ negocio, onClose }: PagoModalProps) {
     setTimeout(() => {
       setFolio(f)
       setStep('exito')
+      
+      // Registrar pedido en el store local
+      const nuevoPedido: Pedido = {
+        id: Date.now().toString(),
+        negocioId: negocio.id,
+        items: items ? items.map(i => ({ id: i.id, nombre: i.nombre, cantidad: i.cantidad, precio: i.precio })) : [],
+        total: parseFloat(monto),
+        estado: 'completado',
+        fecha: new Date().toISOString(),
+        folio: f
+      }
+      NegocioStore.addPedido(nuevoPedido)
     }, 2200)
   }
 
@@ -231,6 +248,17 @@ export function PagoModal({ negocio, onClose }: PagoModalProps) {
               <div style={{ marginBottom: 20 }}>
                 <div style={{ textAlign: 'center', marginBottom: 20 }}>
                   <div style={{ fontSize: 32, fontWeight: 900, color: '#1A2E26', letterSpacing: '-0.03em' }}>{montoFormatted}</div>
+                  {items && (
+                    <div style={{ marginTop: 12, textAlign: 'left', background: 'rgba(13,124,102,0.05)', borderRadius: 12, padding: '12px' }}>
+                      <div style={{ fontSize: 11, fontWeight: 800, color: '#0D7C66', textTransform: 'uppercase', marginBottom: 8 }}>Detalle del pedido</div>
+                      {items.map(it => (
+                        <div key={it.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 4 }}>
+                          <span style={{ color: '#1A2E26' }}>{it.cantidad}x {it.nombre}</span>
+                          <span style={{ fontWeight: 600 }}>${(it.precio * it.cantidad).toFixed(1)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   {desc && <div style={{ fontSize: 13, color: '#5a6e67', marginTop: 4 }}>{desc}</div>}
                 </div>
 
