@@ -1350,7 +1350,7 @@ function ChatPanel({ onClose, isDesktop, onSelectNegocio }: { onClose: () => voi
 export default function MapaPage() {
   const router = useRouter()
   const { data: session } = useSession()
-  const { idioma: idiomaGlobal } = useTranslation()
+  const { idioma: idiomaGlobal, setIdioma } = useTranslation()
   const ui = MAP_UI[idiomaGlobal] ?? MAP_UI.en
   const catLabel = (slug: string) => (CAT_LABELS[idiomaGlobal] ?? CAT_LABELS.en)[slug] ?? slug
 
@@ -2060,7 +2060,42 @@ export default function MapaPage() {
                padding: '8px 24px 44px', boxShadow: '0 -4px 32px rgba(0,0,0,.4)' 
             }}
           >
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 22px' }} />
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#0D7C66', opacity: 0.6, margin: '0 auto 20px' }} />
+
+            {/* ── Selector de idioma ── */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, color: '#8a9690', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Globe size={12} color="#8a9690" />
+                {idiomaGlobal === 'es' ? 'Idioma' : idiomaGlobal === 'en' ? 'Language' : idiomaGlobal === 'fr' ? 'Langue' : idiomaGlobal === 'pt' ? 'Idioma' : 'Sprache'}
+              </div>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {([
+                  { code: 'es', flag: '🇲🇽', name: 'ES' },
+                  { code: 'en', flag: '🇺🇸', name: 'EN' },
+                  { code: 'fr', flag: '🇫🇷', name: 'FR' },
+                  { code: 'pt', flag: '🇵🇹', name: 'PT' },
+                  { code: 'de', flag: '🇩🇪', name: 'DE' },
+                ] as const).map(lang => (
+                  <button
+                    key={lang.code}
+                    onClick={() => setIdioma(lang.code)}
+                    style={{
+                      flex: 1, padding: '9px 4px', borderRadius: 12,
+                      border: idiomaGlobal === lang.code ? '2px solid #0D7C66' : '2px solid transparent',
+                      background: idiomaGlobal === lang.code ? '#0D7C66' : 'rgba(13,124,102,0.07)',
+                      color: idiomaGlobal === lang.code ? '#fff' : '#4a5a52',
+                      fontSize: 10, fontWeight: 800, cursor: 'pointer',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+                      transition: 'all 0.18s',
+                    }}
+                  >
+                    <span style={{ fontSize: 20, lineHeight: 1 }}>{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {session ? (
               <>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>

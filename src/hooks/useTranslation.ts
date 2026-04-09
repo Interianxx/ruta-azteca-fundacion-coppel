@@ -2,13 +2,22 @@
 
 import { useCallback, useEffect, useState } from 'react'
 
-const STORAGE_KEY = 'ra_translations'
-const IDIOMA_DEFAULT = 'es'
+const STORAGE_KEY        = 'ra_translations'
+const IDIOMA_OVERRIDE_KEY = 'ra_idioma_override'
+const IDIOMA_DEFAULT     = 'es'
+const IDIOMA_EVENT       = 'ra-idioma-change'
 
 function getIdiomaDispositivo(): string {
   if (typeof navigator === 'undefined') return IDIOMA_DEFAULT
-  const lang = navigator.language || IDIOMA_DEFAULT
-  return lang.split('-')[0] // "pt-BR" → "pt", "en-US" → "en"
+  return (navigator.language || IDIOMA_DEFAULT).split('-')[0]
+}
+
+function getIdiomaInicial(): string {
+  try {
+    return localStorage.getItem(IDIOMA_OVERRIDE_KEY) ?? getIdiomaDispositivo()
+  } catch {
+    return getIdiomaDispositivo()
+  }
 }
 
 function getCacheLocal(): Record<string, string> {
@@ -22,9 +31,7 @@ function getCacheLocal(): Record<string, string> {
 function setCacheLocal(cache: Record<string, string>) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cache))
-  } catch {
-    // localStorage lleno — no crítico
-  }
+  } catch {}
 }
 
 function cacheKey(texto: string, idioma: string): string {
@@ -43,13 +50,26 @@ async function traducirRemoto(texto: string, idiomaDestino: string): Promise<str
 }
 
 export function useTranslation() {
-  const [idioma, setIdioma] = useState<string>(IDIOMA_DEFAULT)
-  const [cache, setCache] = useState<Record<string, string>>({})
+  const [idioma, setIdiomaState] = useState<string>(IDIOMA_DEFAULT)
+  const [cache,  setCache]       = useState<Record<string, string>>({})
 
   useEffect(() => {
-    const idiomaDetectado = getIdiomaDispositivo()
-    setIdioma(idiomaDetectado)
+    setIdiomaState(getIdiomaInicial())
     setCache(getCacheLocal())
+
+    // Sincronizar cuando otra instancia del hook cambia el idioma
+    const handler = (e: Event) => {
+      setIdiomaState((e as CustomEvent<string>).detail)
+    }
+    window.addEventListener(IDIOMA_EVENT, handler)
+    return () => window.removeEventListener(IDIOMA_EVENT, handler)
+  }, [])
+
+  /** Cambia el idioma, persiste en localStorage y notifica a todas las instancias del hook */
+  const setIdioma = useCallback((lang: string) => {
+    try { localStorage.setItem(IDIOMA_OVERRIDE_KEY, lang) } catch {}
+    setIdiomaState(lang)
+    window.dispatchEvent(new CustomEvent(IDIOMA_EVENT, { detail: lang }))
   }, [])
 
   const t = useCallback(
@@ -58,13 +78,10 @@ export function useTranslation() {
 
       const key = cacheKey(texto, idioma)
 
-      // 1. Cache local (localStorage) — sin costo
       if (cache[key]) return cache[key]
 
-      // 2. Lambda → DynamoDB cache → Amazon Translate
       const traduccion = await traducirRemoto(texto, idioma)
 
-      // 3. Guardar en localStorage
       const nuevoCache = { ...cache, [key]: traduccion }
       setCache(nuevoCache)
       setCacheLocal(nuevoCache)
@@ -74,5 +91,5 @@ export function useTranslation() {
     [idioma, cache],
   )
 
-  return { t, idioma }
+  return { t, idioma, setIdioma }
 }
