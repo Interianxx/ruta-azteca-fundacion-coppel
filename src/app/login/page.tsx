@@ -286,6 +286,10 @@ type View = 'select' | 'tourist' | 't-login' | 't-signup' | 't-verify' | 't-forg
 export default function LoginPage() {
   const router  = useRouter()
   const { data: session } = useSession()
+  const searchParams = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search)
+    : null
+  const nextParam = searchParams?.get('next') ?? null
 
   const [view,        setView]        = useState<View>('select')
   const [viewKey,     setViewKey]     = useState(0)
@@ -310,13 +314,16 @@ export default function LoginPage() {
   useEffect(() => {
     if (!session) return
     if (skipSessionRedirectRef.current) return
-    // If verification just completed, honour the saved destination
+    // 1. ?next= param (from protected page redirects)
+    if (nextParam) { router.replace(nextParam); return }
+    // 2. Destination saved during email verification flow
     const savedDest = sessionStorage.getItem('postVerifyDest')
     if (savedDest) {
       sessionStorage.removeItem('postVerifyDest')
       router.replace(savedDest)
       return
     }
+    // 3. Default by role
     const rol = (session as { rol?: string }).rol
     if (rol === 'admin') {
       router.replace('/admin/dashboard')
@@ -325,7 +332,7 @@ export default function LoginPage() {
     } else {
       router.replace('/turista/mapa')
     }
-  }, [session, router])
+  }, [session, router, nextParam])
 
   useEffect(() => {
     setLang(getUILang())
