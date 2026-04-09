@@ -31,6 +31,7 @@ def parse_args():
     parser.add_argument("--env",     default="dev",       help="Entorno: dev | prod")
     parser.add_argument("--region",  default="us-east-1", help="Región AWS")
     parser.add_argument("--dry-run", action="store_true", help="Imprime sin escribir")
+    parser.add_argument("--clean",   action="store_true", help="Borra registros SEED antes de insertar")
     return parser.parse_args()
 
 
@@ -131,6 +132,40 @@ def seed_table(table, items: list, label: str, dry_run: bool):
 
 
 # ---------------------------------------------------------------------------
+# Cleaner — borra todos los NEGOCIO con propietarioId=SEED
+# ---------------------------------------------------------------------------
+
+def clean_seed_negocios(table):
+    print("\nBorrando registros SEED anteriores...")
+    deleted = 0
+    last_key = None
+
+    while True:
+        kwargs = {
+            "FilterExpression": "propietarioId = :s AND begins_with(PK, :p)",
+            "ExpressionAttributeValues": {":s": "SEED", ":p": "NEGOCIO#"},
+            "ProjectionExpression": "PK, SK",
+        }
+        if last_key:
+            kwargs["ExclusiveStartKey"] = last_key
+
+        resp = table.scan(**kwargs)
+        items = resp.get("Items", [])
+
+        if items:
+            with table.batch_writer() as batch:
+                for item in items:
+                    batch.delete_item(Key={"PK": item["PK"], "SK": item["SK"]})
+                    deleted += 1
+
+        last_key = resp.get("LastEvaluatedKey")
+        if not last_key:
+            break
+
+    print(f"  ✓ {deleted} registros SEED eliminados")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -143,7 +178,7 @@ def main():
     print(f"  Ruta Azteca — Seed DynamoDB")
     print(f"  Tabla:   {tabla}")
     print(f"  Región:  {args.region}")
-    print(f"  Modo:    {'DRY-RUN' if args.dry_run else 'ESCRITURA REAL'}")
+    print(f"  Modo:    {'DRY-RUN' if args.dry_run else 'ESCRITURA REAL'}{' + CLEAN' if args.clean else ''}")
     print(f"{'='*60}")
 
     # Verificar credenciales
@@ -177,6 +212,9 @@ def main():
             else:
                 print(f"✗ Error al conectar con DynamoDB: {e}", file=sys.stderr)
             sys.exit(1)
+
+        if args.clean:
+            clean_seed_negocios(table)
 
         seed_table(table, categoria_items, "categorías", dry_run=False)
         seed_table(table, negocio_items,   "negocios",   dry_run=False)
