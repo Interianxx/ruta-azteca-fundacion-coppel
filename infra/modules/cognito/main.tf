@@ -239,6 +239,13 @@ resource "aws_cognito_user_group" "negocio_activo" {
   precedence   = 4
 }
 
+resource "aws_cognito_user_group" "negocio_rechazado" {
+  name         = "negocio_rechazado"
+  user_pool_id = aws_cognito_user_pool.main.id
+  description  = "Dueños de negocio rechazados"
+  precedence   = 6
+}
+
 resource "aws_cognito_user_group" "admin" {
   name         = "admin"
   user_pool_id = aws_cognito_user_pool.main.id

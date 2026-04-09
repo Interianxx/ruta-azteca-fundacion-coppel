@@ -57,6 +57,7 @@ interface MarkerEntry {
 interface Props {
   negocios:  Negocio[]
   onSelect:  (negocio: Negocio) => void
+  onHover?:  (negocio: Negocio | null, rect: DOMRect | null) => void
   selected?: Negocio | null
   mapStyle?: string
 }
@@ -64,30 +65,43 @@ interface Props {
 export interface MapViewHandle {
   drawRoute: (geometry: GeoJSON.LineString, bounds?: [[number, number], [number, number]]) => void
   clearRoute: () => void
+  triggerGeolocate: () => void
+  flyToUser: (coords: [number, number]) => void
 }
 
 export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
-  { negocios, onSelect, selected, mapStyle },
+  { negocios, onSelect, onHover, selected, mapStyle },
   ref,
 ) {
   const containerRef   = useRef<HTMLDivElement>(null)
   const mapRef         = useRef<mapboxgl.Map | null>(null)
-  const routeReadyRef  = useRef(false)
+  const routeReadyRef    = useRef(false)
+  const appliedStyleRef  = useRef<string>(MAPBOX_STYLE)
+  const pendingRouteRef  = useRef<{ geometry: GeoJSON.LineString; bounds?: [[number, number], [number, number]] } | null>(null)
   // Map estable id → { marker, pin } — nunca se limpia completo
   const entriesRef     = useRef<Map<string, MarkerEntry>>(new Map())
   // Ref para onSelect: evita stale closure sin recrear markers
   const onSelectRef    = useRef(onSelect)
+  // Ref para onHover: igual, evita stale closure
+  const onHoverRef     = useRef(onHover)
   // Ref para selected id: accesible desde handlers sin closures
   const selectedIdRef  = useRef<string | undefined>(selected?.id)
+  const geolocateRef   = useRef<mapboxgl.GeolocateControl | null>(null)
 
-  // Mantener onSelectRef siempre fresco
+  // Mantener refs siempre frescos
   useEffect(() => { onSelectRef.current = onSelect }, [onSelect])
+  useEffect(() => { onHoverRef.current  = onHover  }, [onHover])
 
   // Exponer drawRoute y clearRoute al padre
   useImperativeHandle(ref, () => ({
     drawRoute(geometry, bounds) {
       const map = mapRef.current
-      if (!map || !routeReadyRef.current) return
+      if (!map) return
+      if (!routeReadyRef.current) {
+        // El estilo aún no cargó — guardar para ejecutar en style.load
+        pendingRouteRef.current = { geometry, bounds }
+        return
+      }
       const src = map.getSource('route') as mapboxgl.GeoJSONSource | undefined
       if (!src) return
       src.setData({ type: 'Feature', properties: {}, geometry })
@@ -100,6 +114,15 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
       if (!map || !routeReadyRef.current) return
       const src = map.getSource('route') as mapboxgl.GeoJSONSource | undefined
       if (src) src.setData({ type: 'FeatureCollection', features: [] })
+    },
+    triggerGeolocate() {
+      geolocateRef.current?.trigger()
+    },
+    flyToUser(coords) {
+      const map = mapRef.current
+      if (!map) return
+      map.flyTo({ center: coords, zoom: 16, duration: 1200 })
+      map.once('moveend', () => { geolocateRef.current?.trigger() })
     },
   }))
 
@@ -117,10 +140,12 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
     })
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
-    map.addControl(
-      new mapboxgl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true }),
-      'top-right',
-    )
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true,
+    })
+    geolocateRef.current = geolocate
+    map.addControl(geolocate, 'top-right')
 
 // Agregar source y layers de ruta en cada carga de estilo (inicial + setStyle)
     map.on('style.load', () => {
@@ -145,11 +170,22 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
         paint: { 'line-color': '#0D7C66', 'line-width': 5, 'line-opacity': 0.9 },
       })
       routeReadyRef.current = true
+      // Ejecutar ruta que llegó antes de que el estilo cargara
+      if (pendingRouteRef.current) {
+        const { geometry, bounds } = pendingRouteRef.current
+        pendingRouteRef.current = null
+        const src = map.getSource('route') as mapboxgl.GeoJSONSource | undefined
+        if (src) {
+          src.setData({ type: 'Feature', properties: {}, geometry })
+          if (bounds) map.fitBounds(bounds, { padding: { top: 80, bottom: 300, left: 40, right: 40 }, duration: 1000 })
+        }
+      }
     })
 
     mapRef.current = map
     return () => {
       routeReadyRef.current = false
+      geolocateRef.current = null
       entriesRef.current.forEach(({ marker }) => marker.remove())
       entriesRef.current.clear()
       map.remove()
@@ -157,10 +193,11 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
     }
   }, [])
 
-  // ── Efecto 1b: cambiar estilo del mapa ────────────────────────────────────
+  // ── Efecto 1b: cambiar estilo del mapa (solo si cambia realmente) ──────────
   useEffect(() => {
     const map = mapRef.current
-    if (!map || !mapStyle) return
+    if (!map || !mapStyle || mapStyle === appliedStyleRef.current) return
+    appliedStyleRef.current = mapStyle
     routeReadyRef.current = false
     map.setStyle(mapStyle)
   }, [mapStyle])
@@ -204,6 +241,7 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
         pin.style.transition = 'transform .15s, filter .15s'
         pin.style.transform  = 'scale(1.2)'
         pin.style.filter     = 'drop-shadow(0 3px 8px rgba(0,0,0,.3))'
+        onHoverRef.current?.(negocio, el.getBoundingClientRect())
       })
       el.addEventListener('mouseleave', () => {
         if (selectedIdRef.current === negocio.id) return
@@ -211,6 +249,7 @@ export const MapView = forwardRef<MapViewHandle, Props>(function MapView(
         pin.style.filter    = 'drop-shadow(0 2px 4px rgba(0,0,0,.25))'
         // Eliminar transition después de la animación para no interferir con zoom
         setTimeout(() => { pin.style.transition = '' }, 150)
+        onHoverRef.current?.(null, null)
       })
       // Usar ref para evitar stale closure sobre onSelect
       el.addEventListener('click', () => onSelectRef.current(negocio))
