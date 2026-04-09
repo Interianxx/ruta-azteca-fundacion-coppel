@@ -182,7 +182,7 @@ export const authOptions: NextAuthOptions = {
       options: { httpOnly: false, sameSite: 'lax' as const, path: '/', secure: useSecure },
     },
     sessionToken: {
-      name: 'next-auth.session-token',
+      name: `${pfx}next-auth.session-token`,
       options: cookieOpts({ maxAge: 30 * 24 * 60 * 60 }), // 30 días
     },
   },
@@ -196,25 +196,22 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }) {
       if (account?.type === 'oauth') {
         // OAuth flow (Google via Cognito Hosted UI)
-        // cognito:groups está en el access_token — decodificamos sin verificar.
         const payload   = account.access_token ? decodeJwtPayload(account.access_token) : {}
         const allGroups = (payload['cognito:groups'] as string[] | undefined) ?? []
         token.rol = ROLES_PROPIOS.find(r => allGroups.includes(r)) ?? 'turista'
-        console.log('[nextauth/jwt] oauth flow — groups:', allGroups, '→ rol:', token.rol)
+        console.log('[nextauth/jwt] oauth login — groups:', allGroups, '→ rol:', token.rol)
       } else if (user && (user as { rol?: string }).rol) {
-        // Credentials flow — rol fue asignado en authorize()
+        // Credentials flow — rol fue asignado en authorize() — solo log en login nuevo
         token.rol = (user as { rol?: string }).rol
-        console.log('[nextauth/jwt] credentials flow — rol from user:', token.rol)
-      } else {
-        // Token refresh — rol ya estaba en el token
-        console.log('[nextauth/jwt] token refresh — existing rol:', token.rol)
+        console.log('[nextauth/jwt] credentials login — rol:', token.rol)
       }
+      // token refresh: no log (muy frecuente, satura CloudWatch)
       return token
     },
     async session({ session, token }) {
       ;(session as { rol?: string }).rol      = token.rol as string
       ;(session.user as { sub?: string }).sub = token.sub
-      console.log('[nextauth/session] returning session — rol:', (session as { rol?: string }).rol, 'email:', session.user?.email)
+      // no log aquí: se llama en cada useSession() — usar authorize/jwt para trazar
       return session
     },
   },

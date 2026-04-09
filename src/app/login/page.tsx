@@ -407,9 +407,7 @@ export default function LoginPage() {
       if (data.error) { setError(data.error); return }
       const dest = view === 'b-verify' ? '/negocio/registro' : '/turista/mapa'
       console.log('[verify] dest:', dest, '| attempting auto-login...')
-      // Store dest BEFORE signIn — session useEffect picks it up and redirects
-      // (more reliable than calling router.replace directly from async handler)
-      sessionStorage.setItem('postVerifyDest', dest)
+      skipSessionRedirectRef.current = true  // prevent session useEffect from interfering
       let login = await signIn('credentials', { redirect: false, email, password })
       console.log('[verify] login attempt 1:', login?.error ?? 'OK', '| ok:', login?.ok, '| status:', login?.status)
       if (login?.error) {
@@ -418,15 +416,15 @@ export default function LoginPage() {
         console.log('[verify] login attempt 2:', login?.error ?? 'OK', '| ok:', login?.ok)
       }
       if (login?.error) {
-        console.log('[verify] auto-login failed — postVerifyDest saved, showing manual login')
-        // postVerifyDest stays for when user logs in manually
+        console.log('[verify] auto-login failed — saving postVerifyDest for manual login')
+        skipSessionRedirectRef.current = false
+        sessionStorage.setItem('postVerifyDest', dest)
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
-        console.log('[verify] auto-login OK — session useEffect will redirect to:', dest)
-        // No manual navigation — useEffect handles it once session is in React context
-        // NOTE: do NOT call getSession() here — it triggers a second session fetch
-        // which fires the useEffect again after postVerifyDest is already consumed
+        // 50ms: gives browser time to process Set-Cookie before the new request
+        console.log('[verify] auto-login OK — navigating to:', dest, 'in 50ms')
+        setTimeout(() => { window.location.href = dest }, 50)
       }
     } catch {
       setError(ui.err_network)
