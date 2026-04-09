@@ -524,7 +524,8 @@ export default function LoginPage() {
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row font-sans bg-jade-air overflow-hidden relative selection:bg-[var(--color-jade-air-accent)] selection:text-white">
+    <div className="min-h-screen flex flex-col font-sans bg-jade-air overflow-hidden relative selection:bg-[var(--color-jade-air-accent)] selection:text-white">
+      <div className="flex flex-col md:flex-row flex-1">
       <style>{`
         @keyframes slideInFwd  { from { opacity:0; transform:translateX(24px)  } to { opacity:1; transform:none } }
         @keyframes slideInBack { from { opacity:0; transform:translateX(-24px) } to { opacity:1; transform:none } }
@@ -885,15 +886,72 @@ export default function LoginPage() {
             )}
           </div>
         </div>
+      </div>{/* ← cierra panel derecho (flex-1 md:w-1/2) */}
+      </div>{/* ← cierra wrapper paneles (flex flex-col md:flex-row flex-1) */}
 
-        {/* Verification Footer Text */}
-        <div className="absolute bottom-6 left-0 right-0 flex items-center justify-center gap-2 text-[11px] text-[var(--color-jade-100)]/40 tracking-[0.05em] font-medium uppercase">
-          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          {ui.verified_footer}
+      {/* ── FOOTER DE PÁGINA COMPLETO ────────────────────────────────────────── */}
+      <footer style={{
+        background: 'linear-gradient(135deg, #04342C 0%, #0A5C48 100%)',
+        borderTop: '1px solid rgba(255,255,255,0.07)',
+        padding: '28px 24px 20px',
+        width: '100%',
+      }}>
+        <div style={{ maxWidth: 700, margin: '0 auto' }}>
+
+          {/* Logos */}
+          <p style={{ margin: '0 0 12px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.1em', color: 'rgba(255,255,255,0.3)', textAlign: 'center' }}>
+            Con el respaldo de
+          </p>
+
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, marginBottom: 20, flexWrap: 'wrap' }}>
+            {/* Fundación Coppel — variante WhiteYellow para fondo oscuro */}
+            <img
+              src="/Fundacion Coppel-WhiteYellow@4x.png"
+              alt="Fundación Coppel"
+              style={{ height: 28, width: 'auto', objectFit: 'contain', opacity: 0.92 }}
+            />
+            <div style={{ width: 1, height: 28, background: 'rgba(255,255,255,0.15)' }} />
+            {/* Ola México — logo blanco sobre fondo oscuro */}
+            <img
+              src="/logo-olamexico-full-white@2x.png"
+              alt="Ola México"
+              style={{ height: 28, width: 'auto', objectFit: 'contain', opacity: 0.87 }}
+            />
+          </div>
+
+          {/* Links */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
+            {[
+              { label: 'Conócenos',           href: '#' },
+              { label: 'Contáctanos',         href: '#' },
+              { label: 'Aviso de privacidad', href: '#' },
+              { label: 'Términos de uso',     href: '#' },
+            ].map((link, i) => (
+              <span key={link.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {i > 0 && <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 12 }}>·</span>}
+                <a
+                  href={link.href}
+                  style={{
+                    fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.42)',
+                    textDecoration: 'none', transition: 'color 0.2s',
+                    letterSpacing: '.02em',
+                    WebkitTapHighlightColor: 'transparent',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.78)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.42)')}
+                >
+                  {link.label}
+                </a>
+              </span>
+            ))}
+          </div>
+
+          {/* Créditos */}
+          <p style={{ margin: 0, fontSize: 10, color: 'rgba(255,255,255,0.22)', textAlign: 'center', fontWeight: 500, letterSpacing: '.04em' }}>
+            © 2026 Fundación Coppel · Ruta Azteca · FIFA World Cup México
+          </p>
         </div>
-      </div>
+      </footer>
 
     </div>
   )

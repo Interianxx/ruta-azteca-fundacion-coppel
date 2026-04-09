@@ -46,8 +46,14 @@
       radial-gradient(circle at 10% 20%, rgba(13, 124, 102, 0.03) 0%, transparent 50%),
       radial-gradient(circle at 90% 80%, rgba(29, 158, 117, 0.04) 0%, transparent 50%);
     min-height: 100vh;
+    min-height: 100dvh; /* Safari iOS — respeta la barra de navegación */
     position: relative;
     overflow-x: hidden;
+  }
+
+  /* Padding seguro para iPhone (notch + barra de Safari) */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
   }
 
   /* El "Panel de Cristal" Definitivo */
@@ -58,6 +64,10 @@
     border: var(--glass-border);
     border-radius: 24px;
     box-shadow: var(--glass-shadow);
+  }
+
+  /* glass-card: overflow hidden para efecto interno (NO usar en elementos fixed) */
+  .glass-card {
     position: relative;
     overflow: hidden;
   }

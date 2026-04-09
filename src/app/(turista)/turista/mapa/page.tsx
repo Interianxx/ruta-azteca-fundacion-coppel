@@ -6,6 +6,7 @@ import { MapView, CATEGORIA_COLOR, CATEGORIA_LUCIDE, type MapViewHandle } from '
 import type { Negocio, CategoriaSlug, Horario } from '@/types/negocio'
 import { LayoutGrid, Utensils, Palette, BedDouble, Map, Bus, Store, Compass, Heart, Navigation2, User, Globe, Bot, Footprints, Car } from 'lucide-react'
 import { useTranslation } from '@/hooks/useTranslation'
+import { PagoModal } from '@/components/Negocio/PagoModal'
 
 // ─── Config ────────────────────────────────────────────────────────────────
 
@@ -264,6 +265,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
   const [submitting,   setSubmitting]  = useState(false)
   const [submitMsg,    setSubmitMsg]   = useState('')
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [showPago,     setShowPago]    = useState(false)
 
   // Fetch favorites status + reviews on mount
   useEffect(() => {
@@ -515,23 +517,42 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
       })()}
 
       {/* Actions */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
         <button onClick={onRoute} style={{
-          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          padding: '14px', background: '#0D7C66',
+          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          padding: '13px 10px', background: '#0D7C66',
           border: '1px solid #0D7C66', borderRadius: 14, cursor: 'pointer',
-          color: '#fff', fontWeight: 600, fontSize: 15,
+          color: '#fff', fontWeight: 600, fontSize: 14,
         }}>
           <RouteIcon /> {ui.directions}
         </button>
+
+        {/* Botón de pago */}
+        <button onClick={() => setShowPago(true)} style={{
+          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          padding: '13px 10px',
+          background: 'linear-gradient(135deg, #FF6B00 0%, #FF8C42 100%)',
+          border: 'none', borderRadius: 14, cursor: 'pointer',
+          color: '#fff', fontWeight: 700, fontSize: 14,
+          boxShadow: '0 4px 14px rgba(255,107,0,0.3)',
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+          Pagar
+        </button>
+
         <button onClick={onFullPage} style={{
-          width: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 46, height: 46, display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: 'rgba(26, 46, 38, 0.08)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 14, cursor: 'pointer',
-          color: '#1A2E26'
+          color: '#1A2E26', flexShrink: 0,
         }}>
           <ShareIcon />
         </button>
       </div>
+
+      {/* Modal de pago */}
+      {showPago && <PagoModal negocio={negocio} onClose={() => setShowPago(false)} />}
 
       {/* ── Reseñas ── */}
       <div style={{ borderTop: '1px solid rgba(26, 46, 38, 0.12)', paddingTop: 20 }}>
@@ -1350,7 +1371,7 @@ export default function MapaPage() {
   const SHEET_HEIGHTS = { peek: 72, half: 340, full: Math.round(typeof window !== 'undefined' ? window.innerHeight * 0.85 : 600) }
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui,-apple-system,sans-serif' }}>
+    <div style={{ width: '100vw', height: '100svh', position: 'relative', overflow: 'hidden', fontFamily: 'system-ui,-apple-system,sans-serif' } as React.CSSProperties}>
       <style>{`
         .img-thumb { overflow: hidden; }
         .img-thumb img { transition: transform .35s ease; }

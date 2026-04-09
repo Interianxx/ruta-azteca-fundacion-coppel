@@ -5,9 +5,9 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { 
   Phone, MessageCircle, MapPin, Map, Star, 
-  MessageSquare, Tag, Loader2, LogOut, Clock, 
-  Pencil, Check, X, ShieldCheck, Palette, 
-  BedDouble, Bus, LayoutGrid, CheckCircle2 
+  MessageSquare, Loader2, LogOut, Clock, 
+  Check, X, ShieldCheck, Palette, Eye, TrendingUp,
+  BedDouble, Bus, LayoutGrid, CheckCircle2, CreditCard, ArrowRight
 } from 'lucide-react'
 import type { Horario, HorarioDia } from '@/types/negocio'
 
@@ -54,6 +54,7 @@ export default function PerfilNegocioPage() {
   
   const [negocio, setNegocio] = useState<Record<string, any> | null>(null)
   const [loading, setLoading] = useState(true)
+  const [metricas, setMetricas] = useState<{ vistas: number; clicks_whatsapp: number; clicks_telefono: number; calificacion: number | null; totalReviews: number } | null>(null)
 
   const [horario,       setHorario]       = useState<Horario>(DEFAULT_HORARIO)
   const [editingHorario, setEditingHorario] = useState(false)
@@ -72,6 +73,13 @@ export default function PerfilNegocioPage() {
           setDraftHorario(d.data.horario)
         }
         setLoading(false)
+        // Fetch métricas si tenemos ID
+        if (d.data?.id) {
+          fetch(`/api/negocios/${d.data.id}/metricas`)
+            .then(r => r.json())
+            .then(j => setMetricas(j.data ?? null))
+            .catch(() => {})
+        }
       })
       .catch(() => setLoading(false))
   }, [status, router])
@@ -203,19 +211,65 @@ export default function PerfilNegocioPage() {
           </div>
         )}
 
-        {/* Stats Grid Jade Air Responsive */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-          {[
-            { Icon: Star,          label: 'Ranking',   value: negocio.calificacion ? `${Number(negocio.calificacion).toFixed(1)}` : '—' },
-            { Icon: MessageSquare, label: 'Opiniones',  value: negocio.totalReviews ?? 0 },
-            { Icon: MapPin,        label: 'Estado Map', value: negocio.estado === 'PENDING' ? '⏳' : '✓' },
-          ].map(s => (
-            <div key={s.label} className="glass-card" style={{ padding: '20px 12px', textAlign: 'center' }}>
-              <s.Icon size={20} color="var(--color-jade-air-accent)" style={{ margin: '0 auto 8px' }} />
-              <div className="text-jade-title" style={{ fontSize: 24, marginBottom: 2 }}>{s.value}</div>
-              <div className="text-jade-muted" style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.05em' }}>{s.label}</div>
+        {/* ── MÉTRICAS PROMINENTES ── */}
+        <div style={{ marginBottom: 20 }}>
+          {/* Header de sección */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <TrendingUp size={16} color="var(--color-jade-air-accent)" />
+              <span className="text-jade-muted" style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.1em' }}>Métricas de impacto</span>
             </div>
-          ))}
+            <button
+              onClick={() => router.push('/negocio/metricas')}
+              style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-jade-air-accent)', fontSize: 12, fontWeight: 700, padding: '4px 8px', borderRadius: 8 }}
+            >
+              Ver todo <ArrowRight size={13} />
+            </button>
+          </div>
+
+          {/* KPIs 2x2 */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+            {[
+              { label: 'Visualizaciones', value: metricas?.vistas ?? negocio?.vistas ?? 0, Icon: Eye, color: '#0D7C66', bg: 'rgba(13,124,102,0.08)' },
+              { label: 'Mensajes WA', value: metricas?.clicks_whatsapp ?? 0, Icon: MessageCircle, color: '#25D366', bg: 'rgba(37,211,102,0.08)' },
+              { label: 'Llamadas', value: metricas?.clicks_telefono ?? 0, Icon: Phone, color: '#3B82F6', bg: 'rgba(59,130,246,0.08)' },
+              { label: 'Calificación', value: metricas?.calificacion ? `${Number(metricas.calificacion).toFixed(1)} ⭐` : negocio?.calificacion ? `${Number(negocio.calificacion).toFixed(1)} ⭐` : '—', Icon: Star, color: '#C5A044', bg: 'rgba(197,160,68,0.08)' },
+            ].map(kpi => (
+              <div key={kpi.label} className="glass-card" style={{ padding: '16px 14px' }}>
+                <div style={{ width: 32, height: 32, borderRadius: 9, background: kpi.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
+                  <kpi.Icon size={16} color={kpi.color} />
+                </div>
+                <div className="text-jade-title" style={{ fontSize: 22, marginBottom: 1, letterSpacing: '-0.02em' }}>{kpi.value}</div>
+                <div style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.06em', color: kpi.color }}>{kpi.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Conversión + Dinero */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {/* Tasa de conversión */}
+            <div className="glass-card" style={{ padding: '14px 16px' }}>
+              <div style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.06em', color: '#0D7C66', marginBottom: 6 }}>Conversión</div>
+              <div style={{ fontSize: 20, fontWeight: 900, color: '#1A2E26', letterSpacing: '-0.02em', marginBottom: 6 }}>
+                {metricas?.vistas
+                  ? `${(((metricas.clicks_whatsapp + metricas.clicks_telefono) / metricas.vistas) * 100).toFixed(1)}%`
+                  : '—'}
+              </div>
+              <div style={{ height: 5, background: 'rgba(13,124,102,0.1)', borderRadius: 3, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: metricas?.vistas ? `${Math.min(100, ((metricas.clicks_whatsapp + metricas.clicks_telefono) / metricas.vistas) * 100)}%` : '0%', background: 'linear-gradient(90deg, #0D7C66, #1A9E78)', borderRadius: 3 }} />
+              </div>
+            </div>
+
+            {/* Dinero recibido — placeholder */}
+            <div style={{ background: 'linear-gradient(135deg, rgba(255,107,0,0.06), rgba(255,140,66,0.1))', borderRadius: 20, padding: '14px 16px', border: '1.5px dashed rgba(255,107,0,0.22)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.06em', color: '#FF6B00', marginBottom: 4 }}>Ingresos</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                <CreditCard size={14} color="#FF6B00" />
+                <span style={{ fontSize: 18, fontWeight: 900, color: '#1A2E26' }}>—</span>
+              </div>
+              <div style={{ fontSize: 9, color: '#FF6B00', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em' }}>Próximamente</div>
+            </div>
+          </div>
         </div>
 
         {/* Info card Jade Air */}
