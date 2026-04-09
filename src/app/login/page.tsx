@@ -310,6 +310,13 @@ export default function LoginPage() {
   useEffect(() => {
     if (!session) return
     if (skipSessionRedirectRef.current) return
+    // If verification just completed, honour the saved destination
+    const savedDest = sessionStorage.getItem('postVerifyDest')
+    if (savedDest) {
+      sessionStorage.removeItem('postVerifyDest')
+      router.replace(savedDest)
+      return
+    }
     const rol = (session as { rol?: string }).rol
     if (rol === 'admin') {
       router.replace('/admin/dashboard')
@@ -386,10 +393,16 @@ export default function LoginPage() {
       if (data.error) { setError(data.error); return }
       const dest = view === 'b-verify' ? '/negocio/registro' : '/turista/mapa'
       skipSessionRedirectRef.current = true
-      const login = await signIn('credentials', { redirect: false, email, password })
+      // Retry once after 2s — Cognito takes time to propagate the new user
+      let login = await signIn('credentials', { redirect: false, email, password })
       if (login?.error) {
-        // Login falló (ej. Cognito aún no propagó) — mostrar éxito y pedir login manual
+        await new Promise(r => setTimeout(r, 2000))
+        login = await signIn('credentials', { redirect: false, email, password })
+      }
+      if (login?.error) {
+        // Still failing — save destination so the useEffect picks it up after manual login
         skipSessionRedirectRef.current = false
+        sessionStorage.setItem('postVerifyDest', dest)
         setSuccess(ui.ok_verified)
         nav(view === 'b-verify' ? 'business' : 't-login', 'fwd')
       } else {
