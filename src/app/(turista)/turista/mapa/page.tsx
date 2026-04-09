@@ -639,7 +639,7 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage 
 
 // ─── Route panel ─────────────────────────────────────────────────────────────
 
-import { MAPBOX_TOKEN } from '@/lib/mapbox'
+import { MAPBOX_TOKEN, MAPBOX_STYLE, MAPBOX_SATELLITE } from '@/lib/mapbox'
 
 type RouteMode = 'walking' | 'driving'
 
@@ -1268,6 +1268,7 @@ export default function MapaPage() {
   const [isDesktop,      setIsDesktop]      = useState(false)
   const mapViewRef = useRef<MapViewHandle>(null)
   const [activeTab,      setActiveTab]      = useState<string>('explorar')
+  const [mapStyle,       setMapStyle]       = useState<string>(MAPBOX_STYLE)
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -1482,7 +1483,51 @@ export default function MapaPage() {
 
       {/* ── Map area ── */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-        <MapView ref={mapViewRef} negocios={filtered} onSelect={handleSelect} selected={selected} />
+        <MapView ref={mapViewRef} negocios={filtered} onSelect={handleSelect} selected={selected} mapStyle={mapStyle} />
+
+        {/* ── Selector de tipo de mapa ── */}
+        {!showRoute && (
+          <div style={{
+            position: 'absolute',
+            bottom: isDesktop ? 16 : 148,
+            left: isDesktop ? 424 : 12,
+            zIndex: 20,
+            display: 'flex',
+            borderRadius: 14,
+            overflow: 'hidden',
+            background: 'rgba(255,255,255,0.92)',
+            backdropFilter: 'blur(20px) saturate(120%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(120%)',
+            border: '1px solid rgba(255,255,255,0.7)',
+            boxShadow: '0 4px 20px rgba(13,124,102,0.14), 0 1px 4px rgba(0,0,0,0.07)',
+          }}>
+            {([
+              { style: MAPBOX_STYLE,     label: 'Predeterminado' },
+              { style: MAPBOX_SATELLITE, label: 'Satélite' },
+            ] as const).map(({ style, label }) => {
+              const active = mapStyle === style
+              return (
+                <button
+                  key={style}
+                  onClick={() => setMapStyle(style)}
+                  style={{
+                    padding: '7px 14px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s, color 0.2s',
+                    background: active ? '#0D7C66' : 'transparent',
+                    color: active ? '#fff' : '#1A2E26',
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+        )}
 
       {/* ── Overlay para cerrar al tocar el mapa ── */}
       {(showDetail || showChat || (!isDesktop && sheetState !== 'peek')) && (
