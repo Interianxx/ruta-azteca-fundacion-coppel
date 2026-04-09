@@ -221,7 +221,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 
 // ─── Detail bottom sheet ────────────────────────────────────────────────────
 
-function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage, cart, setCart }: {
+function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage, cart, setCart, onFavChange }: {
   negocio: Negocio
   session: ReturnType<typeof useSession>['data']
   isDesktop: boolean
@@ -230,7 +230,9 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
   onFullPage: () => void
   cart: Record<string, number>
   setCart: React.Dispatch<React.SetStateAction<Record<string, number>>>
+  onFavChange?: (negocio: Negocio, added: boolean) => void
 }) {
+  const router  = useRouter()
   const color   = CATEGORIA_COLOR[negocio.categoria] ?? '#1A9E78'
   const CatIcon = CATEGORIA_LUCIDE[negocio.categoria] ?? Store
   const cat     = CATS.find(c => c.slug === negocio.categoria)
@@ -304,16 +306,19 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
   }, [negocio.id, session])
 
   const toggleFav = async () => {
-    if (!session) return
+    if (!session) { return }
     setFavLoading(true)
+    const adding = !isFav
     try {
-      const method = isFav ? 'DELETE' : 'POST'
-      await fetch('/api/favoritos', {
-        method,
+      const res = await fetch('/api/favoritos', {
+        method: adding ? 'POST' : 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ negocioId: negocio.id }),
       })
-      setIsFav(prev => !prev)
+      if (res.ok) {
+        setIsFav(adding)
+        onFavChange?.(negocio, adding)
+      }
     } finally {
       setFavLoading(false)
     }
@@ -415,13 +420,17 @@ function DetailSheet({ negocio, session, isDesktop, onBack, onRoute, onFullPage,
               }}>
                 <BackIcon /> {ui.back}
               </button>
-              <button onClick={toggleFav} disabled={!session || favLoading} style={{
-                width: 42, height: 42, borderRadius: '50%', border: '1px solid rgba(26, 46, 38, 0.12)',
-                background: isFav ? 'rgba(229,62,62,0.15)' : 'rgba(26, 46, 38, 0.08)',
-                cursor: session ? 'pointer' : 'default',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'all .2s',
-              }}>
+              <button
+                onClick={session ? toggleFav : () => router.push('/login')}
+                disabled={favLoading}
+                style={{
+                  width: 42, height: 42, borderRadius: '50%', border: '1px solid rgba(26, 46, 38, 0.12)',
+                  background: isFav ? 'rgba(229,62,62,0.15)' : 'rgba(26, 46, 38, 0.08)',
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'all .2s',
+                }}
+              >
                 <svg width="22" height="22" viewBox="0 0 24 24"
                   fill={isFav ? '#e53e3e' : 'none'}
                   stroke={isFav ? '#e53e3e' : '#8a9690'} strokeWidth="2.5" strokeLinecap="round">
@@ -1258,22 +1267,8 @@ export default function MapaPage() {
   useEffect(() => { fetchNegocios(categoria) }, [categoria, fetchNegocios])
 
   // Prefetch favoritos en background cuando hay sesión
-  useEffect(() => {
-    if (!session) return
-    fetch('/api/favoritos')
-      .then(r => r.json())
-      .then(async json => {
-        const ids: string[] = json.data ?? []
-        setFavIds(ids)
-        const items = await Promise.all(
-          ids.map(id =>
-            fetch(`/api/negocios/${id}`).then(r => r.json()).then(j => j.data as Negocio).catch(() => null)
-          )
-        )
-        setFavNegocios(items.filter(Boolean) as Negocio[])
-      })
-      .catch(() => {})
-  }, [session])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchFavoritos() }, [session])
 
   const filtered = search
     ? negocios.filter(n =>
@@ -1307,9 +1302,32 @@ export default function MapaPage() {
     recognition.start()
   }
 
+  const fetchFavoritos = () => {
+    if (!session) return
+    fetch('/api/favoritos')
+      .then(r => r.json())
+      .then(async json => {
+        const ids: string[] = json.data ?? []
+        setFavIds(ids)
+        const items = await Promise.all(
+          ids.map(id =>
+            fetch(`/api/negocios/${id}`).then(r => r.json()).then(j => j.data as Negocio).catch(() => null)
+          )
+        )
+        setFavNegocios(items.filter(Boolean) as Negocio[])
+      })
+      .catch(() => {})
+  }
+
   const openFavoritos = () => {
     if (!session) { router.push('/login'); return }
+    fetchFavoritos()
     setShowFavoritos(true)
+  }
+
+  const handleFavChange = (negocio: Negocio, added: boolean) => {
+    setFavIds(prev => added ? [...prev, negocio.id] : prev.filter(id => id !== negocio.id))
+    setFavNegocios(prev => added ? [...prev, negocio] : prev.filter(n => n.id !== negocio.id))
   }
 
   const SHEET_HEIGHTS = { peek: 72, half: 340, full: Math.round(typeof window !== 'undefined' ? window.innerHeight * 0.85 : 600) }
@@ -1784,6 +1802,7 @@ export default function MapaPage() {
             onFullPage={() => router.push(`/turista/negocio/${selected.id}`)}
             cart={cart}
             setCart={setCart}
+            onFavChange={handleFavChange}
           />
         )}
       </AnimatePresence>
